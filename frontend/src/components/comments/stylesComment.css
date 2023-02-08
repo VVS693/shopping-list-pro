@@ -1,0 +1,22 @@
+
+
+
+.comment-enter {
+    opacity: 0;
+}
+
+.comment-enter-active {
+    opacity: 1;
+    transition: opacity 500ms ease-in;
+}
+
+.comment-exit {
+    opacity: 1;
+    transform:translateX(0);
+}
+
+.comment-exit-active {
+    opacity: 0;
+    transform:translateX(-100%);
+    transition: opacity 250ms ease-in, transform 250ms;
+}
