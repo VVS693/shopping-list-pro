@@ -64,7 +64,7 @@ export function ShopItem({ item }: ShopItemProps) {
   useEffect(() => setShowComments(isShowComments), [isShowComments]);
 
   return (
-    <div className="flex flex-col items-start pl-4 pr-3 border-b">
+    <div className="flex flex-col items-start pl-4 pr-4 border-b">
       <div className="flex items-center w-full justify-between">
         <CheckBox
           isCompleted={item.completed}
@@ -99,7 +99,7 @@ export function ShopItem({ item }: ShopItemProps) {
                     setAddNewComment(false);
                   }}
                 >
-                  <CommentOutlinedIcon className="text-blue-gray-500" />
+                  <CommentOutlinedIcon color="action" />
                 </IconButton>
               ) : (
                 <IconButton
@@ -108,7 +108,7 @@ export function ShopItem({ item }: ShopItemProps) {
                     setAddNewComment(false);
                   }}
                 >
-                  <CommentsDisabledOutlinedIcon className="text-blue-gray-500" />
+                  <CommentsDisabledOutlinedIcon color="action" />
                 </IconButton>
               )}
             </>
@@ -120,7 +120,7 @@ export function ShopItem({ item }: ShopItemProps) {
                   setAddNewComment(true);
                 }}
               >
-                <AddCommentOutlinedIcon className="text-blue-gray-500" />
+                <AddCommentOutlinedIcon color="action" />
               </IconButton>
             )
           )}

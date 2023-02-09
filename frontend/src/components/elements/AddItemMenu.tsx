@@ -109,7 +109,7 @@ export function AddItemMenu({ onAdd }: AddItemMenuProps) {
         <IconButton>
           <SubdirectoryArrowLeftOutlinedIcon
             sx={{ fontSize: 30 }}
-            className="text-blue-gray-800"
+            color="primary"
           />
         </IconButton>
       </form>

@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
-import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface ShopItemProps {
   title: string;
@@ -84,7 +84,7 @@ export function ItemEdit({ title, placeholder, onEdit, onDel }: ShopItemProps) {
           onFocus={onFocusHandler}
           //  onClick={onClickHandler}
         >
-          <DeleteOutlinedIcon className=" text-blue-gray-500" />
+          <DeleteIcon sx={{color: "#ef5350"}} />
         </IconButton>
       </div>
     </>

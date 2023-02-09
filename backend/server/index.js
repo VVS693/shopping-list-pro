@@ -8,6 +8,7 @@ import cors from "cors";
 import * as UserController from "./controllers/UserController.js";
 import * as ItemController from "./controllers/ItemController.js";
 import * as MessageController from "./controllers/MessageController.js";
+import * as ListController from "./controllers/ListController.js";
 import checkAuth from "./middlewares/checkAuth.js";
 import { MY_MONGO_DB } from "./config/config.js";
 // import fs from "fs";
@@ -104,6 +105,12 @@ app.delete("/items/:id", checkAuth, ItemController.removeItem);
 app.patch("/items/:id", checkAuth, ItemController.updateItem);
 
 app.get("/messages", checkAuth, MessageController.getAllMessages);
+
+
+app.get("/lists", checkAuth, ListController.getAllLists);
+app.post("/lists", checkAuth, ListController.createList);
+
+
 
 server.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);

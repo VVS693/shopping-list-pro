@@ -79,7 +79,7 @@ export function CommentItem({
         )}
         {isAddIcon && !edit && (
           <IconButton  sx={{ padding: "4px" }} onClick={onCommentAdd}>
-            <AddCommentOutlinedIcon className=" text-blue-gray-500" />
+            <AddCommentOutlinedIcon color="action" />
           </IconButton>
         )}
 

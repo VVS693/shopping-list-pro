@@ -18,53 +18,84 @@ import { CommentItem } from "../comments/CommentItem";
 import { MyListItem } from "./MyListItem";
 import TextField from "@mui/material/TextField";
 import { ItemsList } from "../items/ItemsList";
+import { CategoryHeader } from "./CategoryHeader";
+import { fetchAllLists } from "../../store/reducers/actionsListsCreators";
 
 export function MyLists() {
   const dispatch = useAppDispatch();
-  const { items } = useAppSelector((state) => state.itemsReducer);
+  const { lists } = useAppSelector((state) => state.listsReducer);
+  const { user } = useAppSelector((state) => state.userReducer);
 
-  const onAddItemHandler = (value: string) => {
-    animateScroll.scrollToBottom({
-      duration: 1500,
-      smooth: "easeInQuad",
-    });
-
-    const itemData: IShopItem = {
-      id: v4(),
-      completed: false,
-      title: value,
-    };
-    dispatch(addItemArray(itemData));
-    dispatch(fetchAddItems(itemData));
-  };
 
   useEffect(() => {
     dispatch(fetchAllUsers());
-    dispatch(fetchAllSortedItems());
+    dispatch(fetchAllLists());
   }, []);
 
-  const tempList = {
+  const tempListOwn = {
     id: "12345",
-    title: "jfwojfwjfwljffwjwlfjwwfjwljflwjflwfjwlfjwlf",
+    title: "jfwojfwjfwljffwjwlfjwwfjwljflwjflwfjwlqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqfjwlf",
+    userOwner: "63c8038f240821b739229331",
+  };
+
+  const tempListShared = {
+    id: "12345",
+    title: "Test Test Test Test Test Test Test Testwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww ",
+    userOwner: "63d78283d588b3c6c3763fa3",
+  };
+
+  const tempListArchived = {
+    id: "12345",
+    title: "twwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww ",
     userOwner: "63c8038f240821b739229331",
   };
 
   return (
     <>
+
+
       <TransitionGroup>
-        {/* {items.map((el) => (
+        {lists.map((el) => (
           <CSSTransition key={el.id} timeout={500} classNames="list">
-            <ShopItem item={el} />
+
+
+            <MyListItem listItem={el} onListDel={() => {}} onListEdit={() => {}}/>
+
+
           </CSSTransition>
-        ))} */}
+        ))}
 
-        <MyListItem listItem={tempList} onListDel={() => {}} onListEdit={() => {}}/>
 
-        <MyListItem listItem={tempList} onListDel={() => {}} onListEdit={() => {}}/>
 
-        <MyListItem listItem={tempList} onListDel={() => {}} onListEdit={() => {}}/>
 
-        <ItemsList />
+
+
+
+
+          {/* <CategoryHeader title="My Personal Lists:"/>
+
+        <MyListItem listItem={tempListOwn} onListDel={() => {}} onListEdit={() => {}}/>
+
+        <MyListItem listItem={tempListOwn} onListDel={() => {}} onListEdit={() => {}}/>
+
+        <MyListItem listItem={tempListOwn} onListDel={() => {}} onListEdit={() => {}}/>
+
+        <CategoryHeader title="My Shared Lists:"/>
+
+        <MyListItem listItem={tempListShared} onListDel={() => {}} onListEdit={() => {}}/>
+
+        <MyListItem listItem={tempListShared} onListDel={() => {}} onListEdit={() => {}}/>
+
+        <MyListItem listItem={tempListShared} onListDel={() => {}} onListEdit={() => {}}/>
+
+        <CategoryHeader title="Archived Lists:"/>
+
+        <MyListItem listItem={tempListArchived} onListDel={() => {}} onListEdit={() => {}}/>
+
+        <MyListItem listItem={tempListArchived} onListDel={() => {}} onListEdit={() => {}}/>
+
+        <MyListItem listItem={tempListArchived} onListDel={() => {}} onListEdit={() => {}}/> */}
+
 
 
       </TransitionGroup>

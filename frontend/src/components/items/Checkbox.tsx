@@ -7,7 +7,7 @@ interface CheckboxProps {
 
 export function CheckBox({ isCompleted, onChangeCheckBox }: CheckboxProps) {
   return (
-    <IconButton onClick={onChangeCheckBox}>
+    <IconButton onClick={onChangeCheckBox} >
       {!isCompleted ? checkBoxEmptyIcon : checkBoxCompletedIcon}
     </IconButton>
   );

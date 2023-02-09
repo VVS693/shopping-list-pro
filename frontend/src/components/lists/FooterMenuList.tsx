@@ -1,32 +1,34 @@
-import { AddItemMenu } from "./AddItemMenu";
 import IconButton from "@mui/material/IconButton";
 import QuestionAnswerOutlinedIcon from "@mui/icons-material/QuestionAnswerOutlined";
+import IosShareOutlinedIcon from "@mui/icons-material/IosShareOutlined";
+
+import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
+import UnarchiveOutlinedIcon from "@mui/icons-material/UnarchiveOutlined";
 import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
+import FilterListOutlinedIcon from "@mui/icons-material/FilterListOutlined";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import CommentsDisabledOutlinedIcon from "@mui/icons-material/CommentsDisabledOutlined";
 import SortOutlinedIcon from "@mui/icons-material/SortOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { showAddForm } from "../../store/reducers/itemsSlice";
 import { CSSTransition } from "react-transition-group";
-import "./stylesFooterMenu.css";
+import "./stylesFooterMenuList.css";
+import { AddItemMenu } from "../elements/AddItemMenu";
 
-interface FooterMenuProps {
-  onChatClick: () => void;
+interface FooterMenuListProps {
   onSortClick: () => void;
-  onShowCommentsClick: () => void;
   onAddItemClick: (value: string) => void;
 }
 
-export function FooterMenu({
-  onChatClick,
+export function FooterMenuList({
   onSortClick,
-  onShowCommentsClick,
   onAddItemClick,
-}: FooterMenuProps) {
-  const [isCommentsVisible, setCommentsVisible] = useState(false);
+}: FooterMenuListProps) {
+  const [isArchivedVisible, setArchivedVisible] = useState(false);
+  const [sortToggle, setSortToggle] = useState(true);
   const dispatch = useAppDispatch();
   const { isAddFormVisible } = useAppSelector((state) => state.itemsReducer);
 
@@ -35,7 +37,7 @@ export function FooterMenu({
       <CSSTransition
         in={isAddFormVisible}
         timeout={700}
-        classNames="footer"
+        classNames="footerList"
         unmountOnExit
       >
         <div className="z-0 fixed bottom-20 w-full max-w-md min-w-[375px] border-t">
@@ -49,39 +51,56 @@ export function FooterMenu({
 
       <div className="z-50 fixed w-full max-w-md min-w-[375px] bottom-0 border-t bg-white">
         <div className="flex justify-between px-4 pb-6 pt-[10px]">
-          <IconButton onClick={() => {}}>
-            <ArrowBackIosNewIcon sx={{ fontSize: 30 }} color="action" />
-          </IconButton>
-
-          <IconButton onClick={onChatClick}>
-            <QuestionAnswerOutlinedIcon sx={{ fontSize: 30 }} color="action" />
-          </IconButton>
-
-          <IconButton
+          {/* <IconButton
             onClick={() => {
-              setCommentsVisible(!isCommentsVisible);
-              onShowCommentsClick();
+              setArchivedVisible(!isArchivedVisible);
+              onShowArchivedClick();
             }}
           >
-            {!isCommentsVisible ? (
-              <CommentOutlinedIcon sx={{ fontSize: 30 }} color="action" />
+            {!isArchivedVisible ? (
+              <UnarchiveOutlinedIcon
+                sx={{ fontSize: 30 }}
+                color="action"
+              />
             ) : (
-              <CommentsDisabledOutlinedIcon
+              <ArchiveOutlinedIcon
                 sx={{ fontSize: 30 }}
                 color="action"
               />
             )}
+          </IconButton> */}
+
+          <IconButton onClick={() => {}}>
+            <MenuOutlinedIcon
+              sx={{ fontSize: 30 }}
+              color="action"
+            />
           </IconButton>
 
           <IconButton onClick={() => {}}>
-            <SearchOutlinedIcon sx={{ fontSize: 30 }} color="action" />
-          </IconButton>
-
-          <IconButton onClick={onSortClick}>
-            <SortOutlinedIcon
-              sx={{ fontSize: 30, transform: "scaleY(-1)" }}
+            <SearchOutlinedIcon
+              sx={{ fontSize: 30 }}
               color="action"
             />
+          </IconButton>
+
+          <IconButton
+            onClick={() => {
+              setSortToggle(!sortToggle);
+              onSortClick();
+            }}
+          >
+            {!sortToggle ? (
+              <SortOutlinedIcon
+                sx={{ fontSize: 30 }}
+                color="action"
+              />
+            ) : (
+              <SortOutlinedIcon
+                sx={{ fontSize: 30, transform: "scaleY(-1)" }}
+                color="action"
+              />
+            )}
           </IconButton>
 
           <IconButton

@@ -9,10 +9,16 @@ import { ItemsList } from "../components/items/ItemsList";
 import { fetchAllUsers } from "../store/reducers/actionUserCreators";
 import { useNavigate } from "react-router-dom";
 import { MyLists } from "../components/lists/MyLists";
+import { FooterMenuList } from "../components/lists/FooterMenuList";
+import { v4 } from "uuid";
+import { IListItem } from "../types";
+import { addList } from "../store/reducers/listsSlice";
+import { fetchAddList } from "../store/reducers/actionsListsCreators";
 
 export function AllLists() {
   const dispatch = useAppDispatch();
   const { isLoading, error } = useAppSelector((state) => state.itemsReducer);
+  const { user } = useAppSelector((state) => state.userReducer);
   const navigate = useNavigate();
 
   const onSortHandler = () => {
@@ -20,13 +26,19 @@ export function AllLists() {
       duration: 1000,
       smooth: "easeInQuad",
     });
-    dispatch(sortItemsArray());
-    dispatch(fetchAllSortedItems());
-    dispatch(fetchAllUsers())
+    // dispatch(sortItemsArray());
+    // dispatch(fetchAllSortedItems());
+    // dispatch(fetchAllUsers())
   };
 
-  const onShowAllCommentsHandler = () => {
-    dispatch(showAllComments());
+  const onAddListHandler = (value: string) => {
+    const listData: IListItem = {
+      id: v4(),
+      title: value,
+      userOwner: user._id
+    };
+    // dispatch(addList(listData));
+    dispatch(fetchAddList(listData));
   };
 
   return (
@@ -40,11 +52,9 @@ export function AllLists() {
       <MyLists />
 
 
-      <FooterMenu
-        onChatClick={() => navigate("/chat")}
+      <FooterMenuList
         onSortClick={onSortHandler}
-        onShowCommentsClick={onShowAllCommentsHandler}
-        onAddItemClick={() => {}}
+        onAddItemClick={onAddListHandler}
       />
     </div>
   );

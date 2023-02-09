@@ -21,7 +21,7 @@ function App() {
 
   useEffect(() => {
     if (isAuth) {
-      navigate("/");
+      navigate("/lists");
     }
     if (!isAuth) {
       navigate("/login");
