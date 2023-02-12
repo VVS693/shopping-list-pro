@@ -75,6 +75,7 @@ export const createItem = async (req, res) => {
       id: req.body.id,
       completed: req.body.completed,
       title: req.body.title,
+      listId: req.body.listId
     });
     const post = await doc.save();
     res.json(post);
@@ -82,6 +83,19 @@ export const createItem = async (req, res) => {
     console.log(err);
     res.status(500).json({
       message: "Failed to create item!",
+    });
+  }
+};
+
+export const getItemsByListId = async (req, res) => {
+  // console.log(req)
+  try {
+    const items = await ItemModel.find({listId: req.params.id}).sort({completed: 1})
+    res.json(items);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Failed to get items!",
     });
   }
 };

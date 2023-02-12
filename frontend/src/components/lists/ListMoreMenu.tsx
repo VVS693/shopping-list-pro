@@ -59,9 +59,15 @@ const StyledMenu = styled((props: MenuProps) => (
 
 interface ListMoreMenuProps {
   isShared: boolean;
+  onEditTitleClick: () => void;
+  onDeleteClick: () => void
 }
 
-export function ListMoreMenu({ isShared }: ListMoreMenuProps) {
+export function ListMoreMenu({
+  isShared,
+  onEditTitleClick,
+  onDeleteClick,
+}: ListMoreMenuProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -70,6 +76,18 @@ export function ListMoreMenu({ isShared }: ListMoreMenuProps) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const onEditTitleClickHandler = () => {
+    setAnchorEl(null);
+    onEditTitleClick();
+  };
+
+  const onDeleteClickHandler = () => {
+    setAnchorEl(null);
+    onDeleteClick();
+  };
+
+
 
   return (
     <div>
@@ -92,7 +110,7 @@ export function ListMoreMenu({ isShared }: ListMoreMenuProps) {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose} disableRipple>
+        <MenuItem onClick={onEditTitleClickHandler} disableRipple>
           <EditIcon color="action" />
           Edit Title
         </MenuItem>
@@ -110,7 +128,7 @@ export function ListMoreMenu({ isShared }: ListMoreMenuProps) {
         )}
 
         <Divider sx={{ my: 0.5 }} />
-        <MenuItem onClick={handleClose} disableRipple sx={{ color: "#ef5350" }}>
+        <MenuItem onClick={onDeleteClickHandler} disableRipple sx={{ color: "#ef5350" }}>
           <DeleteIcon sx={{ color: "#ef5350" }} />
           Delete List
         </MenuItem>

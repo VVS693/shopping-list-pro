@@ -15,7 +15,7 @@ import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { showAddForm } from "../../store/reducers/itemsSlice";
 import { CSSTransition } from "react-transition-group";
-import "./stylesFooterMenuList.css";
+import "./stylesLists.css";
 import { AddItemMenu } from "../elements/AddItemMenu";
 
 interface FooterMenuListProps {
@@ -36,7 +36,7 @@ export function FooterMenuList({
     <>
       <CSSTransition
         in={isAddFormVisible}
-        timeout={700}
+        timeout={500}
         classNames="footerList"
         unmountOnExit
       >

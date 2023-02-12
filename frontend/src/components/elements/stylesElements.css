@@ -1,0 +1,24 @@
+
+
+
+.footer-enter {
+    bottom: 0;
+}
+
+.footer-enter-active {
+    bottom: 80px;
+    transition: bottom 500ms;
+}
+
+.footer-exit {
+    opacity: 1;
+    bottom: 80px;
+}
+
+.footer-exit-active {
+    bottom: 0;
+    transition:  500ms;
+} 
+
+
+

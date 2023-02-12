@@ -1,9 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { IShopItem } from "../../types";
+import { IListItem, IShopItem } from "../../types";
 import { clientDatabase } from "../axios";
 
 export const fetchAllSortedItems = createAsyncThunk(
-  "items/fetchAll",
+  "fetchAllSortedItems",
   async (_, thunkAPI) => {
     try {
       const response = await clientDatabase.get<IShopItem[]>("items");
@@ -50,6 +50,18 @@ export const fetchAddItems = createAsyncThunk(
       return item;
     } catch (err) {
       return thunkAPI.rejectWithValue("Error add item...");
+    }
+  }
+);
+
+export const fetchAllSortedItemsByListId = createAsyncThunk(
+  "fetchAllSortedItemsByListId",
+  async (listId: string, thunkAPI) => {
+    try {
+      const response = await clientDatabase.get<IShopItem[]>(`items/lists/${listId}`);
+      return response.data
+    } catch (err) {
+      return thunkAPI.rejectWithValue("Error loading...");
     }
   }
 );

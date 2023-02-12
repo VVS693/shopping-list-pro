@@ -2,10 +2,6 @@ import mongoose from "mongoose";
 
 const ListSchema = new mongoose.Schema(
   {
-    id: {
-      type: String,
-      require: true,
-    },
     title: {
       type: String,
       require: true,

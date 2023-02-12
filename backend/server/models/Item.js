@@ -3,9 +3,18 @@ import mongoose from "mongoose";
 const ItemSchema = new mongoose.Schema(
   {
     id: {
-        type: String,
-        require: true,
-      },
+      type: String,
+      require: true,
+    },
+    // listId: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "List",
+    //   require: true,
+    // },
+    listId: {
+      type: String,
+      require: true,
+    },
     completed: {
       type: Boolean,
       require: true,

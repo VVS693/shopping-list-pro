@@ -11,13 +11,14 @@ import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { showAddForm } from "../../store/reducers/itemsSlice";
 import { CSSTransition } from "react-transition-group";
-import "./stylesFooterMenu.css";
+import "./stylesElements.css";
 
 interface FooterMenuProps {
   onChatClick: () => void;
   onSortClick: () => void;
   onShowCommentsClick: () => void;
   onAddItemClick: (value: string) => void;
+  onBackClick: () => void
 }
 
 export function FooterMenu({
@@ -25,6 +26,7 @@ export function FooterMenu({
   onSortClick,
   onShowCommentsClick,
   onAddItemClick,
+  onBackClick,
 }: FooterMenuProps) {
   const [isCommentsVisible, setCommentsVisible] = useState(false);
   const dispatch = useAppDispatch();
@@ -34,7 +36,7 @@ export function FooterMenu({
     <>
       <CSSTransition
         in={isAddFormVisible}
-        timeout={700}
+        timeout={500}
         classNames="footer"
         unmountOnExit
       >
@@ -49,7 +51,7 @@ export function FooterMenu({
 
       <div className="z-50 fixed w-full max-w-md min-w-[375px] bottom-0 border-t bg-white">
         <div className="flex justify-between px-4 pb-6 pt-[10px]">
-          <IconButton onClick={() => {}}>
+          <IconButton onClick={onBackClick}>
             <ArrowBackIosNewIcon sx={{ fontSize: 30 }} color="action" />
           </IconButton>
 

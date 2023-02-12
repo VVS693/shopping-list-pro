@@ -1,28 +1,50 @@
 import { IListItem } from "../../types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { fetchAddList, fetchAllLists } from "./actionsListsCreators";
+import {
+  fetchAddList,
+  fetchAllLists,
+  fetchDeleteList,
+  fetchEditList,
+} from "./actionsListsCreators";
 
 interface ListsState {
   lists: IListItem[];
   isLoading: boolean;
   error: string;
+  currentList: IListItem;
 }
 
 const initialState: ListsState = {
   lists: [],
   isLoading: false,
   error: "",
+  currentList: {
+    _id: "",
+    title: "",
+    userOwner: ""
+  },
 };
 
 export const listsSlice = createSlice({
   name: "lists",
   initialState,
   reducers: {
-
     addList(state, action: PayloadAction<IListItem>) {
       state.lists.push(action.payload);
     },
-
+    editList(state, action: PayloadAction<IListItem>) {
+      state.lists.map((el) => {
+        if (el._id === action.payload._id) {
+          Object.assign(el, action.payload);
+        }
+      });
+    },
+    setCurrentList(state, action: PayloadAction<IListItem>) {
+      state.currentList = action.payload;
+    },
+    deleteList(state, action: PayloadAction<IListItem>) {
+      state.lists = state.lists.filter((el) => el._id !== action.payload._id)
+    },
   },
 
   extraReducers(builder) {
@@ -53,14 +75,41 @@ export const listsSlice = createSlice({
         state.error = action.payload as string;
       })
 
+      .addCase(fetchEditList.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchEditList.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = "";
+        state.lists.map((el) => {
+          if (el._id === action.payload._id) {
+            Object.assign(el, action.payload);
+          }
+        });
+      })
+      .addCase(fetchEditList.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
 
+      // .addCase(fetchDeleteList.pending, (state) => {
+      //   state.isLoading = true;
+      // })
+      // .addCase(fetchDeleteList.fulfilled, (state, action) => {
+      //   state.isLoading = false;
+      //   state.error = "";
+      //   console.log("del case")
+      //   state.lists = state.lists.filter((el) => el._id !== action.payload._id);
+      // })
+      // .addCase(fetchDeleteList.rejected, (state, action) => {
+      //   state.isLoading = false;
+      //   state.error = action.payload as string;
+      // })
 
 
   },
 });
 
-export const {
-  addList,
-} = listsSlice.actions;
+export const { addList, editList, setCurrentList, deleteList } = listsSlice.actions;
 
 export default listsSlice.reducer;

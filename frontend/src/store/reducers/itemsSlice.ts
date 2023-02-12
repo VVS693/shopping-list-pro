@@ -1,4 +1,4 @@
-import { fetchAllSortedItems } from "./actionsItemsCreators";
+import { fetchAllSortedItems, fetchAllSortedItemsByListId } from "./actionsItemsCreators";
 import { IShopItem } from "./../../types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
@@ -36,9 +36,11 @@ export const itemsSlice = createSlice({
     editItemArray(state, action: PayloadAction<IShopItem>) {
       state.items.map((el) => {
         if (el.id === action.payload.id) {
-          el.completed = action.payload.completed;
-          el.title = action.payload.title;
-          el.comments = action.payload.comments;
+
+          Object.assign(el, action.payload);
+          // el.completed = action.payload.completed;
+          // el.title = action.payload.title;
+          // el.comments = action.payload.comments;
         }
       });
     },
@@ -52,6 +54,10 @@ export const itemsSlice = createSlice({
         if (a.completed < b.completed) return -1;
         return 0;
       });
+    },
+
+    setInitialItems(state) {
+      state.items = []
     },
   },
 
@@ -68,7 +74,21 @@ export const itemsSlice = createSlice({
       .addCase(fetchAllSortedItems.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
+      })
+
+      .addCase(fetchAllSortedItemsByListId.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchAllSortedItemsByListId.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = "";
+        state.items = action.payload;
+      })
+      .addCase(fetchAllSortedItemsByListId.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
       });
+
   },
 });
 
@@ -79,6 +99,7 @@ export const {
   addItemArray,
   showAllComments,
   showAddForm,
+  setInitialItems,
 } = itemsSlice.actions;
 
 export default itemsSlice.reducer;

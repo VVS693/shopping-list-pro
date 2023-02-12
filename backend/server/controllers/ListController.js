@@ -1,6 +1,5 @@
 import ListModel from "../models/List.js";
-
-
+import ItemModel from "../models/Item.js";
 
 // export const removeItem = async (req, res) => {
 //   try {
@@ -74,10 +73,9 @@ export const getAllLists = async (req, res) => {
 export const createList = async (req, res) => {
   try {
     const doc = new ListModel({
-      id: req.body.id,
+      // id: req.body.id,
       title: req.body.title,
       userOwner: req.body.userOwner,
-
     });
     const post = await doc.save();
     res.json(post);
@@ -86,5 +84,46 @@ export const createList = async (req, res) => {
     res.status(500).json({
       message: "Failed to create list!",
     });
+  }
+};
+
+export const updateList = async (req, res) => {
+  try {
+    console.log(req.params);
+    const listId = req.params.id;
+    await ListModel.updateOne(
+      {
+        _id: listId,
+      },
+      {
+        title: req.body.title,
+      }
+    );
+    const list = await ListModel.findOne({ _id: req.body._id });
+    res.json(list);
+  } catch (error) {
+    console.log(err);
+    res.status(500).json({
+      message: "Failed to update list!",
+    });
+  }
+};
+
+export const removeList = async (req, res) => {
+  try {
+    const listId = req.params.id.trim();
+    const deletedCount = await ItemModel.deleteMany({
+      listId: listId,
+    });
+    await ListModel.findOneAndDelete({
+      _id: listId,
+    });
+    res.json(deletedCount);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Failed to delete list!",
+    });
+    
   }
 };

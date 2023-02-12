@@ -3,9 +3,11 @@ import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import {
   fetchAddItems,
   fetchAllSortedItems,
+  fetchAllSortedItemsByListId,
 } from "../store/reducers/actionsItemsCreators";
 import {
   addItemArray,
+  setInitialItems,
   showAllComments,
   sortItemsArray,
 } from "../store/reducers/itemsSlice";
@@ -17,10 +19,12 @@ import { fetchAllUsers } from "../store/reducers/actionUserCreators";
 import { useNavigate } from "react-router-dom";
 import { IShopItem } from "../types";
 import { v4 } from "uuid";
+import Fade from "@mui/material/Fade";
 
 export function Home() {
   const dispatch = useAppDispatch();
   const { isLoading, error } = useAppSelector((state) => state.itemsReducer);
+  const { currentList } = useAppSelector((state) => state.listsReducer);
   const navigate = useNavigate();
 
   const onSortHandler = () => {
@@ -29,40 +33,46 @@ export function Home() {
       smooth: "easeInQuad",
     });
     dispatch(sortItemsArray());
-    dispatch(fetchAllSortedItems());
+    dispatch(fetchAllSortedItemsByListId(currentList?._id));
+    // dispatch(fetchAllSortedItems());
     dispatch(fetchAllUsers());
   };
 
-  const onShowAllCommentsHandler = () => {
+  const onShowAllCommentsHandle = () => {
     dispatch(showAllComments());
   };
 
-  const onAddItemHandler = (value: string) => {
+  const onAddItemHandle = (value: string) => {
     const itemData: IShopItem = {
       id: v4(),
       completed: false,
       title: value,
+      listId: currentList?._id,
     };
     dispatch(addItemArray(itemData));
     dispatch(fetchAddItems(itemData));
   };
 
+  const onBackClickHandle = () => {
+    dispatch(setInitialItems())
+    navigate("/lists")
+  }
 
   return (
     <div className="container mx-auto max-w-md pb-20">
       {error ? (
         <ErrorMessage error={error} />
       ) : (
-        <Header isLoading={isLoading} title="Shopping List" />
+        <Header isLoading={isLoading} title={currentList?.title} />
       )}
-
       <ItemsList />
 
       <FooterMenu
+        onBackClick={onBackClickHandle}
         onChatClick={() => navigate("/chat")}
         onSortClick={onSortHandler}
-        onShowCommentsClick={onShowAllCommentsHandler}
-        onAddItemClick={onAddItemHandler}
+        onShowCommentsClick={onShowAllCommentsHandle}
+        onAddItemClick={onAddItemHandle}
       />
     </div>
   );

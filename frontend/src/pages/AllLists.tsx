@@ -17,7 +17,7 @@ import { fetchAddList } from "../store/reducers/actionsListsCreators";
 
 export function AllLists() {
   const dispatch = useAppDispatch();
-  const { isLoading, error } = useAppSelector((state) => state.itemsReducer);
+  const { isLoading, error } = useAppSelector((state) => state.listsReducer);
   const { user } = useAppSelector((state) => state.userReducer);
   const navigate = useNavigate();
 
@@ -33,7 +33,9 @@ export function AllLists() {
 
   const onAddListHandler = (value: string) => {
     const listData: IListItem = {
-      id: v4(),
+
+      // id: v4(),
+      _id: v4(),
       title: value,
       userOwner: user._id
     };

@@ -32,75 +32,21 @@ export function MyLists() {
     dispatch(fetchAllLists());
   }, []);
 
-  const tempListOwn = {
-    id: "12345",
-    title: "jfwojfwjfwljffwjwlfjwwfjwljflwjflwfjwlqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqfjwlf",
-    userOwner: "63c8038f240821b739229331",
-  };
-
-  const tempListShared = {
-    id: "12345",
-    title: "Test Test Test Test Test Test Test Testwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww ",
-    userOwner: "63d78283d588b3c6c3763fa3",
-  };
-
-  const tempListArchived = {
-    id: "12345",
-    title: "twwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww ",
-    userOwner: "63c8038f240821b739229331",
-  };
 
   return (
     <>
 
-
       <TransitionGroup>
         {lists.map((el) => (
-          <CSSTransition key={el.id} timeout={500} classNames="list">
+          <CSSTransition key={el._id} timeout={500} classNames="list">
 
-
-            <MyListItem listItem={el} onListDel={() => {}} onListEdit={() => {}}/>
-
+            <MyListItem listItem={el} dateLabelMark="updatedAt" onListDel={() => {}} onListEdit={() => {}}/>
 
           </CSSTransition>
         ))}
 
-
-
-
-
-
-
-
-          {/* <CategoryHeader title="My Personal Lists:"/>
-
-        <MyListItem listItem={tempListOwn} onListDel={() => {}} onListEdit={() => {}}/>
-
-        <MyListItem listItem={tempListOwn} onListDel={() => {}} onListEdit={() => {}}/>
-
-        <MyListItem listItem={tempListOwn} onListDel={() => {}} onListEdit={() => {}}/>
-
-        <CategoryHeader title="My Shared Lists:"/>
-
-        <MyListItem listItem={tempListShared} onListDel={() => {}} onListEdit={() => {}}/>
-
-        <MyListItem listItem={tempListShared} onListDel={() => {}} onListEdit={() => {}}/>
-
-        <MyListItem listItem={tempListShared} onListDel={() => {}} onListEdit={() => {}}/>
-
-        <CategoryHeader title="Archived Lists:"/>
-
-        <MyListItem listItem={tempListArchived} onListDel={() => {}} onListEdit={() => {}}/>
-
-        <MyListItem listItem={tempListArchived} onListDel={() => {}} onListEdit={() => {}}/>
-
-        <MyListItem listItem={tempListArchived} onListDel={() => {}} onListEdit={() => {}}/> */}
-
-
-
       </TransitionGroup>
 
-      {/* <AddItem onAdd={onAddItemHandler} /> */}
     </>
   );
 }

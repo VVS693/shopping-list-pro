@@ -8,6 +8,7 @@ export interface IShopItem {
   id: string;
   completed: boolean;
   title: string;
+  listId: string
   comments?: IComment[];
 }
 
@@ -69,11 +70,11 @@ export interface IUserSharing {
 }
 
 export interface IListItem {
-  id: string;
+  _id: string
+  // id: string;
   title: string;
   userOwner: string;
   usersSharing?: IUserSharing[];
-
   createdAt?: string;
   updatedAt?: string;
 }

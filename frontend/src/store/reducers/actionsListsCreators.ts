@@ -30,23 +30,12 @@ import { clientDatabase } from "../axios";
 //   }
 // );
 
-// export const fetchEditItems = createAsyncThunk(
-//   "editItem",
-//   async (item: IShopItem, thunkAPI) => {
-//     try {
-//       await clientDatabase.patch<IShopItem>(`items/${item.id}`, item);
-//       return item;
-//     } catch (err) {
-//       return thunkAPI.rejectWithValue("Error edit item...");
-//     }
-//   }
-// );
-
 export const fetchAllLists = createAsyncThunk(
   "fetchAllLists",
   async (_, thunkAPI) => {
     try {
       const response = await clientDatabase.get<IListItem[]>("lists");
+      
       return response.data;
     } catch (err) {
       return thunkAPI.rejectWithValue("Error loading all lists...");
@@ -62,6 +51,33 @@ export const fetchAddList = createAsyncThunk(
       return response.data;
     } catch (err) {
       return thunkAPI.rejectWithValue("Error add list...");
+    }
+  }
+);
+
+export const fetchEditList = createAsyncThunk(
+  "fetchEditList",
+  async (list: IListItem, thunkAPI) => {
+    try {
+      const response = await clientDatabase.patch<IListItem>(
+        `lists/${list._id}`,
+        list
+      );
+      return response.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue("Error edit list...");
+    }
+  }
+);
+
+export const fetchDeleteList = createAsyncThunk(
+  "fetchDeleteList",
+  async (list: IListItem, thunkAPI) => {
+    try {
+      const response = await clientDatabase.delete<IListItem>(`lists/${list._id}`);
+      return response.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue("Error delete list...");
     }
   }
 );

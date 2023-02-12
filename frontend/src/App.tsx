@@ -11,7 +11,6 @@ import { fetchUserMe } from "./store/reducers/actionUserCreators";
 function App() {
   const dispatch = useAppDispatch();
   const { isAuth } = useAppSelector((state) => state.userReducer);
-  const { isLoading } = useAppSelector((state) => state.itemsReducer);
 
   useEffect(() => {
     dispatch(fetchUserMe());
@@ -34,7 +33,7 @@ function App() {
       <Route path="/lists" element={<AllLists />} />
       <Route path="/chat" element={<Chat />} />
       <Route path="/useraccount" element={<UserAccount />} />
-      <Route path="/login" element={!isLoading && <Login />} />
+      <Route path="/login" element={<Login />} />
     </Routes>
   );
 }

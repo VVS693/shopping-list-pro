@@ -104,12 +104,17 @@ app.post("/items", checkAuth, ItemController.createItem);
 app.delete("/items/:id", checkAuth, ItemController.removeItem);
 app.patch("/items/:id", checkAuth, ItemController.updateItem);
 
+app.get("/items/lists/:id", checkAuth, ItemController.getItemsByListId);
+
+
+
 app.get("/messages", checkAuth, MessageController.getAllMessages);
 
 
 app.get("/lists", checkAuth, ListController.getAllLists);
 app.post("/lists", checkAuth, ListController.createList);
-
+app.patch("/lists/:id", checkAuth, ListController.updateList);
+app.delete("/lists/:id", checkAuth, ListController.removeList);
 
 
 server.listen(PORT, () => {

@@ -1,13 +1,13 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
 
 interface ShopItemProps {
   title: string;
   placeholder?: string;
   onEdit: (el: string) => void;
-  onDel: () => void;
+  onDel?: () => void;
 }
 
 export function ItemEdit({ title, placeholder, onEdit, onDel }: ShopItemProps) {
@@ -25,7 +25,7 @@ export function ItemEdit({ title, placeholder, onEdit, onDel }: ShopItemProps) {
       if (value.trim().length !== 0) {
         onEdit(value);
       } else {
-        onDel();
+        onDel && onDel();
       }
     }
   };
@@ -33,12 +33,12 @@ export function ItemEdit({ title, placeholder, onEdit, onDel }: ShopItemProps) {
   const onFocusHandler = () => {
     // console.log("foc")
     isDel.current = true;
-    onDel();
+    onDel && onDel();
   };
   const onClickHandler = () => {
     // console.log("kl")
     isDel.current = true;
-    onDel();
+    onDel && onDel();
   };
 
   return (
@@ -80,12 +80,14 @@ export function ItemEdit({ title, placeholder, onEdit, onDel }: ShopItemProps) {
           />
         </form>
 
-        <IconButton
-          onFocus={onFocusHandler}
-          //  onClick={onClickHandler}
-        >
-          <DeleteIcon sx={{color: "#ef5350"}} />
-        </IconButton>
+        {!!onDel && (
+          <IconButton
+            onFocus={onFocusHandler}
+            //  onClick={onClickHandler}
+          >
+            <DeleteIcon sx={{ color: "#ef5350" }} />
+          </IconButton>
+        )}
       </div>
     </>
   );
