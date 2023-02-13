@@ -33,11 +33,10 @@ export function AllLists() {
 
   const onAddListHandler = (value: string) => {
     const listData: IListItem = {
-
       // id: v4(),
       _id: v4(),
       title: value,
-      userOwner: user._id
+      userOwner: user._id,
     };
     // dispatch(addList(listData));
     dispatch(fetchAddList(listData));
@@ -48,11 +47,10 @@ export function AllLists() {
       {error ? (
         <ErrorMessage error={error} />
       ) : (
-        <Header isLoading={isLoading} title="Shopping List Pro"/>
+        <Header isLoading={isLoading} title="Shopping List Pro" />
       )}
 
       <MyLists />
-
 
       <FooterMenuList
         onSortClick={onSortHandler}

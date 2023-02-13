@@ -89,7 +89,7 @@ export const createList = async (req, res) => {
 
 export const updateList = async (req, res) => {
   try {
-    console.log(req.params);
+    // console.log(req.params);
     const listId = req.params.id;
     await ListModel.updateOne(
       {

@@ -5,6 +5,7 @@ import { UserAvatar } from "../user/UserAvatar";
 import { ItemEdit } from "../items/ItemEdit";
 import { ItemTitle } from "../items/ItemTitle";
 import ShareIcon from "@mui/icons-material/Share";
+import Avatar from "@mui/material/Avatar";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import IconButton from "@mui/material/IconButton";
 import { ListMoreMenu } from "./ListMoreMenu";
@@ -21,6 +22,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { AlertDialog } from "../elements/AlertDialog";
 import Divider from "@mui/material/Divider";
+import { ListLabelMark } from "./ListLabelMark";
 
 interface MyListItemProps {
   listItem: IListItem;
@@ -41,6 +43,8 @@ export function MyListItem({
   const [isDeleteListModalApproveOpen, setIsDeleteListModalApproveOpen] =
     useState(false);
   const [alertDialogText, setalertDialogText] = useState("");
+  const isShared: boolean = !!listItem.usersSharing?.length;
+
   const dispatch = useAppDispatch();
 
   const listEditHandle = (value: string) => {
@@ -52,34 +56,6 @@ export function MyListItem({
     dispatch(editList(listData));
     dispatch(fetchEditList(listData));
   };
-
-  // const whoseAvatar = (listItem: IListItem) => {
-  //   const listUserOwner = users.find(
-  //     (el: IUser) => el._id === listItem.userOwner
-  //   );
-  //   return listUserOwner;
-  // };
-
-  // const isShared = (listItem: IListItem) => {
-  //   const isShared = listItem.usersSharing?.length > 0 ? true : false
-  //   return isShared
-  // }
-
-  const isShared = useRef<boolean>(!!listItem.usersSharing?.length);
-
-  const dateLabel = (date: string | undefined) => {
-    const dataLabel: string = date
-      ? new Date(Date.parse(date)).toLocaleString("en-GB", {
-          timeStyle: "short",
-          dateStyle: "short",
-        })
-      : "";
-    return dataLabel;
-  };
-
-  const itemsCount = (listId: string) => {
-
-  }
 
   const onEditTitleClickHandle = () => {
     setTimeout(() => {
@@ -104,20 +80,14 @@ export function MyListItem({
     cancelHandler();
     dispatch(deleteList(listItem));
     dispatch(fetchAllLists());
-    
   };
-
-  // const userExitModalOpen = async () => {
-  //   setAlertDialogExitOpen(true);
-  //   setalertDialogText("Are you sure you want to exit?");
-  // };
 
   const cancelHandler = () => {
     setIsDeleteListModalApproveOpen(false);
   };
 
   return (
-    <div className="relative flex flex-col items-start pl-4 pr-4 border-b">
+    <div className="relative flex flex-col items-start pl-0 pr-0 border-b">
       <AlertDialog
         isOpen={isDeleteListModalApproveOpen}
         text={alertDialogText}
@@ -125,10 +95,20 @@ export function MyListItem({
         cancelFunc={cancelHandler}
       />
       <div className="flex items-center w-full justify-between pb-3">
-        {isShared.current ? (
-          <ShareIcon color="action" />
+        {isShared ? (
+          <ShareIcon
+            color="action"
+            fontSize="small"
+            className=" relative left-2"
+          />
         ) : (
-          <div className="pl-6" />
+          <Avatar
+            sx={{ width: "20px", height: "20px", fontSize: "10px" }}
+            variant="rounded"
+            className=" relative left-2"
+          >
+            My
+          </Avatar>
         )}
 
         {isEditing ? (
@@ -138,28 +118,41 @@ export function MyListItem({
         )}
 
         <ListMoreMenu
-          isShared={isShared.current}
+          isShared={isShared}
           onEditTitleClick={onEditTitleClickHandle}
           onDeleteClick={onDeleteClickHandle}
+          positionHorisontal="right"
         />
       </div>
 
-      <div className="select-none absolute bottom-1 flex">
-        {!!(dateLabelMark === "createdAt") && (
-          <div className="select-none pl-10 pr-2 text-xs font-extralight text-light-blue-800">
-            {`Created at: ${dateLabel(listItem.createdAt)}`}
-          </div>
-        )}
-        {!!(dateLabelMark === "updatedAt") && (
-          <div className="select-none pl-10 pr-2 text-xs font-extralight text-light-blue-800">
-            {`Update at: ${dateLabel(listItem.updatedAt)}`}
-          </div>
-        )}
-        <Divider orientation="vertical" flexItem />
-          <div className="pl-2 select-none text-xs font-extralight text-light-blue-800">
-            {`Items: `}
-          </div>
+      <div className="select-none absolute bottom-1 pl-8 flex">
+        <ListLabelMark
+          updated={{
+            updatedAt: listItem.updatedAt,
+            timeStyle: "short",
+            dateStyle: "short",
+          }}
+          // created={{
+          //   createdAt: listItem.createdAt,
+          //   timeStyle: "short",
+          //   dateStyle: "short",
+          // }}
+        />
 
+        {/* {!!(dateLabelMark === "createdAt") && (
+        //   <div className="select-none pl-10 pr-2 text-xs font-extralight text-light-blue-800">
+        //     {`Created at: ${dateLabel(listItem.createdAt)}`}
+        //   </div>
+        // )}
+        // {!!(dateLabelMark === "updatedAt") && (
+        //   <div className="select-none pl-10 pr-2 text-xs font-extralight text-light-blue-800">
+        //     {`Update at: ${dateLabel(listItem.updatedAt)}`}
+        //   </div>
+        // )}
+        // <Divider orientation="vertical" flexItem />
+        //   <div className="pl-2 select-none text-xs font-extralight text-light-blue-800">
+        //     {`Items: `}
+        //   </div> */}
       </div>
     </div>
   );

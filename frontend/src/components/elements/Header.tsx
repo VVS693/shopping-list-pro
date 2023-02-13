@@ -1,18 +1,40 @@
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../hooks/redux";
 import { UserAvatar } from "../user/UserAvatar";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import Fade from "@mui/material/Fade";
-import IconButton from "@mui/material/IconButton";
+import { ListLabelMark } from "../lists/ListLabelMark";
 
 interface HeaderProps {
-  title?: string;
+  title?: ReactNode
   isLoading?: boolean;
   isUserActive?: boolean;
+  created?: {
+    createdAt?: string;
+    timeStyle?: "full" | "long" | "medium" | "short" | undefined;
+    dateStyle?: "full" | "long" | "medium" | "short" | undefined;
+  };
+
+  updated?: {
+    updatedAt?: string;
+    timeStyle?: "full" | "long" | "medium" | "short" | undefined;
+    dateStyle?: "full" | "long" | "medium" | "short" | undefined;
+  };
+
+  itemsAmount?: number;
+  isShared?: boolean;
 }
 
-export function Header({ isLoading, title, isUserActive }: HeaderProps) {
+export function Header({
+  isLoading,
+  title,
+  isUserActive,
+  created,
+  updated,
+  itemsAmount,
+  isShared
+}: HeaderProps) {
   const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.userReducer);
   const [isLoaderShow, setIsLoaderShow] = useState(isLoading);
@@ -26,16 +48,49 @@ export function Header({ isLoading, title, isUserActive }: HeaderProps) {
     }
   }, [isLoading]);
 
+  const bottomUp: string =
+    !!created || !!updated || !!itemsAmount ? "bottom-2" : "";
+
   return (
     <div className="z-50 sticky max-w-md min-w-[375px] top-0 bg-white">
-      <div className="flex w-full items-center justify-between  pt-2 pb-2 px-6 border-b">
-        <Fade in={!!title} timeout={animationTimeout}>
-          <div className="text-left min-w-[250px] pr-3 text-blue-gray-800 font-bold text-2xl select-none break-words">
-            {title}
-          </div>
-        </Fade>
+      <div className="flex  w-full items-center justify-between  py-2 px-6 border-b">
+        <div className="min-w-[250px]">
+          <Fade in={!!title} timeout={animationTimeout}>
+            <div
+              className={`relative text-left min-w-[250px] px-1 py-2 text-blue-gray-800 font-bold text-2xl select-none break-words ${bottomUp}`}
+            >
+              {title}
+              
+            </div>
+          </Fade>
+          <Fade
+            in={!!created || !!updated || !!itemsAmount}
+            timeout={animationTimeout}
+          >
+            <div>
+              {(!!created || !!updated || !!itemsAmount) && (
+                <div className="absolute bottom-1 ">
+                  <ListLabelMark
+                    updated={{
+                      updatedAt: updated?.updatedAt,
+                      timeStyle: updated?.timeStyle,
+                      dateStyle: updated?.dateStyle,
+                    }}
+                    created={{
+                      createdAt: created?.createdAt,
+                      timeStyle: created?.timeStyle,
+                      dateStyle: created?.dateStyle,
+                    }}
+                    itemsAmount={itemsAmount}
+                    isShared={isShared}
+                  />
+                </div>
+              )}
+            </div>
+          </Fade>
+        </div>
 
-        <div className="flex w-10 h-10 relative ml-8">
+        <div className="flex w-12 h-12 relative ml-9 items-center">
           <Fade
             in={isLoaderShow}
             timeout={animationTimeout}
@@ -44,8 +99,8 @@ export function Header({ isLoading, title, isUserActive }: HeaderProps) {
           >
             <AutorenewIcon
               sx={{
-                width: "40px",
-                height: "40px",
+                width: "48px",
+                height: "48px",
                 animation: "spin 1s linear infinite",
               }}
               color="action"
@@ -61,6 +116,8 @@ export function Header({ isLoading, title, isUserActive }: HeaderProps) {
               <UserAvatar
                 isUserActive={isUserActive}
                 userAvatar={user.avatar}
+                width={48}
+                height={48}
               />
             </div>
           </Fade>

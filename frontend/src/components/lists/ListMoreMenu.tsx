@@ -19,7 +19,7 @@ const StyledMenu = styled((props: MenuProps) => (
     elevation={0}
     anchorOrigin={{
       vertical: "bottom",
-      horizontal: "right",
+      horizontal: "center",
     }}
     transformOrigin={{
       vertical: "top",
@@ -59,14 +59,16 @@ const StyledMenu = styled((props: MenuProps) => (
 
 interface ListMoreMenuProps {
   isShared: boolean;
-  onEditTitleClick: () => void;
-  onDeleteClick: () => void
+  onEditTitleClick?: () => void;
+  onDeleteClick: () => void;
+  positionHorisontal: number | "left" | "right" | "center"
 }
 
 export function ListMoreMenu({
   isShared,
   onEditTitleClick,
   onDeleteClick,
+  positionHorisontal
 }: ListMoreMenuProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -79,15 +81,13 @@ export function ListMoreMenu({
 
   const onEditTitleClickHandler = () => {
     setAnchorEl(null);
-    onEditTitleClick();
+    onEditTitleClick && onEditTitleClick();
   };
 
   const onDeleteClickHandler = () => {
     setAnchorEl(null);
     onDeleteClick();
   };
-
-
 
   return (
     <div>
@@ -105,15 +105,22 @@ export function ListMoreMenu({
         id="more-list-menu"
         MenuListProps={{
           "aria-labelledby": "demo-customized-button",
+
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: positionHorisontal
         }}
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={onEditTitleClickHandler} disableRipple>
-          <EditIcon color="action" />
-          Edit Title
-        </MenuItem>
+        {!!onEditTitleClick && (
+          <MenuItem onClick={onEditTitleClickHandler} disableRipple>
+            <EditIcon color="action" />
+            Edit Title
+          </MenuItem>
+        )}
 
         {isShared ? (
           <MenuItem onClick={handleClose} disableRipple>
@@ -128,7 +135,11 @@ export function ListMoreMenu({
         )}
 
         <Divider sx={{ my: 0.5 }} />
-        <MenuItem onClick={onDeleteClickHandler} disableRipple sx={{ color: "#ef5350" }}>
+        <MenuItem
+          onClick={onDeleteClickHandler}
+          disableRipple
+          sx={{ color: "#ef5350" }}
+        >
           <DeleteIcon sx={{ color: "#ef5350" }} />
           Delete List
         </MenuItem>

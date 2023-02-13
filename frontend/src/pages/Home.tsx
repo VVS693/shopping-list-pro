@@ -19,11 +19,14 @@ import { fetchAllUsers } from "../store/reducers/actionUserCreators";
 import { useNavigate } from "react-router-dom";
 import { IShopItem } from "../types";
 import { v4 } from "uuid";
-import Fade from "@mui/material/Fade";
+import Typography from "@mui/material/Typography";
+import { ListMoreMenu } from "../components/lists/ListMoreMenu";
 
 export function Home() {
   const dispatch = useAppDispatch();
-  const { isLoading, error } = useAppSelector((state) => state.itemsReducer);
+  const { isLoading, error, items } = useAppSelector(
+    (state) => state.itemsReducer
+  );
   const { currentList } = useAppSelector((state) => state.listsReducer);
   const navigate = useNavigate();
 
@@ -54,16 +57,56 @@ export function Home() {
   };
 
   const onBackClickHandle = () => {
-    dispatch(setInitialItems())
-    navigate("/lists")
-  }
+    dispatch(setInitialItems());
+    navigate("/lists");
+  };
+
+  const isShared = () => {
+    return !!currentList.usersSharing?.length;
+  };
+
+  const onDeleteClickHandle = () => {
+    console.log("delete list");
+    // setIsDeleteListModalApproveOpen(true);
+    // setalertDialogText(
+    //   "Are you sure you want to delete this list? All elements will be removed!"
+    // );
+  };
+
+  const titleHeader = (
+    <div className="flex relative items-center right-4">
+      <ListMoreMenu
+        isShared={true}
+        onDeleteClick={onDeleteClickHandle}
+        positionHorisontal="left"
+      />
+      <Typography variant="inherit" noWrap>
+        {currentList?.title}
+      </Typography>
+    </div>
+  );
 
   return (
     <div className="container mx-auto max-w-md pb-20">
       {error ? (
         <ErrorMessage error={error} />
       ) : (
-        <Header isLoading={isLoading} title={currentList?.title} />
+        <Header
+          isLoading={isLoading}
+          title={titleHeader}
+          updated={{
+            updatedAt: currentList.updatedAt,
+            // timeStyle: "short",
+            dateStyle: "short",
+          }}
+          created={{
+            createdAt: currentList.createdAt,
+            // timeStyle: "short",
+            dateStyle: "short",
+          }}
+          itemsAmount={items.length}
+          isShared={isShared()}
+        />
       )}
       <ItemsList />
 
