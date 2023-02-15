@@ -35,7 +35,6 @@ export function ShopItem({ item }: ShopItemProps) {
   };
 
   const toggleCompleted = () => {
-    // тут нужно только один уровеь копировать
     const itemData: IShopItem = {
       ...item,
       completed: !item.completed,
@@ -55,7 +54,9 @@ export function ShopItem({ item }: ShopItemProps) {
     const itemData: IShopItem = structuredClone(item);
     itemData.comments = allCommentsData;
     if (allCommentsData.length === 0) {
-      setShowComments(false);
+      setTimeout(() => {
+        setShowComments(false);
+      }, 750);
     }
     dispatch(editItemArray(itemData));
     dispatch(fetchEditItems(itemData));

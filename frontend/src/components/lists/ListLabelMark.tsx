@@ -1,7 +1,7 @@
 import Divider from "@mui/material/Divider";
 import ShareIcon from "@mui/icons-material/Share";
 
-interface MyListItemProps {
+interface ListLabelMarkProps {
   created?: {
     createdAt?: string;
     timeStyle?: "full" | "long" | "medium" | "short" | undefined;
@@ -22,7 +22,7 @@ export function ListLabelMark({
   updated,
   itemsAmount,
   isShared,
-}: MyListItemProps) {
+}: ListLabelMarkProps) {
   const dateLabel = (
     date: string | undefined,
     timeStyle: "full" | "long" | "medium" | "short" | undefined,
@@ -38,7 +38,7 @@ export function ListLabelMark({
   };
 
   return (
-    <div className="select-none flex">
+    <div className="select-none flex items-center">
       {!!created && (
         <div className="select-none pl-1 pr-1 text-xs font-extralight text-light-blue-800">
           {`Crt: ${dateLabel(
@@ -72,7 +72,7 @@ export function ListLabelMark({
       {isShared && (
         <>
           <Divider orientation="vertical" flexItem />
-          <ShareIcon sx={{fontSize: "16px"}}  className="px-1 text-light-blue-800" />
+          <ShareIcon sx={{fontSize: "22px"}}  className="px-1 text-light-blue-800" />
         </>
       )}
     </div>

@@ -115,6 +115,7 @@ app.get("/lists", checkAuth, ListController.getAllLists);
 app.post("/lists", checkAuth, ListController.createList);
 app.patch("/lists/:id", checkAuth, ListController.updateList);
 app.delete("/lists/:id", checkAuth, ListController.removeList);
+app.get("/lists/count/:id", checkAuth, ListController.getAmountDocsByListId);
 
 
 server.listen(PORT, () => {

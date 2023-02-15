@@ -127,3 +127,16 @@ export const removeList = async (req, res) => {
     
   }
 };
+
+export const getAmountDocsByListId = async (req, res) => {
+  try {
+    const listId = req.params.id.trim();
+    const amount = await ItemModel.count({ listId: listId });
+    res.json(amount);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Failed to count elements of list!",
+    });
+  }
+};

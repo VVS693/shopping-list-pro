@@ -69,7 +69,7 @@ export function Header({
           >
             <div>
               {(!!created || !!updated || !!itemsAmount) && (
-                <div className="absolute bottom-1 ">
+                <div className="absolute bottom-1">
                   <ListLabelMark
                     updated={{
                       updatedAt: updated?.updatedAt,

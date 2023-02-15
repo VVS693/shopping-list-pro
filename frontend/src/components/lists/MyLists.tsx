@@ -12,6 +12,7 @@ import { IShopItem } from "../../types";
 import { ShopItem } from "../items/ShopItem";
 import { v4 } from "uuid";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
+import Collapse from '@mui/material/Collapse';
 import "./stylesLists.css";
 import { ItemTitle } from "../items/ItemTitle";
 import { CommentItem } from "../comments/CommentItem";
@@ -34,19 +35,22 @@ export function MyLists() {
 
 
   return (
-    <>
-
       <TransitionGroup>
         {lists.map((el) => (
-          <CSSTransition key={el._id} timeout={500} classNames="list">
+          <Collapse key={el._id} timeout={{
+            appear: 750,
+            enter: 750,
+            exit: 750,
+          }}>
 
-            <MyListItem listItem={el} dateLabelMark="updatedAt" onListDel={() => {}} onListEdit={() => {}}/>
+          {/* <CSSTransition key={el._id} timeout={500} classNames="list"> */}
+            
+            <MyListItem listItem={el} dateLabelMark="updatedAt" />
+            
+          {/* </CSSTransition> */}
 
-          </CSSTransition>
+          </Collapse>
         ))}
-
       </TransitionGroup>
-
-    </>
   );
 }

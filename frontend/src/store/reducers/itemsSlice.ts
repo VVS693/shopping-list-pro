@@ -1,4 +1,7 @@
-import { fetchAllSortedItems, fetchAllSortedItemsByListId } from "./actionsItemsCreators";
+import {
+  fetchAllSortedItems,
+  fetchAllSortedItemsByListId,
+} from "./actionsItemsCreators";
 import { IShopItem } from "./../../types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
@@ -7,7 +10,7 @@ interface ItemsState {
   isLoading: boolean;
   error: string;
   isShowComments: boolean;
-  isAddFormVisible: boolean
+  isAddFormVisible: boolean;
 }
 
 const initialState: ItemsState = {
@@ -23,7 +26,7 @@ export const itemsSlice = createSlice({
   initialState,
   reducers: {
     showAddForm(state, action: PayloadAction<boolean>) {
-      state.isAddFormVisible = action.payload
+      state.isAddFormVisible = action.payload;
     },
     showAllComments(state) {
       state.isShowComments = !state.isShowComments;
@@ -36,11 +39,7 @@ export const itemsSlice = createSlice({
     editItemArray(state, action: PayloadAction<IShopItem>) {
       state.items.map((el) => {
         if (el.id === action.payload.id) {
-
           Object.assign(el, action.payload);
-          // el.completed = action.payload.completed;
-          // el.title = action.payload.title;
-          // el.comments = action.payload.comments;
         }
       });
     },
@@ -49,15 +48,18 @@ export const itemsSlice = createSlice({
       state.items.push(action.payload);
     },
 
+    // sortItemsArray(state) {
+    //   state.items = state.items.sort((a, b) => {
+    //     if (a.completed < b.completed) return -1;
+    //     return 0;
+    //   });
+    // },
     sortItemsArray(state) {
-      state.items = state.items.sort((a, b) => {
-        if (a.completed < b.completed) return -1;
-        return 0;
-      });
+      state.items = state.items.filter((el) => el.completed === true);
     },
 
     setInitialItems(state) {
-      state.items = []
+      state.items = [];
     },
   },
 
@@ -88,7 +90,6 @@ export const itemsSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload as string;
       });
-
   },
 });
 

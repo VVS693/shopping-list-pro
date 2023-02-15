@@ -41,13 +41,20 @@ export function AllLists() {
     // dispatch(addList(listData));
     dispatch(fetchAddList(listData));
   };
+  const TitleHeader = () => {
+    return (
+      <div className="flex  items-center py-1">
+          Shopping List Pro
+      </div>
+    );
+  };
 
   return (
     <div className="container mx-auto max-w-md pb-20">
       {error ? (
         <ErrorMessage error={error} />
       ) : (
-        <Header isLoading={isLoading} title="Shopping List Pro" />
+        <Header isLoading={isLoading} title={<TitleHeader/>} />
       )}
 
       <MyLists />

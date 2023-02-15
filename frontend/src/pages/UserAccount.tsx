@@ -218,7 +218,7 @@ export function UserAccount() {
               size="sm"
               variant="outlined"
               className="w-28 tracking-wider"
-              onClick={() => navigate("/")}
+              onClick={() => navigate(-1)}
             >
               Cancel
             </Button>

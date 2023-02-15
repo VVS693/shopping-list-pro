@@ -45,6 +45,9 @@ export const listsSlice = createSlice({
     deleteList(state, action: PayloadAction<IListItem>) {
       state.lists = state.lists.filter((el) => el._id !== action.payload._id)
     },
+    setInitialLists(state) {
+      state.lists = [];
+    },
   },
 
   extraReducers(builder) {
@@ -110,6 +113,6 @@ export const listsSlice = createSlice({
   },
 });
 
-export const { addList, editList, setCurrentList, deleteList } = listsSlice.actions;
+export const { addList, editList, setCurrentList, deleteList, setInitialLists } = listsSlice.actions;
 
 export default listsSlice.reducer;

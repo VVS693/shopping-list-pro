@@ -5,6 +5,7 @@ import { CommentAdd } from "./CommentAdd";
 import { CommentItem } from "./CommentItem";
 import { v4 } from "uuid";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
+import Collapse from "@mui/material/Collapse";
 import "./stylesComment.css";
 
 interface CommentsListProps {
@@ -89,6 +90,16 @@ export function CommentsList({
       <TransitionGroup>
         {comments?.map((el, index) => (
           <CSSTransition key={el.idComment} timeout={500} classNames="comment">
+
+          {/* // <Collapse
+            // key={el.idComment}
+            // timeout={{
+            //   appear: 750,
+            //   enter: 750,
+            //   exit: 750,
+            // }}
+          // > */}
+
             <CommentItem
               comment={el}
               userAvatar={userAvatarSearch(el)}
@@ -98,6 +109,8 @@ export function CommentsList({
               isAddIcon={index + 1 === comments?.length ? true : false}
               // key={el.idComment}
             />
+          {/* // </Collapse> */}
+
           </CSSTransition>
         ))}
       </TransitionGroup>

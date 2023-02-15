@@ -81,3 +81,15 @@ export const fetchDeleteList = createAsyncThunk(
     }
   }
 );
+
+export const fetchAmountDocsByListId = createAsyncThunk(
+  "fetchAmountDocsByListId",
+  async (list: IListItem, thunkAPI) => {
+    try {
+      const response = await clientDatabase.get<IListItem>(`lists/count/${list._id}`);
+      return response.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue("Error to count elements of list...");
+    }
+  }
+);
