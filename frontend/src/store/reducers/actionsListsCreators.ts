@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { IListItem } from "../../types";
+import { IListItem, IUser } from "../../types";
 import { clientDatabase } from "../axios";
 
 // export const fetchAllSortedItems = createAsyncThunk(
@@ -39,6 +39,18 @@ export const fetchAllLists = createAsyncThunk(
       return response.data;
     } catch (err) {
       return thunkAPI.rejectWithValue("Error loading all lists...");
+    }
+  }
+);
+
+export const fetchAllUserLists = createAsyncThunk(
+  "fetchAllUserLists",
+  async (user: IUser, thunkAPI) => {
+    try {
+      const response = await clientDatabase.get<IListItem[]>(`lists/${user._id}`);
+      return response.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue("Error loading all User's lists...");
     }
   }
 );
@@ -90,6 +102,30 @@ export const fetchAmountDocsByListId = createAsyncThunk(
       return response.data;
     } catch (err) {
       return thunkAPI.rejectWithValue("Error to count elements of list...");
+    }
+  }
+);
+
+export const fetchLatestUpdateOfDocsByListId = createAsyncThunk(
+  "fetchLatestUpdateOfDocsByListId",
+  async (list: IListItem, thunkAPI) => {
+    try {
+      const response = await clientDatabase.get<IListItem>(`lists/updated/${list._id}`);
+      return response.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue("Error to get last updated element of list...");
+    }
+  }
+);
+
+export const fetchCreatedDateByListId = createAsyncThunk(
+  "fetchCreatedDateByListId",
+  async (list: IListItem, thunkAPI) => {
+    try {
+      const response = await clientDatabase.get<IListItem>(`lists/created/${list._id}`);
+      return response.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue("Error to get created date of list...");
     }
   }
 );

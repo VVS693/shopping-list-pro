@@ -11,12 +11,15 @@ import CommentsDisabledOutlinedIcon from "@mui/icons-material/CommentsDisabledOu
 import SortOutlinedIcon from "@mui/icons-material/SortOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { showAddForm } from "../../store/reducers/itemsSlice";
 import { CSSTransition } from "react-transition-group";
 import "./stylesLists.css";
 import { AddItemMenu } from "../elements/AddItemMenu";
+import Divider from "@mui/material/Divider";
+import {ShareUsersMenu} from "../elements/ShareUsersMenu";
+import Slide from "@mui/material/Slide";
 
 interface FooterMenuListProps {
   onSortClick: () => void;
@@ -34,13 +37,14 @@ export function FooterMenuList({
 
   return (
     <>
+
       <CSSTransition
         in={isAddFormVisible}
         timeout={500}
         classNames="footerList"
         unmountOnExit
       >
-        <div className="z-0 fixed bottom-20 w-full max-w-md min-w-[375px] border-t">
+        <div className="z-0 fixed bottom-20 w-full max-w-md min-w-[360px] border-t">
           <AddItemMenu
             onAdd={(value) => {
               onAddItemClick(value);
@@ -49,7 +53,8 @@ export function FooterMenuList({
         </div>
       </CSSTransition>
 
-      <div className="z-50 fixed w-full max-w-md min-w-[375px] bottom-0 border-t bg-white">
+      <div className="z-40 fixed w-full max-w-md min-w-[360px] bottom-0  bg-white">
+      <Divider />
         <div className="flex justify-between px-4 pb-6 pt-[10px]">
           {/* <IconButton
             onClick={() => {

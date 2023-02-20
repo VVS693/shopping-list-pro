@@ -13,7 +13,7 @@ interface ListLabelMarkProps {
     timeStyle?: "full" | "long" | "medium" | "short" | undefined;
     dateStyle?: "full" | "long" | "medium" | "short" | undefined;
   };
-  itemsAmount?: number;
+  itemsAmount?: number | Promise<number>;
   isShared?: boolean;
 }
 
@@ -38,13 +38,13 @@ export function ListLabelMark({
   };
 
   return (
-    <div className="select-none flex items-center">
-      {!!created && (
+    <div className="select-none min-w-[250px] flex items-center h-[22px]">
+      {!!created  && (
         <div className="select-none pl-1 pr-1 text-xs font-extralight text-light-blue-800">
           {`Crt: ${dateLabel(
-            created.createdAt,
-            created.timeStyle,
-            created.dateStyle
+            created?.createdAt,
+            created?.timeStyle,
+            created?.dateStyle
           )}`}
         </div>
       )}

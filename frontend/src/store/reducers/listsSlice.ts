@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   fetchAddList,
   fetchAllLists,
+  fetchAllUserLists,
   fetchDeleteList,
   fetchEditList,
 } from "./actionsListsCreators";
@@ -12,6 +13,8 @@ interface ListsState {
   isLoading: boolean;
   error: string;
   currentList: IListItem;
+  isShareUsersMenuOpen: boolean
+  // permissionList : IListPermission
 }
 
 const initialState: ListsState = {
@@ -23,6 +26,7 @@ const initialState: ListsState = {
     title: "",
     userOwner: ""
   },
+  isShareUsersMenuOpen: false
 };
 
 export const listsSlice = createSlice({
@@ -48,19 +52,35 @@ export const listsSlice = createSlice({
     setInitialLists(state) {
       state.lists = [];
     },
+    setIsShareUsersMenuOpen(state) {
+      state.isShareUsersMenuOpen = !state.isShareUsersMenuOpen
+    },
   },
 
   extraReducers(builder) {
     builder
-      .addCase(fetchAllLists.pending, (state) => {
+      // .addCase(fetchAllLists.pending, (state) => {
+      //   state.isLoading = true;
+      // })
+      // .addCase(fetchAllLists.fulfilled, (state, action) => {
+      //   state.isLoading = false;
+      //   state.error = "";
+      //   state.lists = action.payload;
+      // })
+      // .addCase(fetchAllLists.rejected, (state, action) => {
+      //   state.isLoading = false;
+      //   state.error = action.payload as string;
+      // })
+
+      .addCase(fetchAllUserLists.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(fetchAllLists.fulfilled, (state, action) => {
+      .addCase(fetchAllUserLists.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = "";
         state.lists = action.payload;
       })
-      .addCase(fetchAllLists.rejected, (state, action) => {
+      .addCase(fetchAllUserLists.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       })
@@ -113,6 +133,6 @@ export const listsSlice = createSlice({
   },
 });
 
-export const { addList, editList, setCurrentList, deleteList, setInitialLists } = listsSlice.actions;
+export const { addList, editList, setCurrentList, deleteList, setInitialLists, setIsShareUsersMenuOpen } = listsSlice.actions;
 
 export default listsSlice.reducer;

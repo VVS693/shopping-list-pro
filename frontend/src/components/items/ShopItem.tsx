@@ -25,6 +25,7 @@ interface ShopItemProps {
 export function ShopItem({ item }: ShopItemProps) {
   const dispatch = useAppDispatch();
   const { isShowComments } = useAppSelector((state) => state.itemsReducer);
+  const { user } = useAppSelector((state) => state.userReducer);
   const [isEditing, setIsEditing] = useState(false);
   const [showComments, setShowComments] = useState(isShowComments);
   const [addNewComment, setAddNewComment] = useState(false);
@@ -65,7 +66,7 @@ export function ShopItem({ item }: ShopItemProps) {
   useEffect(() => setShowComments(isShowComments), [isShowComments]);
 
   return (
-    <div className="flex flex-col items-start pl-4 pr-4 border-b">
+    <div className="min-w-[360px] flex flex-col items-start pl-3 pr-3 border-b">
       <div className="flex items-center w-full justify-between">
         <CheckBox
           isCompleted={item.completed}
@@ -84,8 +85,11 @@ export function ShopItem({ item }: ShopItemProps) {
         ) : (
           <ItemTitle
             title={item.title}
+            isActive={item?.userId === user._id}
             onClick={() => {
-              setIsEditing(true);
+              if (item?.userId === user._id) {
+                setIsEditing(true);
+              }
             }}
           />
         )}

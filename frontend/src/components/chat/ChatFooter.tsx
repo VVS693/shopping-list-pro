@@ -5,6 +5,7 @@ import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import SendIcon from "@mui/icons-material/Send";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import Divider from "@mui/material/Divider";
 
 interface ChatFooterProps {
   onSendClick: (text: string) => void;
@@ -29,7 +30,8 @@ export function ChatFooter({ onSendClick, onBackClick }: ChatFooterProps) {
   };
 
   return (
-    <div className=" z-50 flex w-96 fixed justify-between bottom-0 px-4 pb-8 pt-3 border-t bg-white">
+    <div className="z-50 fixed w-full max-w-md min-w-[360px] bottom-0  bg-white">
+      <Divider/>
       <Box
         component="form"
         onSubmit={submitHandler}
@@ -41,7 +43,9 @@ export function ChatFooter({ onSendClick, onBackClick }: ChatFooterProps) {
         }}
         noValidate
         autoComplete="off"
+        className="flex justify-between  px-4 pb-6 pt-4"
       >
+        
         <IconButton
           color="primary"
           sx={{ alignSelf: "flex-end", p: 0 }}

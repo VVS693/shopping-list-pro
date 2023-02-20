@@ -7,6 +7,7 @@ import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import SubdirectoryArrowLeftOutlinedIcon from "@mui/icons-material/SubdirectoryArrowLeftOutlined";
 import { useAppDispatch } from "../../hooks/redux";
 import { showAddForm } from "../../store/reducers/itemsSlice";
+import Paper from "@mui/material/Paper";
 
 interface AddItemMenuProps {
   onAdd: (value: string) => void;
@@ -51,7 +52,7 @@ export function AddItemMenu({ onAdd }: AddItemMenuProps) {
   };
 
   return (
-    <>
+    <Paper elevation={12}>
       <div className="fixed top-0 right-0 left-0 bottom-0" />
       <form
         onSubmit={submitHandler}
@@ -109,10 +110,10 @@ export function AddItemMenu({ onAdd }: AddItemMenuProps) {
         <IconButton>
           <SubdirectoryArrowLeftOutlinedIcon
             sx={{ fontSize: 30 }}
-            color="primary"
+            color="warning"
           />
         </IconButton>
       </form>
-    </>
+    </Paper>
   );
 }

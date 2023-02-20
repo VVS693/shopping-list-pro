@@ -11,14 +11,17 @@ import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { showAddForm } from "../../store/reducers/itemsSlice";
 import { CSSTransition } from "react-transition-group";
+import Divider from "@mui/material/Divider";
 import "./stylesElements.css";
+import {ShareUsersMenu} from "./ShareUsersMenu";
+import Slide from "@mui/material/Slide";
 
 interface FooterMenuProps {
   onChatClick: () => void;
   onSortClick: () => void;
   onShowCommentsClick: () => void;
   onAddItemClick: (value: string) => void;
-  onBackClick: () => void
+  onBackClick: () => void;
 }
 
 export function FooterMenu({
@@ -40,7 +43,7 @@ export function FooterMenu({
         classNames="footer"
         unmountOnExit
       >
-        <div className="z-0 fixed bottom-20 w-full max-w-md min-w-[375px] border-t">
+        <div className="z-0 fixed bottom-20 w-full max-w-md min-w-[360px] ">
           <AddItemMenu
             onAdd={(value) => {
               onAddItemClick(value);
@@ -49,7 +52,8 @@ export function FooterMenu({
         </div>
       </CSSTransition>
 
-      <div className="z-50 fixed w-full max-w-md min-w-[375px] bottom-0 border-t bg-white">
+      <div className="z-40 fixed w-full max-w-md min-w-[360px] bottom-0  bg-white">
+        <Divider />
         <div className="flex justify-between px-4 pb-6 pt-[10px]">
           <IconButton onClick={onBackClick}>
             <ArrowBackIosNewIcon sx={{ fontSize: 30 }} color="action" />

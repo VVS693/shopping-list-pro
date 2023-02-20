@@ -15,6 +15,9 @@ const ItemSchema = new mongoose.Schema(
       type: String,
       require: true,
     },
+    userId: {
+      type: String,
+    },
     completed: {
       type: Boolean,
       require: true,
@@ -30,8 +33,9 @@ const ItemSchema = new mongoose.Schema(
           require: true,
         },
         userId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
+          // type: mongoose.Schema.Types.ObjectId,
+          // ref: "User",
+          type: String,
           require: true,
         },
         title: String,

@@ -20,35 +20,54 @@ import { IShopItem } from "../types";
 import { v4 } from "uuid";
 import Typography from "@mui/material/Typography";
 import { ListMoreMenu } from "../components/lists/ListMoreMenu";
-import { setInitialLists } from "../store/reducers/listsSlice";
-import { useMemo, useState } from "react";
+import {
+  setInitialLists,
+  setIsShareUsersMenuOpen,
+} from "../store/reducers/listsSlice";
+import { useEffect, useMemo, useState } from "react";
 import { AlertDialog } from "../components/elements/AlertDialog";
-import { useDeleteList } from "../hooks/deleteList";
+import { useDeleteList, useListData } from "../hooks/listHooks";
+import { ShareUsersMenu } from "../components/elements/ShareUsersMenu";
+import Slide from "@mui/material/Slide";
+import Fade from "@mui/material/Fade";
+import { ListLabelMark } from "../components/lists/ListLabelMark";
+import { animationTimeout } from "../config-var";
 
 export function Home() {
   const dispatch = useAppDispatch();
-  const { isLoading, error, items } = useAppSelector(
+  useEffect(() => {
+    dispatch(fetchAllUsers());
+    dispatch(fetchAllSortedItemsByListId(currentList?._id));
+  }, []);
+
+  const { isLoading, error, items, isShowComments } = useAppSelector(
     (state) => state.itemsReducer
   );
-  const { currentList } = useAppSelector((state) => state.listsReducer);
+  const { currentList, isShareUsersMenuOpen } = useAppSelector(
+    (state) => state.listsReducer
+  );
+  const { user } = useAppSelector((state) => state.userReducer);
   const {
     alertDialogText,
     isDeleteListModalApproveOpen,
     onDeleteClickHandle,
-    deleteListHandle,
+    onDeleteListHandle,
     cancelHandler,
   } = useDeleteList(currentList);
+
+  const { updatedAt } = useListData(currentList, items);
 
   const navigate = useNavigate();
 
   const onSortHandler = () => {
-    dispatch(sortItemsArray());
+    dispatch(setInitialItems());
+    // dispatch(sortItemsArray());
     setTimeout(() => {
       dispatch(fetchAllSortedItemsByListId(currentList?._id));
-      animateScroll.scrollToTop({
-        duration: 500,
-        smooth: "easeInQuad",
-      });
+      // animateScroll.scrollToTop({
+      //   duration: 500,
+      //   smooth: "easeInQuad",
+      // });
     }, 750);
     dispatch(fetchAllUsers());
   };
@@ -63,6 +82,7 @@ export function Home() {
       completed: false,
       title: value,
       listId: currentList?._id,
+      userId: user._id
     };
     dispatch(addItemArray(itemData));
     dispatch(fetchAddItems(itemData));
@@ -72,6 +92,7 @@ export function Home() {
     dispatch(setInitialItems());
     dispatch(setInitialLists());
     navigate("/lists");
+    isShowComments && dispatch(showAllComments());
   };
 
   const isShared = useMemo(
@@ -79,18 +100,9 @@ export function Home() {
     [currentList.usersSharing?.length]
   );
 
-  // const titleHeader = (
-  //   <div className="flex relative items-center right-4">
-  //     <ListMoreMenu
-  //       isShared={true}
-  //       onDeleteClick={onDeleteClickHandle}
-  //       positionHorisontal="left"
-  //     />
-  //     <Typography variant="inherit" noWrap>
-  //       {currentList?.title}
-  //     </Typography>
-  //   </div>
-  // );
+  const onShareClickHandle = () => {
+    dispatch(setIsShareUsersMenuOpen());
+  };
 
   const TitleHeader = () => {
     return (
@@ -98,22 +110,40 @@ export function Home() {
         <ListMoreMenu
           isShared={isShared}
           onDeleteClick={onDeleteClickHandle}
+          onShareClick={onShareClickHandle}
           positionHorisontal="left"
         />
         <Typography variant="inherit" noWrap>
-          {currentList?.title}
+          {currentList.title}
         </Typography>
       </div>
     );
   };
 
+  const ListLabelMarkAll = () => {
+    return (
+      <ListLabelMark
+        updated={{
+          updatedAt: updatedAt === "" ? currentList.createdAt : updatedAt,
+          dateStyle: "short",
+        }}
+        created={{
+          createdAt: currentList.createdAt,
+          dateStyle: "short",
+        }}
+        itemsAmount={items.length}
+        isShared={isShared}
+      />
+    );
+  };
+
   return (
-    <div className="container mx-auto max-w-md pb-20">
+    <div className="container mx-auto max-w-md min-w-[360px] pb-20">
       <AlertDialog
         isOpen={isDeleteListModalApproveOpen}
         text={alertDialogText}
         okFunc={() => {
-          deleteListHandle();
+          onDeleteListHandle();
           onBackClickHandle();
         }}
         cancelFunc={cancelHandler}
@@ -124,21 +154,22 @@ export function Home() {
         <Header
           isLoading={isLoading}
           title={<TitleHeader />}
-          updated={{
-            updatedAt: currentList.updatedAt,
-            // timeStyle: "short",
-            dateStyle: "short",
-          }}
-          created={{
-            createdAt: currentList.createdAt,
-            // timeStyle: "short",
-            dateStyle: "short",
-          }}
-          itemsAmount={items.length}
-          isShared={isShared}
+          listLabelMark={<ListLabelMarkAll />}
         />
       )}
       <ItemsList />
+
+      <Slide
+        direction="up"
+        timeout={500}
+        in={isShareUsersMenuOpen}
+        mountOnEnter
+        unmountOnExit
+      >
+        <div className=" z-50 w-full fixed top-[72px]">
+          <ShareUsersMenu />
+        </div>
+      </Slide>
       <FooterMenu
         onBackClick={onBackClickHandle}
         onChatClick={() => navigate("/chat")}

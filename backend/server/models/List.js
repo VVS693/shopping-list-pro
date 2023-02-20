@@ -7,16 +7,18 @@ const ListSchema = new mongoose.Schema(
       require: true,
     },
     userOwner: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      // type: mongoose.Schema.Types.ObjectId,
+      // ref: "User",
+      type: String,
       require: true,
     },
 
     usersSharing: [
       {
         userId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
+          // type: mongoose.Schema.Types.ObjectId,
+          // ref: "User",
+          type: String,
           require: true,
         },
       },

@@ -67,6 +67,7 @@ export function CommentItem({
           >
           <Commentitle
             title={comment?.title}
+            isActive={comment?.userId === user._id}
             editHandler={() => {
               if (comment?.userId === user._id) {
                 setEdit(true);

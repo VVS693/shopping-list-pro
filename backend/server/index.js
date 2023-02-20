@@ -112,11 +112,13 @@ app.get("/messages", checkAuth, MessageController.getAllMessages);
 
 
 app.get("/lists", checkAuth, ListController.getAllLists);
+app.get("/lists/:id", checkAuth, ListController.getAllUsersLists);
 app.post("/lists", checkAuth, ListController.createList);
 app.patch("/lists/:id", checkAuth, ListController.updateList);
 app.delete("/lists/:id", checkAuth, ListController.removeList);
 app.get("/lists/count/:id", checkAuth, ListController.getAmountDocsByListId);
-
+app.get("/lists/updated/:id", checkAuth, ListController.getNewestDocDateByListId);
+app.get("/lists/created/:id", checkAuth, ListController.getCreatedDateByListId);
 
 server.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);

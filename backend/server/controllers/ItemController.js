@@ -75,7 +75,8 @@ export const createItem = async (req, res) => {
       id: req.body.id,
       completed: req.body.completed,
       title: req.body.title,
-      listId: req.body.listId
+      listId: req.body.listId,
+      userId: req.body.userId
     });
     const post = await doc.save();
     res.json(post);
@@ -90,7 +91,7 @@ export const createItem = async (req, res) => {
 export const getItemsByListId = async (req, res) => {
   // console.log(req)
   try {
-    const items = await ItemModel.find({listId: req.params.id}).sort({completed: 1})
+    const items = await ItemModel.find({listId: req.params.id}).sort({completed: 1, createdAt: 1})
     res.json(items);
   } catch (err) {
     console.log(err);

@@ -6,10 +6,7 @@ import { ItemTitle } from "../items/ItemTitle";
 import ShareIcon from "@mui/icons-material/Share";
 import Avatar from "@mui/material/Avatar";
 import { ListMoreMenu } from "./ListMoreMenu";
-import {
-  editList,
-  setCurrentList,
-} from "../../store/reducers/listsSlice";
+import { editList, setCurrentList, setIsShareUsersMenuOpen } from "../../store/reducers/listsSlice";
 import {
   fetchAmountDocsByListId,
   fetchEditList,
@@ -18,7 +15,8 @@ import { useNavigate } from "react-router-dom";
 import { AlertDialog } from "../elements/AlertDialog";
 import { ListLabelMark } from "./ListLabelMark";
 import Fade from "@mui/material/Fade";
-import { useDeleteList } from "../../hooks/deleteList";
+import { useDeleteList, useListData } from "../../hooks/listHooks";
+import Slide from "@mui/material/Slide";
 
 interface MyListItemProps {
   listItem: IListItem;
@@ -26,18 +24,28 @@ interface MyListItemProps {
 }
 
 export function MyListItem({ listItem, dateLabelMark }: MyListItemProps) {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const { user, users } = useAppSelector((state) => state.userReducer);
-  const {alertDialogText, isDeleteListModalApproveOpen, onDeleteClickHandle, deleteListHandle, cancelHandler} = useDeleteList(listItem)
-  const [amountElements, setAmountElements] = useState(0);
+  const {
+    alertDialogText,
+    isDeleteListModalApproveOpen,
+    onDeleteClickHandle,
+    onDeleteListHandle,
+    cancelHandler,
+  } = useDeleteList(listItem);
+
+  const {amountElements, createdAt, updatedAt} = useListData(listItem)
 
   const isShared = useMemo(
     () => !!listItem.usersSharing?.length,
     [listItem.usersSharing?.length]
   );
-
-  const dispatch = useAppDispatch();
+  const isMyList = useMemo(
+    () => user._id === listItem.userOwner,
+    [user, listItem]
+  );
 
   const listEditHandle = (value: string) => {
     setIsEditing(false);
@@ -60,16 +68,10 @@ export function MyListItem({ listItem, dateLabelMark }: MyListItemProps) {
     navigate("/");
   };
 
-
-  const itemsCount = async () => {
-    const itemsAmount = await dispatch(fetchAmountDocsByListId(listItem));
-    if (typeof itemsAmount.payload === "number")
-      setAmountElements(itemsAmount.payload);
-  };
-
-  useEffect(() => {
-    itemsCount();
-  }, []);
+  const onShareClickHandle = () => {
+    dispatch(setIsShareUsersMenuOpen())
+    dispatch(setCurrentList(listItem))
+  }
 
   const animationTimeout: number = 750;
 
@@ -78,10 +80,11 @@ export function MyListItem({ listItem, dateLabelMark }: MyListItemProps) {
       <AlertDialog
         isOpen={isDeleteListModalApproveOpen}
         text={alertDialogText}
-        okFunc={deleteListHandle}
+        okFunc={onDeleteListHandle}
         cancelFunc={cancelHandler}
       />
-      <div className="flex items-center w-full justify-between pb-3">
+
+      <div className="flex items-center w-full min-w-[360px] justify-between pb-3">
         {isShared ? (
           <ShareIcon
             color="action"
@@ -106,8 +109,10 @@ export function MyListItem({ listItem, dateLabelMark }: MyListItemProps) {
 
         <ListMoreMenu
           isShared={isShared}
+          isMyList={isMyList}
           onEditTitleClick={onEditTitleClickHandle}
           onDeleteClick={onDeleteClickHandle}
+          onShareClick={onShareClickHandle}
           positionHorisontal="right"
         />
       </div>
@@ -118,12 +123,12 @@ export function MyListItem({ listItem, dateLabelMark }: MyListItemProps) {
         <div className="select-none absolute bottom-1 pl-8 flex">
           <ListLabelMark
             updated={{
-              updatedAt: listItem.updatedAt,
+              updatedAt: updatedAt === "" ? createdAt : updatedAt,
               timeStyle: "short",
               dateStyle: "short",
             }}
             // created={{
-            //   createdAt: listItem.createdAt,
+            //   createdAt: createdAt,
             //   timeStyle: "short",
             //   dateStyle: "short",
             // }}

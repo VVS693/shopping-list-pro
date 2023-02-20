@@ -13,12 +13,27 @@ import { FooterMenuList } from "../components/lists/FooterMenuList";
 import { v4 } from "uuid";
 import { IListItem } from "../types";
 import { addList } from "../store/reducers/listsSlice";
-import { fetchAddList } from "../store/reducers/actionsListsCreators";
+import {
+  fetchAddList,
+  fetchAllLists,
+  fetchAllUserLists,
+} from "../store/reducers/actionsListsCreators";
+import { ShareUsersMenu } from "../components/elements/ShareUsersMenu";
+import Slide from "@mui/material/Slide";
+import Typography from "@mui/material/Typography";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useListData } from "../hooks/listHooks";
+import Fade from "@mui/material/Fade";
+import { ListLabelMark } from "../components/lists/ListLabelMark";
+// import { useAmountDocsOfList } from "../hooks/listHooks";
 
 export function AllLists() {
+  const shareUserMenuRef = useRef(null);
   const dispatch = useAppDispatch();
-  const { isLoading, error } = useAppSelector((state) => state.listsReducer);
+  const { isLoading, error, isShareUsersMenuOpen, currentList } =
+    useAppSelector((state) => state.listsReducer);
   const { user } = useAppSelector((state) => state.userReducer);
+  const { amountElements, createdAt, updatedAt } = useListData(currentList);
   const navigate = useNavigate();
 
   const onSortHandler = () => {
@@ -41,23 +56,78 @@ export function AllLists() {
     // dispatch(addList(listData));
     dispatch(fetchAddList(listData));
   };
-  const TitleHeader = () => {
+
+  const TitleHeaderPro = () => {
+    return <div className="flex items-center py-1">Shopping List Pro</div>;
+  };
+
+  const TitleHeaderList = () => {
     return (
-      <div className="flex  items-center py-1">
-          Shopping List Pro
+      <div className="flex items-center py-1">
+        <Typography variant="inherit" noWrap>
+          {currentList?.title}
+        </Typography>
       </div>
     );
   };
 
+  const ListLabelMarkAll = () => {
+    return (
+      <ListLabelMark
+        updated={{
+          updatedAt: updatedAt,
+          dateStyle: "short",
+        }}
+        created={{
+          createdAt: createdAt,
+          dateStyle: "short",
+        }}
+        itemsAmount={amountElements}
+        isShared={isShared}
+      />
+    );
+  };
+
+  const isShared = useMemo(
+    () => !!currentList.usersSharing?.length,
+    [currentList.usersSharing?.length]
+  );
+
+  useEffect(() => {
+    dispatch(fetchAllUsers());
+    if (user._id !== "") dispatch(fetchAllUserLists(user));
+  }, [isShareUsersMenuOpen]);
+
   return (
-    <div className="container mx-auto max-w-md pb-20">
+    <div
+      className="min-w-[360px] mx-auto max-w-md pb-20"
+      ref={shareUserMenuRef}
+    >
       {error ? (
         <ErrorMessage error={error} />
       ) : (
-        <Header isLoading={isLoading} title={<TitleHeader/>} />
+        <Header
+          isLoading={isLoading}
+          title={
+            !isShareUsersMenuOpen ? <TitleHeaderPro /> : <TitleHeaderList />
+          }
+          listLabelMark={!isShareUsersMenuOpen ? "" : <ListLabelMarkAll />}
+        />
       )}
 
       <MyLists />
+
+      <Slide
+        direction="up"
+        timeout={500}
+        in={isShareUsersMenuOpen}
+        mountOnEnter
+        unmountOnExit
+      >
+        <div className=" z-50 w-full fixed top-[72px]">
+          <ShareUsersMenu />
+        </div>
+      </Slide>
 
       <FooterMenuList
         onSortClick={onSortHandler}

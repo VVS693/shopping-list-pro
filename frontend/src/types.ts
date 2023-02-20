@@ -9,7 +9,10 @@ export interface IShopItem {
   completed: boolean;
   title: string;
   listId: string
+  userId?: string
   comments?: IComment[];
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface IUser {
@@ -66,7 +69,7 @@ export interface IUsersOnline {
 }
 
 export interface IUserSharing {
-  id: string;
+  userId: string;
 }
 
 export interface IListItem {
@@ -78,3 +81,5 @@ export interface IListItem {
   createdAt?: string;
   updatedAt?: string;
 }
+
+
