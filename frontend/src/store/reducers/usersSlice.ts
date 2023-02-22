@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IUser, IUsersOnline } from "../../types";
+import { IUser, IUsersOnline, IUserTyping } from "../../types";
 import {
   fetchAllUsers,
   fetchUserLogin,
   fetchUserMe,
   fetchUserNewPassword,
+  fetchUserRegister,
   fetchUserUpdateAvatar,
   fetchUserUpdateName,
 } from "./actionUserCreators";
@@ -13,6 +14,7 @@ interface UserState {
   user: IUser;
   users: IUser[];
   usersOnline: IUsersOnline[];
+  userTyping: IUserTyping;
   isLoading: boolean;
   error: string;
   isAuth: boolean;
@@ -24,6 +26,7 @@ const initialState: UserState = {
   user: { _id: "", name: "", avatar: " " },
   users: [],
   usersOnline: [],
+  userTyping: { userId: "", name: "", roomId: "" },
   isLoading: false,
   error: "",
   isAuth: false,
@@ -44,10 +47,30 @@ export const usersSlice = createSlice({
     setUsersOnline(state, action: PayloadAction<IUsersOnline[]>) {
       state.usersOnline = action.payload;
     },
+    setUserTyping(state, action: PayloadAction<IUserTyping>) {
+      state.userTyping = action.payload;
+    },
   },
 
   extraReducers(builder) {
     builder
+      .addCase(fetchUserRegister.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchUserRegister.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = "";
+        state.user = action.payload;
+        window.localStorage.setItem("token", action.payload.token)
+        // state.isAuth = true;
+      })
+      .addCase(fetchUserRegister.rejected, (state, action) => {
+        state.isLoading = false;
+        // state.error = action.error.message as string;
+        state.error = action.payload as string
+        state.isAuth = false;
+      })
+
       .addCase(fetchUserLogin.pending, (state) => {
         state.isLoading = true;
       })
@@ -55,11 +78,13 @@ export const usersSlice = createSlice({
         state.isLoading = false;
         state.error = "";
         state.user = action.payload;
+        window.localStorage.setItem("token", action.payload.token)
         state.isAuth = true;
       })
       .addCase(fetchUserLogin.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message as string;
+        // state.error = action.error.message as string;
+        state.error = action.payload as string
         state.isAuth = false;
       })
 
@@ -102,8 +127,8 @@ export const usersSlice = createSlice({
       })
       .addCase(fetchUserUpdateName.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error.message as string;
-        // state.error = action.payload as string;
+        // state.error = action.error.message as string;
+        state.error = action.payload as string;
       })
 
       .addCase(fetchUserUpdateAvatar.pending, (state) => {
@@ -133,7 +158,7 @@ export const usersSlice = createSlice({
   },
 });
 
-export const { defaultAvatarImage, authReset, setUsersOnline } =
+export const { defaultAvatarImage, authReset, setUsersOnline, setUserTyping } =
   usersSlice.actions;
 
 export default usersSlice.reducer;

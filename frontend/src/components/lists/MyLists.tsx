@@ -5,19 +5,40 @@ import { MyListItem } from "./MyListItem";
 import { CategoryHeader } from "./CategoryHeader";
 import { useMemo } from "react";
 
-export function MyLists() {
+interface MyListsProps {
+  isSortedByTitle?: boolean;
+}
+
+export function MyLists({ isSortedByTitle }: MyListsProps) {
   const { lists } = useAppSelector((state) => state.listsReducer);
   const { user } = useAppSelector((state) => state.userReducer);
 
-  const listUserOwnerData = useMemo(
-    () => lists.filter((el) => el.userOwner === user._id),
-    [user, lists]
-  );
+  const listUserOwnerData = useMemo(() => {
+    const listsData = lists.filter((el) => el.userOwner === user._id);
+    return isSortedByTitle
+      ? listsData.sort((a, b) => {
+          if (a.title > b.title) return -1;
+          return 0;
+        })
+      : listsData.sort((a, b) => {
+          if (a.title < b.title) return -1;
+          return 0;
+        });
+  }, [user, lists, isSortedByTitle]);
 
-  const listUsersSharingData = useMemo(
-    () => lists.filter((el) => el.userOwner !== user._id),
-    [user, lists]
-  );
+  const listUsersSharingData = useMemo(() => {
+    const listsData = lists.filter((el) => el.userOwner !== user._id);
+
+    return isSortedByTitle
+      ? listsData.sort((a, b) => {
+          if (a.title > b.title) return -1;
+          return 0;
+        })
+      : listsData.sort((a, b) => {
+          if (a.title < b.title) return -1;
+          return 0;
+        });
+  }, [user, lists, isSortedByTitle]);
 
   return (
     <TransitionGroup>

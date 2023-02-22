@@ -39,6 +39,12 @@ export const delOldAvatarImage = async (req, res) => {
 
 export const register = async (req, res) => {
   try {
+    const userDouble = await UserModel.findOne({ name: req.body.name });
+    if (!!userDouble) {
+      return res.status(500).json({
+        message: "This name is already taken...",
+      });
+    }
     const password = req.body.password;
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);

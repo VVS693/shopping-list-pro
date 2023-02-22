@@ -43,7 +43,18 @@ export function ShareUsersMenu() {
   const usersData = useMemo(
     () =>
       isMyList
-        ? [...users.filter((el) => el._id !== currentList.userOwner)]
+        ? [
+            ...users.filter(
+              (el) =>
+                el._id !== currentList.userOwner &&
+                checked.findIndex((e) => e.userId === el._id) !== -1
+            ),
+            ...users.filter(
+              (el) =>
+                el._id !== currentList.userOwner &&
+                checked.findIndex((e) => e.userId === el._id) === -1
+            ),
+          ]
         : [...users.filter((el) => el._id === user._id)],
     [user, currentList]
   );
@@ -53,7 +64,7 @@ export function ShareUsersMenu() {
     listData.usersSharing = checked;
     dispatch(fetchEditList(listData));
     dispatch(setCurrentList(listData));
-    dispatch(fetchAllUserLists(user));
+    // dispatch(fetchAllUserLists(user));
     dispatch(setIsShareUsersMenuOpen());
   };
 

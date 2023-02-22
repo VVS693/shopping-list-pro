@@ -30,7 +30,6 @@ export function FooterMenuList({
   onSortClick,
   onAddItemClick,
 }: FooterMenuListProps) {
-  const [isArchivedVisible, setArchivedVisible] = useState(false);
   const [sortToggle, setSortToggle] = useState(true);
   const dispatch = useAppDispatch();
   const { isAddFormVisible } = useAppSelector((state) => state.itemsReducer);
@@ -56,36 +55,20 @@ export function FooterMenuList({
       <div className="z-40 fixed w-full max-w-md min-w-[360px] bottom-0  bg-white">
       <Divider />
         <div className="flex justify-between px-4 pb-6 pt-[10px]">
-          {/* <IconButton
-            onClick={() => {
-              setArchivedVisible(!isArchivedVisible);
-              onShowArchivedClick();
-            }}
-          >
-            {!isArchivedVisible ? (
-              <UnarchiveOutlinedIcon
-                sx={{ fontSize: 30 }}
-                color="action"
-              />
-            ) : (
-              <ArchiveOutlinedIcon
-                sx={{ fontSize: 30 }}
-                color="action"
-              />
-            )}
-          </IconButton> */}
 
-          <IconButton onClick={() => {}}>
+          <IconButton onClick={() => {}} disabled>
             <MenuOutlinedIcon
               sx={{ fontSize: 30 }}
-              color="action"
+              // color="action"
+              color="disabled"
             />
           </IconButton>
 
-          <IconButton onClick={() => {}}>
+          <IconButton onClick={() => {}} disabled>
             <SearchOutlinedIcon
               sx={{ fontSize: 30 }}
-              color="action"
+              // color="action"
+              color="disabled"
             />
           </IconButton>
 

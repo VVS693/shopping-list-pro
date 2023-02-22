@@ -2,7 +2,7 @@ import MessageModel from "../models/Messages.js";
 
 export const getAllMessages = async (req, res) => {
     try {
-      const messages = await MessageModel.find();
+      const messages = await MessageModel.find({roomId: req.params.id});
       res.json(messages);
     } catch (err) {
       console.log(err);
@@ -18,6 +18,7 @@ export const getAllMessages = async (req, res) => {
         id: data.id,
         text: data.text,
         userId: data.userId,
+        roomId: data.roomId,
         creationTime: data.creationTime,
       });
       const post = await doc.save();

@@ -14,6 +14,10 @@ const MessageSchema = new mongoose.Schema(
       type: String,
       require: true,
     },
+    roomId: {
+      type: String,
+      require: true,
+    },
     creationTime: {
       type: String,
     },

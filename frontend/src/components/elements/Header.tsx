@@ -6,6 +6,7 @@ import AutorenewIcon from "@mui/icons-material/Autorenew";
 import Fade from "@mui/material/Fade";
 import Divider from "@mui/material/Divider";
 import { animationTimeout } from "../../config-var";
+import AvatarGroup from "@mui/material/AvatarGroup";
 
 interface HeaderProps {
   title?: ReactNode;
@@ -33,14 +34,13 @@ export function Header({
     }
   }, [isLoading]);
 
-
   return (
     <div className="z-50 sticky max-w-md min-w-[360px] top-0 bg-white">
       <div className="flex  w-full items-center justify-between  py-2 px-4">
         <div className="min-w-[250px]">
           <Fade in={!!title} timeout={animationTimeout}>
             <div
-              className={`relative text-left min-w-[250px] px-1 py-2 text-blue-gray-800 font-bold text-2xl select-none break-words ${bottomUp}`}
+              className={`relative text-left min-w-[250px] py-2 text-blue-gray-800 font-bold text-2xl select-none break-words ${bottomUp}`}
             >
               {title}
             </div>
@@ -73,7 +73,7 @@ export function Header({
           <Fade
             in={!isLoaderShow}
             timeout={animationTimeout}
-            className=" absolute right-0 cursor-pointer"
+            className=" absolute right-0 cursor-pointer flex"
             onClick={() => navigate("/useraccount")}
           >
             <div>

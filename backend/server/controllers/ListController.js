@@ -1,5 +1,6 @@
 import ListModel from "../models/List.js";
 import ItemModel from "../models/Item.js";
+import MessageModel from "../models/Messages.js";
 
 // export const removeItem = async (req, res) => {
 //   try {
@@ -74,7 +75,12 @@ export const getAllUsersLists = async (req, res) => {
   // console.log(req.params)
 
   try {
-    const lists = await ListModel.find({$or: [{userOwner: req.params.id}, {"usersSharing.userId": req.params.id}]}).sort({usersSharing: 1});
+    const lists = await ListModel.find({
+      $or: [
+        { userOwner: req.params.id },
+        { "usersSharing.userId": req.params.id },
+      ],
+    }).sort({ usersSharing: 1 });
     res.json(lists);
   } catch (err) {
     console.log(err);
@@ -111,7 +117,7 @@ export const updateList = async (req, res) => {
       },
       {
         title: req.body.title,
-        usersSharing: req.body.usersSharing
+        usersSharing: req.body.usersSharing,
       }
     );
     const list = await ListModel.findOne({ _id: req.body._id });
@@ -130,6 +136,9 @@ export const removeList = async (req, res) => {
     const deletedCount = await ItemModel.deleteMany({
       listId: listId,
     });
+    await MessageModel.deleteMany({
+      roomId: listId,
+    })
     await ListModel.findOneAndDelete({
       _id: listId,
     });

@@ -1,6 +1,7 @@
 import { Button, Input } from "@material-tailwind/react";
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { AlertDialog } from "../components/elements/AlertDialog";
 import { eyeIcon, eyeSlashIcon } from "../components/icons";
 import { useAppDispatch } from "../hooks/redux";
@@ -12,6 +13,7 @@ interface ILoginInput {
 }
 
 export function Login() {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -31,10 +33,7 @@ export function Login() {
         name: data.name.trim(),
         password: data.password.trim(),
       };
-      const dataUser = await dispatch(fetchUserLogin(sendData)).unwrap();
-      if (dataUser.token) {
-        window.localStorage.setItem("token", dataUser.token);
-      }
+     const res = await dispatch(fetchUserLogin(sendData)).unwrap()
     } catch (error) {
       setAlertDialogOpen(true);
       setAlertDialogText("Login or password is incorrect...");
@@ -47,7 +46,7 @@ export function Login() {
 
   return (
     <div className="container mx-auto max-w-sm flex flex-wrap justify-center pt-6">
-      <h2 className="pt-3 pb-3 text-3xl font-medium text-gray-900">Login</h2>
+      <div className="pt-3 pb-3 text-3xl font-medium text-gray-900">Login</div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="w-80 pt-3 pb-0">
@@ -93,6 +92,17 @@ export function Login() {
           </Button>
         </div>
       </form>
+
+      <div className="flex fixed justify-end w-80 bottom-8">
+        <Button
+          size="sm"
+          variant="outlined"
+          className="w-24 tracking-wider"
+          onClick={() => navigate("/register")}
+        >
+          Sign in
+        </Button>
+      </div>
 
       <AlertDialog
         isOpen={isAlertDialogOpen}

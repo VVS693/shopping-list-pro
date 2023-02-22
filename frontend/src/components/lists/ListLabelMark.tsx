@@ -40,7 +40,7 @@ export function ListLabelMark({
   return (
     <div className="select-none min-w-[250px] flex items-center h-[22px]">
       {!!created  && (
-        <div className="select-none pl-1 pr-1 text-xs font-extralight text-light-blue-800">
+        <div className="select-none text-xs font-extralight text-light-blue-800">
           {`Crt: ${dateLabel(
             created?.createdAt,
             created?.timeStyle,
@@ -49,10 +49,10 @@ export function ListLabelMark({
         </div>
       )}
 
-      {!!created && !!updated && <Divider orientation="vertical" flexItem />}
+      {!!created && !!updated && <Divider orientation="vertical" flexItem sx={{marginX: "4px"}} />}
 
       {!!updated && (
-        <div className="select-none pl-1 pr-1 text-xs font-extralight text-light-blue-800">
+        <div className="select-none text-xs font-extralight text-light-blue-800">
           {`Upd: ${dateLabel(
             updated.updatedAt,
             updated.timeStyle,
@@ -62,16 +62,16 @@ export function ListLabelMark({
       )}
       {(!!created || !!updated) && !!itemsAmount && (
         <>
-          <Divider orientation="vertical" flexItem />
+          <Divider orientation="vertical" flexItem sx={{marginX: "4px"}} />
 
-          <div className="select-none pl-1 pr-1 text-xs font-extralight text-light-blue-800">
+          <div className="select-none text-xs font-extralight text-light-blue-800">
             {`Items: ${itemsAmount}`}
           </div>
         </>
       )}
       {isShared && (
         <>
-          <Divider orientation="vertical" flexItem />
+          <Divider orientation="vertical" flexItem sx={{marginX: "4px"}} />
           <ShareIcon sx={{fontSize: "22px"}}  className="px-1 text-light-blue-800" />
         </>
       )}

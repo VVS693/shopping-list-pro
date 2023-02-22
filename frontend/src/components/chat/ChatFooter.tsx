@@ -6,6 +6,9 @@ import IconButton from "@mui/material/IconButton";
 import SendIcon from "@mui/icons-material/Send";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import Divider from "@mui/material/Divider";
+import { userTyping } from "../../socket.service";
+import { useAppSelector } from "../../hooks/redux";
+import { IUserTyping } from "../../types";
 
 interface ChatFooterProps {
   onSendClick: (text: string) => void;
@@ -13,6 +16,9 @@ interface ChatFooterProps {
 }
 
 export function ChatFooter({ onSendClick, onBackClick }: ChatFooterProps) {
+  const { user } = useAppSelector((state) => state.userReducer);
+  const { currentList } = useAppSelector((state) => state.listsReducer);
+
   const [value, setValue] = useState("");
 
   const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,33 +32,55 @@ export function ChatFooter({ onSendClick, onBackClick }: ChatFooterProps) {
     }
     // console.log(value);
     onSendClick(value.trim());
+    const userTypingData: IUserTyping = {userId: user._id, name: "", roomId: currentList._id }
+    userTyping(userTypingData);
     setValue("");
   };
 
+  const onKeyDownHandle = (event: React.KeyboardEvent<HTMLElement>) => {
+    event.code === "Enter" && event.preventDefault();
+    event.code === "Enter" && submitHandler(event);
+    if (event.code !== "Enter") {
+      const userTypingData: IUserTyping = {
+        userId: user._id,
+        name: user.name,
+        roomId: currentList._id,
+      };
+      userTyping(userTypingData);
+    }
+    if (event.code === "Enter") {
+      const userTypingData: IUserTyping = {
+        userId: user._id,
+        name: "",
+        roomId: currentList._id,
+      };
+      userTyping(userTypingData);
+    }
+  };
+
   return (
-    <div className="z-50 fixed w-full max-w-md min-w-[360px] bottom-0  bg-white">
-      <Divider/>
+    <div className="z-50 fixed w-full max-w-md min-w-[360px] bottom-0 bg-white">
+      <Divider />
+
       <Box
         component="form"
         onSubmit={submitHandler}
         sx={{
-          "& .MuiTextField-root": { m: 0, width: 306 },
+          // "& .MuiTextField-root": { m: 0, w: "100%" },
           display: "flex",
-          width: "100%",
-          justifyContent: "space-between",
         }}
         noValidate
         autoComplete="off"
-        className="flex justify-between  px-4 pb-6 pt-4"
+        className=" px-4 pb-6 pt-4"
       >
-        
         <IconButton
-          color="primary"
+          // color="primary"
           sx={{ alignSelf: "flex-end", p: 0 }}
           onClick={onBackClick}
         >
           <ArrowBackIosNewIcon
-            sx={{ height: "40px", fontSize: 30, color: "GrayText" }}
+            sx={{ height: "40px", fontSize: 30 }}
+            color="action"
           />
         </IconButton>
 
@@ -60,18 +88,22 @@ export function ChatFooter({ onSendClick, onBackClick }: ChatFooterProps) {
           sx={{ pl: "16px", pr: "16px" }}
           id="message-input"
           value={value}
+          autoFocus
           onChange={changeHandler}
+          onKeyDown={onKeyDownHandle}
           multiline
           size="small"
+          fullWidth
           maxRows={10}
         />
 
         <IconButton
-          color="primary"
+          // color="primary"
+          // size="large"
           sx={{ alignSelf: "flex-end", p: 0 }}
           type="submit"
         >
-          <SendIcon sx={{ height: "40px", fontSize: 30, color: "GrayText" }} />
+          <SendIcon sx={{ height: "40px", fontSize: 30 }} color="action" />
         </IconButton>
       </Box>
     </div>

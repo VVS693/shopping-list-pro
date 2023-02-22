@@ -85,6 +85,7 @@ export function CommentsList({
     const commentsUser = users.find((item: IUser) => item._id === el.userId);
     return commentsUser?.avatar;
   };
+  
   return (
     <div className="w-full">
       <TransitionGroup>

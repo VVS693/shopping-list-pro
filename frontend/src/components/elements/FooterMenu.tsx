@@ -79,8 +79,8 @@ export function FooterMenu({
             )}
           </IconButton>
 
-          <IconButton onClick={() => {}}>
-            <SearchOutlinedIcon sx={{ fontSize: 30 }} color="action" />
+          <IconButton onClick={() => {}} disabled>
+            <SearchOutlinedIcon sx={{ fontSize: 30 }} color="disabled" />
           </IconButton>
 
           <IconButton onClick={onSortClick}>

@@ -60,12 +60,25 @@ export interface IMessage {
   id: string;
   text: string;
   userId: string;
+  roomId: string
   creationTime?: string;
 }
 
 export interface IUsersOnline {
   userId: string;
   socketId: string;
+  roomId: string
+}
+
+export interface IUsersJoinRoom {
+  userId: string;
+  roomId: string
+}
+
+export interface IUserTyping {
+  userId: string;
+  name: string
+  roomId: string
 }
 
 export interface IUserSharing {

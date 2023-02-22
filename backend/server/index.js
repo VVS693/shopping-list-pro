@@ -50,20 +50,27 @@ const io = new Server(server, {
   },
 });
 
+let chatRoom = ''
 let usersOnline = [];
 
 io.on("connection", (socket) => {
-  console.log(`User connected on socket: ${socket.id}`);
+  // console.log(`User connected on socket: ${socket.id}`);
+
+  socket.on("joinListChat", (data) => {
+    const { userId, roomId } = data; 
+    socket.join(roomId); 
+    // console.log("Join room " + roomId)
+  });
 
   socket.on("disconnect", () => {
-    console.log("User disconnected ");
+    // console.log("User disconnected ");
     usersOnline = usersOnline.filter((el) => el.socketId !== socket.id);
     // console.log(usersOnline)
     io.emit("newUserResponse", usersOnline);
   });
 
   socket.on("message", (data) => {
-    io.emit("messageResponse", data);
+    io.to(data.roomId).emit("messageResponse", data);
     MessageController.createMessage(data);
     // console.log(data)
   });
@@ -72,6 +79,12 @@ io.on("connection", (socket) => {
     usersOnline.push(data);
     // console.log(usersOnline)
     io.emit("newUserResponse", usersOnline);
+  });
+
+  socket.on("userTyping", (data) => {
+    // console.log(data)
+    io.to(data.roomId).emit("userTypingResponse", data);
+    // console.log("Typing... " + data.userId)
   });
 
   // We can write our socket event listeners in here...
@@ -108,7 +121,7 @@ app.get("/items/lists/:id", checkAuth, ItemController.getItemsByListId);
 
 
 
-app.get("/messages", checkAuth, MessageController.getAllMessages);
+app.get("/messages/:id", checkAuth, MessageController.getAllMessages);
 
 
 app.get("/lists", checkAuth, ListController.getAllLists);

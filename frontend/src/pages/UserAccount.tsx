@@ -15,6 +15,7 @@ import {
 } from "../store/reducers/actionUserCreators";
 import { AlertDialog } from "../components/elements/AlertDialog";
 import { UserAvatar } from "../components/user/UserAvatar";
+import { setInitialLists } from "../store/reducers/listsSlice";
 
 interface IAccountInput {
   newUserName: string;
@@ -142,6 +143,7 @@ export function UserAccount() {
     window.localStorage.removeItem("token");
     cancelHandler();
     dispatch(authReset());
+    dispatch(setInitialLists());
   };
 
   const userExitModalOpen = async () => {
@@ -250,7 +252,7 @@ export function UserAccount() {
                         message: "Maximum username length is twelve characters",
                       },
                       pattern: {
-                        value: /^[A-Za-zА-Яа-я]+$/i,
+                        value: /^[A-Za-zА-Яа-я0-9]+$/i,
                         message: "Username is not valid",
                       },
                     })}

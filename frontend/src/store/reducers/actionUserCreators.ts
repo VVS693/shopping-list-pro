@@ -10,6 +10,21 @@ import {
 } from "../../types";
 import { clientDatabase } from "../axios";
 
+export const fetchUserRegister = createAsyncThunk(
+  "fetchUserRegister",
+  async (regData: IUserLogin, thunkAPI) => {
+    try {
+      const response = await clientDatabase.post<IUserLoginResponse>(
+        "/auth/register",
+        regData
+      );
+      return response.data;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue(err.response.data.message);
+    }
+  }
+);
+
 export const fetchUserLogin = createAsyncThunk(
   "fetchUserLogin",
   async (authData: IUserLogin, thunkAPI) => {
@@ -20,7 +35,6 @@ export const fetchUserLogin = createAsyncThunk(
       );
       return response.data;
     } catch (err: any) {
-      // return thunkAPI.rejectWithValue("Login or password is incorrect);
       return thunkAPI.rejectWithValue(err.response.data);
     }
   }

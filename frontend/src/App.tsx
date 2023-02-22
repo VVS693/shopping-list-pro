@@ -7,6 +7,7 @@ import { Login } from "./pages/Login";
 import { AllLists } from "./pages/AllLists";
 import { UserAccount } from "./pages/UserAccount";
 import { fetchUserMe } from "./store/reducers/actionUserCreators";
+import { UserRegistration } from "./pages/UserRegistration";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -34,6 +35,7 @@ function App() {
       <Route path="/chat" element={<Chat />} />
       <Route path="/useraccount" element={<UserAccount />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<UserRegistration />} />
     </Routes>
   );
 }

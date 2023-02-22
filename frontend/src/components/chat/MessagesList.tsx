@@ -11,11 +11,14 @@ export function MessagesList() {
   const { user, users, usersOnline } = useAppSelector(
     (state) => state.userReducer
   );
+  const { currentList } = useAppSelector((state) => state.listsReducer);
 
   const whoseMessage = (el: IMessage) => {
     const messageUser = users.find((item: IUser) => item._id === el.userId);
     const isUserActive = Boolean(
-      usersOnline.find((el) => el.userId === messageUser?._id)
+      usersOnline.find(
+        (el) => el.userId === messageUser?._id && el.roomId === currentList._id
+        )
     );
     const whoseMessageData = {
       lefsideAvatar: messageUser?._id === user._id ? false : true,

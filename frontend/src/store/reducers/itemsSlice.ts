@@ -49,10 +49,10 @@ export const itemsSlice = createSlice({
     },
 
     // sortItemsArray(state) {
-    //   state.items = state.items.sort((a, b) => {
-    //     if (a.completed < b.completed) return -1;
-    //     return 0;
-    //   });
+      // state.items = state.items.sort((a, b) => {
+      //   if (a.completed < b.completed) return -1;
+      //   return 0;
+      // });
     // },
     sortItemsArray(state) {
       state.items = state.items.filter((el) => el.completed === true);

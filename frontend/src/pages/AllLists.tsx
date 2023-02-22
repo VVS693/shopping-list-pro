@@ -6,7 +6,10 @@ import { Header } from "../components/elements/Header";
 import { animateScroll } from "react-scroll";
 import { FooterMenu } from "../components/elements/FooterMenu";
 import { ItemsList } from "../components/items/ItemsList";
-import { fetchAllUsers } from "../store/reducers/actionUserCreators";
+import {
+  fetchAllUsers,
+  fetchUserMe,
+} from "../store/reducers/actionUserCreators";
 import { useNavigate } from "react-router-dom";
 import { MyLists } from "../components/lists/MyLists";
 import { FooterMenuList } from "../components/lists/FooterMenuList";
@@ -25,25 +28,24 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useListData } from "../hooks/listHooks";
 import Fade from "@mui/material/Fade";
 import { ListLabelMark } from "../components/lists/ListLabelMark";
+import { Greeting } from "../components/lists/Greeting";
 // import { useAmountDocsOfList } from "../hooks/listHooks";
 
 export function AllLists() {
   const shareUserMenuRef = useRef(null);
   const dispatch = useAppDispatch();
-  const { isLoading, error, isShareUsersMenuOpen, currentList } =
+  const { isLoading, error, isShareUsersMenuOpen, currentList, lists } =
     useAppSelector((state) => state.listsReducer);
   const { user } = useAppSelector((state) => state.userReducer);
   const { amountElements, createdAt, updatedAt } = useListData(currentList);
-  const navigate = useNavigate();
+  const [isSortedByTitle, setIsSortedByTitle] = useState(false);
 
   const onSortHandler = () => {
     animateScroll.scrollToTop({
       duration: 1000,
       smooth: "easeInQuad",
     });
-    // dispatch(sortItemsArray());
-    // dispatch(fetchAllSortedItems());
-    // dispatch(fetchAllUsers())
+    setIsSortedByTitle(!isSortedByTitle);
   };
 
   const onAddListHandler = (value: string) => {
@@ -94,6 +96,7 @@ export function AllLists() {
   );
 
   useEffect(() => {
+    dispatch(fetchUserMe());
     dispatch(fetchAllUsers());
     if (user._id !== "") dispatch(fetchAllUserLists(user));
   }, [isShareUsersMenuOpen]);
@@ -115,7 +118,8 @@ export function AllLists() {
         />
       )}
 
-      <MyLists />
+      {!isLoading && lists.length === 0 && <Greeting />}
+      <MyLists isSortedByTitle={isSortedByTitle} />
 
       <Slide
         direction="up"
