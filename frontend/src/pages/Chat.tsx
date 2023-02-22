@@ -49,40 +49,7 @@ export function Chat() {
     return isUserActive;
   };
 
-  useEffect(() => {
-    dispatch(fetchUserMe());
-    if (isAuth) {
-      // console.log("effect all");
-      dispatch(fetchAllUsers());
-      dispatch(fetchAllMessages(currentList._id));
-      initiateSocketConnection();
-      joinListChat(user._id, currentList._id);
-      newUser(user._id, currentList._id);
-      messageResponse((data: IMessage) => {
-        dispatch(addMessage(data));
-      });
-    }
-    return () => {
-      disconnectSocket();
-    };
-  }, [isAuth]);
-
-  useEffect(() => {
-    // console.log("user online effect");
-    usersOnlineResponse((data: IUsersOnline[]) => {
-      dispatch(setUsersOnline(data));
-    });
-
-    userTypingResponse((data: IUserTyping) => {
-      dispatch(setUserTyping(data));
-    })
-  }, []);
-
-  useEffect(() => {
-    if (!isAuth) {
-      navigate("/login");
-    }
-  }, [isAuth]);
+ 
 
   const sendMessageHadle = (text: string) => {
     const messageData: IMessage = {
@@ -116,6 +83,37 @@ export function Chat() {
       </div>
     );
   };
+
+
+  useEffect(() => {
+    dispatch(fetchUserMe());
+    if (isAuth) {
+      // console.log("effect all");
+      dispatch(fetchAllUsers());
+      dispatch(fetchAllMessages(currentList._id));
+      initiateSocketConnection();
+      joinListChat(user._id, currentList._id);
+      newUser(user._id, currentList._id);
+      messageResponse((data: IMessage) => {
+        dispatch(addMessage(data));
+      });
+    }
+    return () => {
+      disconnectSocket();
+    };
+  }, [isAuth]);
+
+  useEffect(() => {
+    // console.log("user online effect");
+    usersOnlineResponse((data: IUsersOnline[]) => {
+      dispatch(setUsersOnline(data));
+    });
+
+    userTypingResponse((data: IUserTyping) => {
+      dispatch(setUserTyping(data));
+    })
+  }, []);
+
 
   return (
     <div className="container min-w-[360px] mx-auto max-w-md pb-20">

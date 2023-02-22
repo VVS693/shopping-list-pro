@@ -14,7 +14,10 @@ import { Header } from "../components/elements/Header";
 import { animateScroll } from "react-scroll";
 import { FooterMenu } from "../components/elements/FooterMenu";
 import { ItemsList } from "../components/items/ItemsList";
-import { fetchAllUsers, fetchUserMe } from "../store/reducers/actionUserCreators";
+import {
+  fetchAllUsers,
+  fetchUserMe,
+} from "../store/reducers/actionUserCreators";
 import { useNavigate } from "react-router-dom";
 import { IShopItem } from "../types";
 import { v4 } from "uuid";
@@ -77,7 +80,7 @@ export function Home() {
       completed: false,
       title: value,
       listId: currentList?._id,
-      userId: user._id
+      userId: user._id,
     };
     dispatch(addItemArray(itemData));
     dispatch(fetchAddItems(itemData));
@@ -137,12 +140,6 @@ export function Home() {
     dispatch(fetchAllUsers());
     dispatch(fetchAllSortedItemsByListId(currentList?._id));
   }, []);
-
-  useEffect(() => {
-    if (!isAuth) {
-      navigate("/login");
-    }
-  }, [isAuth]);
 
   return (
     <div className="container mx-auto max-w-md min-w-[360px] pb-20">

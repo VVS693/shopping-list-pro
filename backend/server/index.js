@@ -19,7 +19,7 @@ import { Server } from "socket.io";
 
 const PORT = process.env.PORT || 3001;
 export const __dirname = path.resolve();
-
+console.log(__dirname)
 mongoose.set("strictQuery", false);
 mongoose
   .connect(MY_MONGO_DB)

@@ -12,12 +12,11 @@ import { UserRegistration } from "./pages/UserRegistration";
 function App() {
   const dispatch = useAppDispatch();
   const { isAuth } = useAppSelector((state) => state.userReducer);
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchUserMe());
   }, []);
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (isAuth) {

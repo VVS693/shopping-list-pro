@@ -99,12 +99,6 @@ export function AllLists() {
   useEffect(() => {
     dispatch(fetchUserMe());
   }, []);
-  
-  useEffect(() => {
-    if (!isAuth) {
-      navigate("/login");
-    }
-  }, [isAuth]);
 
   useEffect(() => {
     dispatch(fetchAllUsers());
