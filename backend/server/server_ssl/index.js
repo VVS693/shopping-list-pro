@@ -8,6 +8,7 @@ import cors from "cors";
 import * as UserController from "./controllers/UserController.js";
 import * as ItemController from "./controllers/ItemController.js";
 import * as MessageController from "./controllers/MessageController.js"
+import * as ListController from "./controllers/ListController.js";
 import checkAuth from "./middlewares/checkAuth.js";
 import { MY_MONGO_DB } from "./config/config.js";
 import fs from "fs";
@@ -57,24 +58,37 @@ const io = new Server(server, {
 let usersOnline = [];
 
 io.on("connection", (socket) => {
-  console.log(`User connected on socket: ${socket.id}`);
+  // console.log(`User connected on socket: ${socket.id}`);
+
+  socket.on("joinListChat", (data) => {
+    const { userId, roomId } = data; 
+    socket.join(roomId); 
+    // console.log("Join room " + roomId)
+  });
 
   socket.on("disconnect", () => {
-    console.log("User disconnected ");
-    usersOnline = usersOnline.filter((el) => el.socketId !== socket.id)
+    // console.log("User disconnected ");
+    usersOnline = usersOnline.filter((el) => el.socketId !== socket.id);
+    // console.log(usersOnline)
     io.emit("newUserResponse", usersOnline);
   });
 
   socket.on("message", (data) => {
-    io.emit("messageResponse", data);
-    MessageController.createMessage(data)
+    io.to(data.roomId).emit("messageResponse", data);
+    MessageController.createMessage(data);
+    // console.log(data)
   });
 
   socket.on("newUser", (data) => {
-    if (!usersOnline.find(el => el.userId === data.userId)) {
-      usersOnline.push(data);
-    }
+    usersOnline.push(data);
+    // console.log(usersOnline)
     io.emit("newUserResponse", usersOnline);
+  });
+
+  socket.on("userTyping", (data) => {
+    // console.log(data)
+    io.to(data.roomId).emit("userTypingResponse", data);
+    // console.log("Typing... " + data.userId)
   });
 
   // We can write our socket event listeners in here...
@@ -107,12 +121,21 @@ app.post("/items", checkAuth, ItemController.createItem);
 app.delete("/items/:id", checkAuth, ItemController.removeItem);
 app.patch("/items/:id", checkAuth, ItemController.updateItem);
 
-app.get("/messages", checkAuth, MessageController.getAllMessages);
+app.get("/items/lists/:id", checkAuth, ItemController.getItemsByListId);
 
 
-app.get("/*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "../../frontend/build", "index.html"));
-});
+
+app.get("/messages/:id", checkAuth, MessageController.getAllMessages);
+
+
+app.get("/lists", checkAuth, ListController.getAllLists);
+app.get("/lists/:id", checkAuth, ListController.getAllUsersLists);
+app.post("/lists", checkAuth, ListController.createList);
+app.patch("/lists/:id", checkAuth, ListController.updateList);
+app.delete("/lists/:id", checkAuth, ListController.removeList);
+app.get("/lists/count/:id", checkAuth, ListController.getAmountDocsByListId);
+app.get("/lists/updated/:id", checkAuth, ListController.getNewestDocDateByListId);
+app.get("/lists/created/:id", checkAuth, ListController.getCreatedDateByListId);
 
 server.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);

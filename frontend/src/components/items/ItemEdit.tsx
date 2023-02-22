@@ -83,7 +83,7 @@ export function ItemEdit({ title, placeholder, onEdit, onDel }: ShopItemProps) {
         {!!onDel && (
           <IconButton
             onFocus={onFocusHandler}
-            //  onClick={onClickHandler}
+             onClick={onClickHandler} //странно что для телефона это нужно включить
           >
             <DeleteIcon sx={{ color: "#ef5350" }} />
           </IconButton>

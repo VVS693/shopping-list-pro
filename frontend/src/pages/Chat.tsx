@@ -50,9 +50,9 @@ export function Chat() {
   };
 
   useEffect(() => {
+    dispatch(fetchUserMe());
     if (isAuth) {
       // console.log("effect all");
-      dispatch(fetchUserMe());
       dispatch(fetchAllUsers());
       dispatch(fetchAllMessages(currentList._id));
       initiateSocketConnection();
@@ -77,6 +77,12 @@ export function Chat() {
       dispatch(setUserTyping(data));
     })
   }, []);
+
+  useEffect(() => {
+    if (!isAuth) {
+      navigate("/login");
+    }
+  }, [isAuth]);
 
   const sendMessageHadle = (text: string) => {
     const messageData: IMessage = {
@@ -112,7 +118,7 @@ export function Chat() {
   };
 
   return (
-    <div className="min-w-[360px] mx-auto max-w-md pb-20">
+    <div className="container min-w-[360px] mx-auto max-w-md pb-20">
       {error ? (
         <ErrorMessage error={error} />
       ) : (

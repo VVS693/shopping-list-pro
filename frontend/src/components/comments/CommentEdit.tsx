@@ -91,7 +91,7 @@ export function CommentEdit({
         <IconButton
           sx={{ padding: "4px" }}
           onFocus={onFocusHandler}
-          //  onClick={onClickHandler}
+           onClick={onClickHandler} //странно что для телефона это нужно включить
         >
           <DeleteIcon sx={{color: "#ef5350"}} />
         </IconButton>

@@ -88,7 +88,7 @@ export function ChatFooter({ onSendClick, onBackClick }: ChatFooterProps) {
           sx={{ pl: "16px", pr: "16px" }}
           id="message-input"
           value={value}
-          autoFocus
+          // autoFocus
           onChange={changeHandler}
           onKeyDown={onKeyDownHandle}
           multiline

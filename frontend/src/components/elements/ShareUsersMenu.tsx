@@ -94,7 +94,7 @@ export function ShareUsersMenu() {
       elevation={12}
       sx={{ height: "calc(100vh - 72px)" }}
     >
-      <div className="fixed top-0 right-0 left-0 bottom-0" />
+      {/* <div className="fixed top-0 right-0 left-0 bottom-0" /> */}
 
       <MenuList>
         <ListItem
@@ -121,7 +121,7 @@ export function ShareUsersMenu() {
             width: "100%",
             position: "relative",
             overflow: "auto",
-            maxHeight: `calc(100vh - ${isShared ? "246px" : "204px"})`,
+            maxHeight: `calc(100vh - ${isShared ? "342px" : "300px"})`,
           }}
         >
           {usersData.map((el) => {
@@ -166,10 +166,11 @@ export function ShareUsersMenu() {
             </ListItem>
             <Divider />
           </div>
+
+
         )}
-      </MenuList>
-      {
-        <div className="max-w-md min-w-[360px] w-full absolute bottom-6">
+        {
+        <div className=" pt-2">
           <Divider />
           <ListItem disablePadding>
             <Button
@@ -185,6 +186,26 @@ export function ShareUsersMenu() {
           <Divider />
         </div>
       }
+
+
+      </MenuList>
+      {/* {
+        <div className="max-w-md min-w-[360px] w-full absolute bottom-20">
+          <Divider />
+          <ListItem disablePadding>
+            <Button
+              fullWidth
+              size="large"
+              variant="text"
+              color="warning"
+              onClick={onApplyClickHandle}
+            >
+              APPLY
+            </Button>
+          </ListItem>
+          <Divider />
+        </div>
+      } */}
     </Paper>
   );
 }

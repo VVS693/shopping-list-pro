@@ -36,9 +36,10 @@ export function AllLists() {
   const dispatch = useAppDispatch();
   const { isLoading, error, isShareUsersMenuOpen, currentList, lists } =
     useAppSelector((state) => state.listsReducer);
-  const { user } = useAppSelector((state) => state.userReducer);
+  const { user, isAuth } = useAppSelector((state) => state.userReducer);
   const { amountElements, createdAt, updatedAt } = useListData(currentList);
   const [isSortedByTitle, setIsSortedByTitle] = useState(false);
+  const navigate = useNavigate();
 
   const onSortHandler = () => {
     animateScroll.scrollToTop({
@@ -97,13 +98,22 @@ export function AllLists() {
 
   useEffect(() => {
     dispatch(fetchUserMe());
+  }, []);
+  
+  useEffect(() => {
+    if (!isAuth) {
+      navigate("/login");
+    }
+  }, [isAuth]);
+
+  useEffect(() => {
     dispatch(fetchAllUsers());
     if (user._id !== "") dispatch(fetchAllUserLists(user));
   }, [isShareUsersMenuOpen]);
 
   return (
     <div
-      className="min-w-[360px] mx-auto max-w-md pb-20"
+      className="container min-w-[360px] mx-auto max-w-md pb-20"
       ref={shareUserMenuRef}
     >
       {error ? (

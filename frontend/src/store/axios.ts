@@ -2,20 +2,27 @@ import axios from "axios";
 
 // Change what you want
 
-export const clientDatabase = axios.create({
-  baseURL: "http://localhost:3001",
-});
-
-
 // export const clientDatabase = axios.create({
-//   baseURL: "https://sl.vvs693.ru",
+//   baseURL: "http://localhost:3001",
 // });
+
+
+export const clientDatabase = axios.create({
+  baseURL: "https://sl.vvs693.ru",
+});
 
 
 clientDatabase.interceptors.request.use((config) => {
   config.headers!.authorization = window.localStorage.getItem("token");
   return config;
 });
+
+
+
+
+
+
+
 
 
 // export const client = axios.create({
