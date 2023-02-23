@@ -18,10 +18,6 @@ import { IMessage, IUsersOnline, IUserTyping } from "../types";
 import { v4 } from "uuid";
 import { addMessage, clearAllMessages } from "../store/reducers/messagesSlice";
 import { MessagesList } from "../components/chat/MessagesList";
-import {
-  fetchAllUsers,
-  fetchUserMe,
-} from "../store/reducers/actionUserCreators";
 import { useNavigate } from "react-router-dom";
 import { setUsersOnline, setUserTyping } from "../store/reducers/usersSlice";
 import { fetchAllMessages } from "../store/reducers/actionsMessagesCreators";
@@ -34,9 +30,7 @@ export function Chat() {
 
   const { isLoading, error } = useAppSelector((state) => state.messagesReducer);
 
-  const { isAuth, user, usersOnline } = useAppSelector(
-    (state) => state.userReducer
-  );
+  const { user, usersOnline } = useAppSelector((state) => state.userReducer);
 
   const { currentList } = useAppSelector((state) => state.listsReducer);
 
@@ -48,8 +42,6 @@ export function Chat() {
     );
     return isUserActive;
   };
-
- 
 
   const sendMessageHadle = (text: string) => {
     const messageData: IMessage = {
@@ -66,12 +58,16 @@ export function Chat() {
   };
 
   const onBackClickHandle = () => {
-    navigate("/");
-    
-    const userTypingData: IUserTyping = {userId: user._id, name: "", roomId: currentList._id }
+    navigate("/mylist");
+
+    const userTypingData: IUserTyping = {
+      userId: user._id,
+      name: "",
+      roomId: currentList._id,
+    };
     userTyping(userTypingData);
-    
-    dispatch(clearAllMessages())
+
+    dispatch(clearAllMessages());
   };
 
   const TitleHeaderChat = () => {
@@ -84,24 +80,18 @@ export function Chat() {
     );
   };
 
-
   useEffect(() => {
-    dispatch(fetchUserMe());
-    if (isAuth) {
-      // console.log("effect all");
-      dispatch(fetchAllUsers());
-      dispatch(fetchAllMessages(currentList._id));
-      initiateSocketConnection();
-      joinListChat(user._id, currentList._id);
-      newUser(user._id, currentList._id);
-      messageResponse((data: IMessage) => {
-        dispatch(addMessage(data));
-      });
-    }
+    if (currentList._id !== "") dispatch(fetchAllMessages(currentList._id));
+    initiateSocketConnection();
+    joinListChat(user._id, currentList._id);
+    newUser(user._id, currentList._id);
+    messageResponse((data: IMessage) => {
+      dispatch(addMessage(data));
+    });
     return () => {
       disconnectSocket();
     };
-  }, [isAuth]);
+  }, [currentList]);
 
   useEffect(() => {
     // console.log("user online effect");
@@ -111,9 +101,8 @@ export function Chat() {
 
     userTypingResponse((data: IUserTyping) => {
       dispatch(setUserTyping(data));
-    })
+    });
   }, []);
-
 
   return (
     <div className="container min-w-[360px] mx-auto max-w-md pb-20">
@@ -123,8 +112,8 @@ export function Chat() {
         <Header
           isLoading={isLoading}
           isUserActive={onUserActive()}
-          title={<TitleHeaderChat/>}
-          listLabelMark={<ChatLabelMark/>}
+          title={<TitleHeaderChat />}
+          listLabelMark={<ChatLabelMark />}
         />
       )}
 

@@ -144,6 +144,7 @@ export function UserAccount() {
     cancelHandler();
     dispatch(authReset());
     dispatch(setInitialLists());
+    navigate("/login")
   };
 
   const userExitModalOpen = async () => {

@@ -27,14 +27,12 @@ import {
   setInitialLists,
   setIsShareUsersMenuOpen,
 } from "../store/reducers/listsSlice";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { AlertDialog } from "../components/elements/AlertDialog";
 import { useDeleteList, useListData } from "../hooks/listHooks";
 import { ShareUsersMenu } from "../components/elements/ShareUsersMenu";
 import Slide from "@mui/material/Slide";
-import Fade from "@mui/material/Fade";
 import { ListLabelMark } from "../components/lists/ListLabelMark";
-import { animationTimeout } from "../config-var";
 
 export function Home() {
   const dispatch = useAppDispatch();
@@ -46,7 +44,7 @@ export function Home() {
   const { currentList, isShareUsersMenuOpen } = useAppSelector(
     (state) => state.listsReducer
   );
-  const { user, isAuth } = useAppSelector((state) => state.userReducer);
+  const { user } = useAppSelector((state) => state.userReducer);
   const {
     alertDialogText,
     isDeleteListModalApproveOpen,
@@ -61,7 +59,7 @@ export function Home() {
     dispatch(setInitialItems());
     // dispatch(sortItemsArray());
     setTimeout(() => {
-      dispatch(fetchAllSortedItemsByListId(currentList?._id));
+      dispatch(fetchAllSortedItemsByListId(currentList._id));
       // animateScroll.scrollToTop({
       //   duration: 500,
       //   smooth: "easeInQuad",
@@ -89,13 +87,17 @@ export function Home() {
   const onBackClickHandle = () => {
     dispatch(setInitialItems());
     dispatch(setInitialLists());
-    navigate("/lists");
+    navigate("/mylists");
     isShowComments && dispatch(showAllComments());
   };
 
   const isShared = useMemo(
     () => !!currentList.usersSharing?.length,
     [currentList.usersSharing?.length]
+  );
+  const isMyList = useMemo(
+    () => user._id === currentList.userOwner,
+    [user, currentList]
   );
 
   const onShareClickHandle = () => {
@@ -107,6 +109,7 @@ export function Home() {
       <div className="flex relative items-center right-4">
         <ListMoreMenu
           isShared={isShared}
+          isMyList={isMyList}
           onDeleteClick={onDeleteClickHandle}
           onShareClick={onShareClickHandle}
           positionHorisontal="left"
@@ -136,9 +139,8 @@ export function Home() {
   };
 
   useEffect(() => {
-    dispatch(fetchUserMe());
-    dispatch(fetchAllUsers());
-    dispatch(fetchAllSortedItemsByListId(currentList?._id));
+    if (currentList._id !== "")
+      dispatch(fetchAllSortedItemsByListId(currentList?._id));
   }, []);
 
   return (

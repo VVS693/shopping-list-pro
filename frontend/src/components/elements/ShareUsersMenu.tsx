@@ -64,7 +64,7 @@ export function ShareUsersMenu() {
     listData.usersSharing = checked;
     dispatch(fetchEditList(listData));
     dispatch(setCurrentList(listData));
-    // dispatch(fetchAllUserLists(user));
+    dispatch(fetchAllUserLists(user));
     dispatch(setIsShareUsersMenuOpen());
   };
 
@@ -94,7 +94,7 @@ export function ShareUsersMenu() {
       elevation={12}
       sx={{ height: "calc(100vh - 72px)" }}
     >
-      {/* <div className="fixed top-0 right-0 left-0 bottom-0" /> */}
+      <div className="fixed top-0 right-0 left-0 bottom-0" />
 
       <MenuList>
         <ListItem

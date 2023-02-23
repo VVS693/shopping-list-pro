@@ -15,13 +15,12 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ShareIcon from "@mui/icons-material/Share";
 import { manageSharedList, shareWithFriends } from "../../config-var";
 
-
 interface ListMoreMenuProps {
   isShared: boolean;
-  isMyList?: boolean
+  isMyList?: boolean;
   onEditTitleClick?: () => void;
   onDeleteClick: () => void;
-  onShareClick?: () => void
+  onShareClick?: () => void;
   positionHorisontal: number | "left" | "right" | "center";
 }
 
@@ -54,8 +53,8 @@ export function ListMoreMenu({
 
   const onShareHandle = () => {
     setAnchorEl(null);
-    onShareClick && onShareClick()
-  }
+    onShareClick && onShareClick();
+  };
 
   return (
     <div>
@@ -89,32 +88,42 @@ export function ListMoreMenu({
       >
         {!!onEditTitleClick && isMyList && (
           <MenuItem onClick={onEditTitleClickHandler} disableRipple>
-            <EditIcon color="action" sx={{ fontSize: 20, marginRight: 2}}/>
+            <EditIcon color="action" sx={{ fontSize: 20, marginRight: 2 }} />
             Edit Title
           </MenuItem>
         )}
 
         {isShared ? (
           <MenuItem onClick={onShareHandle} disableRipple>
-            <ShareIcon color="action" sx={{ fontSize: 20, marginRight: 2}}/>
+            <ShareIcon color="action" sx={{ fontSize: 20, marginRight: 2 }} />
             {manageSharedList}
           </MenuItem>
         ) : (
           <MenuItem onClick={onShareHandle} disableRipple>
-            <ShareIcon color="action" sx={{ fontSize: 20, marginRight: 2}} />
+            <ShareIcon color="action" sx={{ fontSize: 20, marginRight: 2 }} />
             {shareWithFriends}
           </MenuItem>
         )}
 
-        <Divider />
-        <MenuItem
-          onClick={onDeleteClickHandler}
-          disableRipple
-          sx={{ color: "#ef5350" }}
-        >
-          <DeleteIcon sx={{ color: "#ef5350", fontSize: 20, marginRight: 2, position: "relative", bottom: "1px" }} />
-          Delete List
-        </MenuItem>
+        {isMyList && <Divider />}
+        {isMyList && (
+          <MenuItem
+            onClick={onDeleteClickHandler}
+            disableRipple
+            sx={{ color: "#ef5350" }}
+          >
+            <DeleteIcon
+              sx={{
+                color: "#ef5350",
+                fontSize: 20,
+                marginRight: 2,
+                position: "relative",
+                bottom: "1px",
+              }}
+            />
+            Delete List
+          </MenuItem>
+        )}
       </Menu>
     </div>
   );

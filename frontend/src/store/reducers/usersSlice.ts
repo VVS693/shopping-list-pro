@@ -16,6 +16,7 @@ interface UserState {
   usersOnline: IUsersOnline[];
   userTyping: IUserTyping;
   isLoading: boolean;
+  isLoadingMe: boolean
   error: string;
   isAuth: boolean;
   isAlertDialogOpen: boolean;
@@ -28,6 +29,7 @@ const initialState: UserState = {
   usersOnline: [],
   userTyping: { userId: "", name: "", roomId: "" },
   isLoading: false,
+  isLoadingMe: false,
   error: "",
   isAuth: false,
   isAlertDialogOpen: false,
@@ -85,20 +87,20 @@ export const usersSlice = createSlice({
         state.isLoading = false;
         // state.error = action.error.message as string;
         state.error = action.payload as string
-        state.isAuth = false;
+        // state.isAuth = false;
       })
 
       .addCase(fetchUserMe.pending, (state) => {
-        state.isLoading = true;
+        state.isLoadingMe = true;
       })
       .addCase(fetchUserMe.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.isLoadingMe = false;
         state.error = "";
         state.user = action.payload;
         state.isAuth = true;
       })
       .addCase(fetchUserMe.rejected, (state, action) => {
-        state.isLoading = false;
+        state.isLoadingMe = false;
         state.error = action.error.message as string;
         state.isAuth = false;
       })
@@ -114,7 +116,7 @@ export const usersSlice = createSlice({
       .addCase(fetchAllUsers.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message as string;
-        state.isAuth = false;
+        // state.isAuth = false;
       })
 
       .addCase(fetchUserUpdateName.pending, (state) => {

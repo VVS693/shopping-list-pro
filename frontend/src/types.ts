@@ -90,7 +90,7 @@ export interface IListItem {
   // id: string;
   title: string;
   userOwner: string;
-  usersSharing?: IUserSharing[];
+  usersSharing: IUserSharing[];
   createdAt?: string;
   updatedAt?: string;
 }

@@ -42,6 +42,7 @@ export function AllLists() {
   const navigate = useNavigate();
 
   const onSortHandler = () => {
+    dispatch(fetchAllUserLists(user))
     animateScroll.scrollToTop({
       duration: 1000,
       smooth: "easeInQuad",
@@ -51,13 +52,13 @@ export function AllLists() {
 
   const onAddListHandler = (value: string) => {
     const listData: IListItem = {
-      // id: v4(),
       _id: v4(),
       title: value,
       userOwner: user._id,
+      usersSharing: []
     };
-    // dispatch(addList(listData));
     dispatch(fetchAddList(listData));
+    dispatch(fetchAllUserLists(user))
   };
 
   const TitleHeaderPro = () => {
@@ -97,13 +98,8 @@ export function AllLists() {
   );
 
   useEffect(() => {
-    dispatch(fetchUserMe());
-  }, []);
-
-  useEffect(() => {
-    dispatch(fetchAllUsers());
     if (user._id !== "") dispatch(fetchAllUserLists(user));
-  }, [isShareUsersMenuOpen]);
+  }, [isShareUsersMenuOpen, user]);
 
   return (
     <div

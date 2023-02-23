@@ -25,6 +25,11 @@ export function ChatFooter({ onSendClick, onBackClick }: ChatFooterProps) {
     setValue(event.target.value);
   };
 
+  const cancelUserTyping = () => {
+    const userTypingData: IUserTyping = {userId: user._id, name: "", roomId: currentList._id }
+    userTyping(userTypingData);
+  }
+
   const submitHandler = (event: React.FormEvent) => {
     event.preventDefault();
     if (value.trim().length === 0) {
@@ -32,8 +37,7 @@ export function ChatFooter({ onSendClick, onBackClick }: ChatFooterProps) {
     }
     // console.log(value);
     onSendClick(value.trim());
-    const userTypingData: IUserTyping = {userId: user._id, name: "", roomId: currentList._id }
-    userTyping(userTypingData);
+    cancelUserTyping()
     setValue("");
   };
 
@@ -91,6 +95,7 @@ export function ChatFooter({ onSendClick, onBackClick }: ChatFooterProps) {
           // autoFocus
           onChange={changeHandler}
           onKeyDown={onKeyDownHandle}
+          onBlur={() => cancelUserTyping()}
           multiline
           size="small"
           fullWidth

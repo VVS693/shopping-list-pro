@@ -44,10 +44,18 @@ const options = {
 };
 
 app.use(express.json());
-
 app.use(cors());
 
 const server = https.createServer(options, app);
+
+
+app.use(express.static(path.resolve(__dirname, "avatars")));
+app.use(express.static(path.resolve(__dirname, "avatars/default")));
+app.use(express.static(path.resolve(__dirname, "../frontend/build")));
+// app.get('/*', (req, res) => {
+//   res.sendFile(path.resolve(__dirname, '../frontend/build', 'index.html'));
+// })
+
 const io = new Server(server, {
   cors: {
     origin: "https://localhost:3000",
@@ -94,9 +102,6 @@ io.on("connection", (socket) => {
   // We can write our socket event listeners in here...
 });
 
-app.use(express.static(path.resolve(__dirname, "avatars")));
-app.use(express.static(path.resolve(__dirname, "avatars/default")));
-app.use(express.static(path.resolve(__dirname, "../frontend/build")));
 
 app.post("/auth/login", UserController.login);
 app.post("/auth/register", UserController.register);
@@ -105,7 +110,6 @@ app.get("/auth/all", checkAuth, UserController.getAllUsers);
 
 app.patch("/auth/update/name", checkAuth, UserController.updateUserName);
 app.patch("/auth/update/avatar", checkAuth, UserController.updateUserAvatar);
-
 app.patch("/auth/password", checkAuth, UserController.updatePassword);
 
 app.post(
@@ -120,13 +124,9 @@ app.get("/items", checkAuth, ItemController.getAllItems);
 app.post("/items", checkAuth, ItemController.createItem);
 app.delete("/items/:id", checkAuth, ItemController.removeItem);
 app.patch("/items/:id", checkAuth, ItemController.updateItem);
-
 app.get("/items/lists/:id", checkAuth, ItemController.getItemsByListId);
 
-
-
 app.get("/messages/:id", checkAuth, MessageController.getAllMessages);
-
 
 app.get("/lists", checkAuth, ListController.getAllLists);
 app.get("/lists/:id", checkAuth, ListController.getAllUsersLists);
@@ -136,6 +136,15 @@ app.delete("/lists/:id", checkAuth, ListController.removeList);
 app.get("/lists/count/:id", checkAuth, ListController.getAmountDocsByListId);
 app.get("/lists/updated/:id", checkAuth, ListController.getNewestDocDateByListId);
 app.get("/lists/created/:id", checkAuth, ListController.getCreatedDateByListId);
+
+
+// app.use(express.static(path.resolve(__dirname, "avatars")));
+// app.use(express.static(path.resolve(__dirname, "avatars/default")));
+// app.use(express.static(path.resolve(__dirname, "../frontend/build")));
+app.get('/*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../frontend/build', 'index.html'));
+})
+
 
 server.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);

@@ -13,7 +13,7 @@ import { showAddForm } from "../../store/reducers/itemsSlice";
 import { CSSTransition } from "react-transition-group";
 import Divider from "@mui/material/Divider";
 import "./stylesElements.css";
-import {ShareUsersMenu} from "./ShareUsersMenu";
+import { ShareUsersMenu } from "./ShareUsersMenu";
 import Slide from "@mui/material/Slide";
 
 interface FooterMenuProps {

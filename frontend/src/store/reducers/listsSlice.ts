@@ -24,7 +24,8 @@ const initialState: ListsState = {
   currentList: {
     _id: "",
     title: "",
-    userOwner: ""
+    userOwner: "",
+    usersSharing: []
   },
   isShareUsersMenuOpen: false
 };

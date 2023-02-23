@@ -14,16 +14,41 @@ export function MyLists({ isSortedByTitle }: MyListsProps) {
   const { user } = useAppSelector((state) => state.userReducer);
 
   const listUserOwnerData = useMemo(() => {
-    const listsData = lists.filter((el) => el.userOwner === user._id);
+    const listsDataMy = lists.filter(
+      (el) => el.userOwner === user._id && el.usersSharing.length === 0
+    );
+    const listsDataMyShared = lists.filter(
+      (el) => el.userOwner === user._id && el.usersSharing.length !== 0
+    );
     return isSortedByTitle
-      ? listsData.sort((a, b) => {
-          if (a.title > b.title) return -1;
-          return 0;
-        })
-      : listsData.sort((a, b) => {
-          if (a.title < b.title) return -1;
-          return 0;
-        });
+      ? [
+          ...listsDataMy.sort((a, b) => {
+            if (
+              a.title > b.title &&
+              a.usersSharing.length === b.usersSharing.length
+            )
+              return -1;
+            return 0;
+          }),
+          ...listsDataMyShared.sort((a, b) => {
+            if (a.title > b.title) return -1;
+            return 0;
+          }),
+        ]
+      : [
+          ...listsDataMy.sort((a, b) => {
+            if (
+              a.title < b.title &&
+              a.usersSharing.length === b.usersSharing.length
+            )
+              return -1;
+            return 0;
+          }),
+          ...listsDataMyShared.sort((a, b) => {
+            if (a.title < b.title) return -1;
+            return 0;
+          }),
+        ];
   }, [user, lists, isSortedByTitle]);
 
   const listUsersSharingData = useMemo(() => {

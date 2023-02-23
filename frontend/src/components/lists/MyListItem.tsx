@@ -65,7 +65,7 @@ export function MyListItem({ listItem, dateLabelMark }: MyListItemProps) {
 
   const onGoListHandle = () => {
     dispatch(setCurrentList(listItem));
-    navigate("/");
+    navigate("/mylist");
   };
 
   const onShareClickHandle = () => {

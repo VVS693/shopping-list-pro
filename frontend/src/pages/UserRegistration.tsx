@@ -86,7 +86,7 @@ export function UserRegistration() {
     setAlertDialogErrorOpen(false);
     setAlertDialogSuccessOpen(false);
     reset();
-    navigate("/lists");
+    navigate("/mylists");
   };
 
   return (

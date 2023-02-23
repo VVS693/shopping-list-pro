@@ -41,6 +41,13 @@ export function ItemEdit({ title, placeholder, onEdit, onDel }: ShopItemProps) {
     onDel && onDel();
   };
 
+  const inputRef = useRef<any>(null);
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
   return (
     <>
       <div className="fixed top-0 right-0 left-0 bottom-0" />
@@ -51,6 +58,7 @@ export function ItemEdit({ title, placeholder, onEdit, onDel }: ShopItemProps) {
             id="edit-input"
             sx={{ pl: "16px", pr: "8px", pt: "6px", pb: "5px", width: "100%" }}
             autoFocus
+            ref={inputRef}
             placeholder={placeholder}
             onFocus={(e) =>
               e.currentTarget.setSelectionRange(
@@ -83,7 +91,7 @@ export function ItemEdit({ title, placeholder, onEdit, onDel }: ShopItemProps) {
         {!!onDel && (
           <IconButton
             onFocus={onFocusHandler}
-             onClick={onClickHandler} //странно что для телефона это нужно включить
+            onClick={onClickHandler} //странно что для телефона это нужно включить
           >
             <DeleteIcon sx={{ color: "#ef5350" }} />
           </IconButton>

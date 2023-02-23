@@ -53,7 +53,7 @@ export function ChatLabelMark() {
           >
             {userTyping.name}
           </Typography>
-          <div className="w-16 ml-1 flex flex-nowrap">is typing...</div>
+          <div className="w-20 ml-1 flex flex-nowrap">is typing...</div>
         </div>
       )}
     </div>

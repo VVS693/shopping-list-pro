@@ -33,8 +33,10 @@ export function Login() {
         name: data.name.trim(),
         password: data.password.trim(),
       };
-     const res = await dispatch(fetchUserLogin(sendData)).unwrap()
+      const res = await dispatch(fetchUserLogin(sendData)).unwrap();
+      if (res.token) navigate("/mylists");
     } catch (error) {
+      console.log("incorrect!!!");
       setAlertDialogOpen(true);
       setAlertDialogText("Login or password is incorrect...");
     }

@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useMemo, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../hooks/redux";
 import { UserAvatar } from "../user/UserAvatar";
@@ -6,7 +6,6 @@ import AutorenewIcon from "@mui/icons-material/Autorenew";
 import Fade from "@mui/material/Fade";
 import Divider from "@mui/material/Divider";
 import { animationTimeout } from "../../config-var";
-import AvatarGroup from "@mui/material/AvatarGroup";
 
 interface HeaderProps {
   title?: ReactNode;
