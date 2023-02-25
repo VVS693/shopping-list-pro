@@ -55,7 +55,9 @@ export function ShareUsersMenu() {
                 checked.findIndex((e) => e.userId === el._id) === -1
             ),
           ]
-        : [...users.filter((el) => el._id === user._id)],
+        : [...users.filter((el) => el._id === user._id), 
+          ...users.filter((el) => el._id === currentList.userOwner)
+        ],
     [user, currentList]
   );
 
@@ -133,16 +135,17 @@ export function ShareUsersMenu() {
                     sx={{ paddingX: "16px", wordBreak: "break-all" }}
                   >
                     {el._id === user._id ? `${el.name} (Me)` : el.name}
+                    {el._id === currentList.userOwner ? " (Owner)" : ""}
                   </ListItemText>
 
-                  <Checkbox
+                  {el._id !== currentList.userOwner && <Checkbox
                     edge="end"
                     checked={
                       checked.findIndex((e) => e.userId === el._id) !== -1
                     }
                     color="warning"
                     disableRipple
-                  />
+                  />}
                 </ListItemButton>
               </ListItem>
             );

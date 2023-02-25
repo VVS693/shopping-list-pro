@@ -49,7 +49,7 @@ export function MyLists({ isSortedByTitle }: MyListsProps) {
             return 0;
           }),
         ];
-  }, [user, lists, isSortedByTitle]);
+  }, [user._id, lists, isSortedByTitle]);
 
   const listUsersSharingData = useMemo(() => {
     const listsData = lists.filter((el) => el.userOwner !== user._id);
@@ -63,7 +63,7 @@ export function MyLists({ isSortedByTitle }: MyListsProps) {
           if (a.title < b.title) return -1;
           return 0;
         });
-  }, [user, lists, isSortedByTitle]);
+  }, [user._id, lists, isSortedByTitle]);
 
   return (
     <TransitionGroup>

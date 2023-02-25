@@ -6,7 +6,11 @@ import { ItemTitle } from "../items/ItemTitle";
 import ShareIcon from "@mui/icons-material/Share";
 import Avatar from "@mui/material/Avatar";
 import { ListMoreMenu } from "./ListMoreMenu";
-import { editList, setCurrentList, setIsShareUsersMenuOpen } from "../../store/reducers/listsSlice";
+import {
+  editList,
+  setCurrentList,
+  setIsShareUsersMenuOpen,
+} from "../../store/reducers/listsSlice";
 import {
   fetchAmountDocsByListId,
   fetchEditList,
@@ -17,6 +21,7 @@ import { ListLabelMark } from "./ListLabelMark";
 import Fade from "@mui/material/Fade";
 import { useDeleteList, useListData } from "../../hooks/listHooks";
 import Slide from "@mui/material/Slide";
+import { UserAvatar } from "../user/UserAvatar";
 
 interface MyListItemProps {
   listItem: IListItem;
@@ -36,7 +41,7 @@ export function MyListItem({ listItem, dateLabelMark }: MyListItemProps) {
     cancelHandler,
   } = useDeleteList(listItem);
 
-  const {amountElements, createdAt, updatedAt} = useListData(listItem)
+  const { amountElements, createdAt, updatedAt } = useListData(listItem);
 
   const isShared = useMemo(
     () => !!listItem.usersSharing?.length,
@@ -44,7 +49,7 @@ export function MyListItem({ listItem, dateLabelMark }: MyListItemProps) {
   );
   const isMyList = useMemo(
     () => user._id === listItem.userOwner,
-    [user, listItem]
+    [user._id, listItem.userOwner]
   );
 
   const listEditHandle = (value: string) => {
@@ -69,8 +74,13 @@ export function MyListItem({ listItem, dateLabelMark }: MyListItemProps) {
   };
 
   const onShareClickHandle = () => {
-    dispatch(setIsShareUsersMenuOpen())
-    dispatch(setCurrentList(listItem))
+    dispatch(setIsShareUsersMenuOpen());
+    dispatch(setCurrentList(listItem));
+  };
+
+  const whoseAvatar = (listOwnerId: string) => {
+    const userOwner = users.find((item: IUser) => item._id === listOwnerId);
+    return userOwner?.avatar
   }
 
   const animationTimeout: number = 750;
@@ -86,14 +96,29 @@ export function MyListItem({ listItem, dateLabelMark }: MyListItemProps) {
 
       <div className="flex items-center w-full min-w-[360px] justify-between pb-3">
         {isShared ? (
-          <ShareIcon
-            color="action"
-            fontSize="small"
+          !isMyList ? (
+            <div
             className=" relative left-2"
-          />
+            >
+              <UserAvatar
+              isUserActive={false}
+              userAvatar={whoseAvatar(listItem.userOwner)}
+              width={26}
+              height={26}
+            />
+            </div>
+            
+          ) : (
+            <ShareIcon
+              color="action"
+              fontSize="small"
+              className=" relative left-2"
+              sx={{ width: "26px", height: "26px" }}
+            />
+          )
         ) : (
           <Avatar
-            sx={{ width: "20px", height: "20px", fontSize: "10px" }}
+            sx={{ width: "26px", height: "26px", fontSize: "12px" }}
             variant="rounded"
             className=" relative left-2"
           >
@@ -120,7 +145,7 @@ export function MyListItem({ listItem, dateLabelMark }: MyListItemProps) {
         in={!!listItem.updatedAt || !!listItem.createdAt || !!amountElements}
         timeout={animationTimeout}
       >
-        <div className="select-none absolute bottom-1 pl-8 flex">
+        <div className="select-none absolute bottom-1 pl-11 flex">
           <ListLabelMark
             updated={{
               updatedAt: updatedAt === "" ? createdAt : updatedAt,

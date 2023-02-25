@@ -98,8 +98,9 @@ export function AllLists() {
   );
 
   useEffect(() => {
+    dispatch(fetchAllUsers());
     if (user._id !== "") dispatch(fetchAllUserLists(user));
-  }, [isShareUsersMenuOpen, user]);
+  }, [isShareUsersMenuOpen, user._id]);
 
   return (
     <div
