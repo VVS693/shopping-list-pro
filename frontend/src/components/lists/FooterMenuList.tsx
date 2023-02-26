@@ -18,8 +18,6 @@ import { CSSTransition } from "react-transition-group";
 import "./stylesLists.css";
 import { AddItemMenu } from "../elements/AddItemMenu";
 import Divider from "@mui/material/Divider";
-import { ShareUsersMenu } from "../elements/ShareUsersMenu";
-import Slide from "@mui/material/Slide";
 
 interface FooterMenuListProps {
   onSortClick: () => void;
@@ -47,6 +45,7 @@ export function FooterMenuList({
             onAdd={(value) => {
               onAddItemClick(value);
             }}
+            placeHolder="Add new list..."
           />
         </div>
       </CSSTransition>

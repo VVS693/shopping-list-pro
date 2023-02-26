@@ -179,6 +179,7 @@ export function Home() {
       <FooterMenu
         onBackClick={onBackClickHandle}
         onChatClick={() => navigate("/chat")}
+        isChatButtonActive={currentList.usersSharing.length !== 0}
         onSortClick={onSortHandler}
         onShowCommentsClick={onShowAllCommentsHandle}
         onAddItemClick={onAddItemHandle}

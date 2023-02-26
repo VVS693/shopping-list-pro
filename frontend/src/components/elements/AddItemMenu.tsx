@@ -10,13 +10,14 @@ import { showAddForm } from "../../store/reducers/itemsSlice";
 import Paper from "@mui/material/Paper";
 
 interface AddItemMenuProps {
+  placeHolder?: string;
   onAdd: (value: string) => void;
 }
 
-export function AddItemMenu({ onAdd }: AddItemMenuProps) {
+export function AddItemMenu({ placeHolder, onAdd }: AddItemMenuProps) {
   const [value, setValue] = useState("");
-
-  const isClear = useRef(false);
+  // const isClearFocus = useRef(false);
+  // const isClearClick = useRef(false);
   const clearForm = useRef<any>();
   const addInputRef = useRef<any>();
 
@@ -26,38 +27,74 @@ export function AddItemMenu({ onAdd }: AddItemMenuProps) {
     setValue(event.target.value);
   };
 
+  // const submitHandler = (event: React.FormEvent) => {
+  //   event.preventDefault();
+  //   console.log(isClearFocus.current, isClearClick.current);
+  //   if (!isClearFocus.current) {
+  //     if (value.trim().length === 0) {
+  //       isClearFocus.current = false;
+  //       isClearClick.current = false;
+  //       dispatch(showAddForm(false));
+  //       return;
+  //     }
+  //     onAdd(value.trim());
+  //     animateScroll.scrollToBottom({
+  //       duration: 750,
+  //       smooth: "easeInQuad",
+  //     });
+  //     dispatch(showAddForm(false));
+  //   }
+  //   setValue("");
+  //   isClearFocus.current = false;
+  //   isClearClick.current = false;
+  // };
+
   const submitHandler = (event: React.FormEvent) => {
     event.preventDefault();
-    if (!isClear.current) {
-      if (value.trim().length === 0) {
-        isClear.current = false;
-        dispatch(showAddForm(false));
-        return;
-      }
-      onAdd(value.trim());
-      animateScroll.scrollToBottom({
-        duration: 750,
-        smooth: "easeInQuad",
-      });
+    if (value.trim().length === 0) {
       dispatch(showAddForm(false));
+      return;
     }
+    onAdd(value.trim());
+    animateScroll.scrollToBottom({
+      duration: 750,
+      smooth: "easeInQuad",
+    });
+    dispatch(showAddForm(false));
     setValue("");
-    isClear.current = false;
   };
 
-  const onFocusHandler = () => {
+  // const onFocusHandler = () => {
+  //   console.log("focus");
+  //   setValue("");
+  //   // isClearFocus.current = true;
+  //   addInputRef.current.focus();
+  // };
+
+  // const onClickHandler = () => {
+  //   console.log("click");
+  //   setValue("");
+  //   isClearClick.current = true;
+  //   addInputRef.current.focus();
+  // };
+
+  const onClickHandler = () => {
+    // console.log("click");
     setValue("");
-    isClear.current = true;
     addInputRef.current.focus();
   };
 
   return (
     <Paper elevation={12}>
-      <div className="fixed top-0 right-0 left-0 bottom-0" />
       <form
         onSubmit={submitHandler}
         className="flex w-full flex-nowrap px-3 py-[2px] items-center justify-between bg-white"
       >
+        <div
+          className="fixed top-0 right-0 left-0 bottom-0"
+          onClick={submitHandler}
+        />
+
         <TextField
           id="edit-input"
           variant="standard"
@@ -69,18 +106,18 @@ export function AddItemMenu({ onAdd }: AddItemMenuProps) {
             pt: "7px",
             pb: "6px",
             width: "100%",
-            zIndex: 50,
           }}
-          placeholder="Add element..."
+          placeholder={placeHolder}
           autoFocus
           inputRef={addInputRef}
           value={value}
           onChange={changeHandler}
-          onBlur={(el) => {
-            setTimeout(() => {
-              submitHandler(el);
-            }, 0);
-          }}
+          // onBlur={(el) => {
+          //   setTimeout(() => {
+          //     console.log("blur")
+          //     submitHandler(el);
+          //   }, 0);
+          // }}
           onKeyDown={(el) => {
             el.code === "Enter" && el.preventDefault();
             setTimeout(() => {
@@ -98,8 +135,8 @@ export function AddItemMenu({ onAdd }: AddItemMenuProps) {
               <InputAdornment position="end">
                 <IconButton
                   ref={clearForm}
-                  onFocus={onFocusHandler}
-                  onClick={onFocusHandler}
+                  // onFocus={onFocusHandler}
+                  onClick={onClickHandler}
                   edge="end"
                 >
                   <ClearOutlinedIcon />
@@ -108,7 +145,7 @@ export function AddItemMenu({ onAdd }: AddItemMenuProps) {
             ),
           }}
         />
-        <IconButton>
+        <IconButton type="submit">
           <SubdirectoryArrowLeftOutlinedIcon
             sx={{ fontSize: 30 }}
             color="warning"

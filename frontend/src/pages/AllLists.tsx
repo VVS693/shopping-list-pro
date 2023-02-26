@@ -59,6 +59,7 @@ export function AllLists() {
     };
     dispatch(fetchAddList(listData));
     dispatch(fetchAllUserLists(user))
+    
   };
 
   const TitleHeaderPro = () => {

@@ -13,8 +13,6 @@ import { showAddForm } from "../../store/reducers/itemsSlice";
 import { CSSTransition } from "react-transition-group";
 import Divider from "@mui/material/Divider";
 import "./stylesElements.css";
-import { ShareUsersMenu } from "./ShareUsersMenu";
-import Slide from "@mui/material/Slide";
 
 interface FooterMenuProps {
   onChatClick: () => void;
@@ -22,6 +20,7 @@ interface FooterMenuProps {
   onShowCommentsClick: () => void;
   onAddItemClick: (value: string) => void;
   onBackClick: () => void;
+  isChatButtonActive: boolean;
 }
 
 export function FooterMenu({
@@ -30,6 +29,7 @@ export function FooterMenu({
   onShowCommentsClick,
   onAddItemClick,
   onBackClick,
+  isChatButtonActive,
 }: FooterMenuProps) {
   const [isCommentsVisible, setCommentsVisible] = useState(false);
   const dispatch = useAppDispatch();
@@ -48,6 +48,7 @@ export function FooterMenu({
             onAdd={(value) => {
               onAddItemClick(value);
             }}
+            placeHolder="Add item..."
           />
         </div>
       </CSSTransition>
@@ -59,8 +60,11 @@ export function FooterMenu({
             <ArrowBackIosNewIcon sx={{ fontSize: 30 }} color="action" />
           </IconButton>
 
-          <IconButton onClick={onChatClick}>
-            <QuestionAnswerOutlinedIcon sx={{ fontSize: 30 }} color="action" />
+          <IconButton disabled={!isChatButtonActive} onClick={onChatClick}>
+            <QuestionAnswerOutlinedIcon
+              sx={{ fontSize: 30 }}
+              color={!isChatButtonActive ? "disabled" : "action"}
+            />
           </IconButton>
 
           <IconButton
