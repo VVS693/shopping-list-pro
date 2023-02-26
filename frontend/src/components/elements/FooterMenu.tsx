@@ -43,7 +43,7 @@ export function FooterMenu({
         classNames="footer"
         unmountOnExit
       >
-        <div className="z-0 fixed bottom-20 w-full max-w-md min-w-[360px] ">
+        <div className="fixed bottom-20 w-full max-w-md min-w-[360px] ">
           <AddItemMenu
             onAdd={(value) => {
               onAddItemClick(value);
@@ -52,7 +52,7 @@ export function FooterMenu({
         </div>
       </CSSTransition>
 
-      <div className="z-40 fixed w-full max-w-md min-w-[360px] bottom-0  bg-white">
+      <div className="z-30 fixed w-full max-w-md min-w-[360px] bottom-0  bg-white">
         <Divider />
         <div className="flex justify-between px-4 pb-6 pt-[10px]">
           <IconButton onClick={onBackClick}>

@@ -69,6 +69,7 @@ export function AddItemMenu({ onAdd }: AddItemMenuProps) {
             pt: "7px",
             pb: "6px",
             width: "100%",
+            zIndex: 50,
           }}
           placeholder="Add element..."
           autoFocus
@@ -98,7 +99,7 @@ export function AddItemMenu({ onAdd }: AddItemMenuProps) {
                 <IconButton
                   ref={clearForm}
                   onFocus={onFocusHandler}
-                  // onClick={onFocusHandler}
+                  onClick={onFocusHandler}
                   edge="end"
                 >
                   <ClearOutlinedIcon />

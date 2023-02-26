@@ -11,6 +11,7 @@ interface ShopItemProps {
 }
 
 export function ItemEdit({ title, placeholder, onEdit, onDel }: ShopItemProps) {
+  const inputRef = useRef<any>();
   const [value, setValue] = useState(title);
 
   const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,24 +42,20 @@ export function ItemEdit({ title, placeholder, onEdit, onDel }: ShopItemProps) {
     onDel && onDel();
   };
 
-  const inputRef = useRef<any>(null);
   useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
+    inputRef?.current?.focus();
   }, []);
 
   return (
     <>
-      <div className="fixed top-0 right-0 left-0 bottom-0" />
-
-      <div className="w-full py-[2px] bg-white flex flex-nowrap items-center justify-between">
+      <div className="z-40 fixed top-0 right-0 left-0 bottom-0" />
+      <div className="z-50 w-full py-[2px] flex flex-nowrap items-center justify-between">
         <form onSubmit={submitHandler} className="w-full items-center">
           <TextField
             id="edit-input"
             sx={{ pl: "16px", pr: "8px", pt: "6px", pb: "5px", width: "100%" }}
-            autoFocus
-            ref={inputRef}
+            // autoFocus
+            inputRef={inputRef}
             placeholder={placeholder}
             onFocus={(e) =>
               e.currentTarget.setSelectionRange(

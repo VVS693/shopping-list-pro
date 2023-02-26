@@ -18,7 +18,7 @@ import { CSSTransition } from "react-transition-group";
 import "./stylesLists.css";
 import { AddItemMenu } from "../elements/AddItemMenu";
 import Divider from "@mui/material/Divider";
-import {ShareUsersMenu} from "../elements/ShareUsersMenu";
+import { ShareUsersMenu } from "../elements/ShareUsersMenu";
 import Slide from "@mui/material/Slide";
 
 interface FooterMenuListProps {
@@ -36,14 +36,13 @@ export function FooterMenuList({
 
   return (
     <>
-
       <CSSTransition
         in={isAddFormVisible}
         timeout={500}
         classNames="footerList"
         unmountOnExit
       >
-        <div className="z-0 fixed bottom-20 w-full max-w-md min-w-[360px] border-t">
+        <div className="fixed bottom-20 w-full max-w-md min-w-[360px] border-t">
           <AddItemMenu
             onAdd={(value) => {
               onAddItemClick(value);
@@ -52,10 +51,9 @@ export function FooterMenuList({
         </div>
       </CSSTransition>
 
-      <div className="z-40 fixed w-full max-w-md min-w-[360px] bottom-0  bg-white">
-      <Divider />
+      <div className="z-30 fixed w-full max-w-md min-w-[360px] bottom-0  bg-white">
+        <Divider />
         <div className="flex justify-between px-4 pb-6 pt-[10px]">
-
           <IconButton onClick={() => {}} disabled>
             <MenuOutlinedIcon
               sx={{ fontSize: 30 }}
@@ -79,10 +77,7 @@ export function FooterMenuList({
             }}
           >
             {!sortToggle ? (
-              <SortOutlinedIcon
-                sx={{ fontSize: 30 }}
-                color="action"
-              />
+              <SortOutlinedIcon sx={{ fontSize: 30 }} color="action" />
             ) : (
               <SortOutlinedIcon
                 sx={{ fontSize: 30, transform: "scaleY(-1)" }}

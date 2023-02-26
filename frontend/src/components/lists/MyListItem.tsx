@@ -62,10 +62,14 @@ export function MyListItem({ listItem, dateLabelMark }: MyListItemProps) {
     dispatch(fetchEditList(listData));
   };
 
+  // const onEditTitleClickHandle = () => {
+  //   setTimeout(() => {
+  //     setIsEditing(true);
+  //   }, 0);
+  // };
+
   const onEditTitleClickHandle = () => {
-    setTimeout(() => {
       setIsEditing(true);
-    }, 0);
   };
 
   const onGoListHandle = () => {
@@ -80,8 +84,8 @@ export function MyListItem({ listItem, dateLabelMark }: MyListItemProps) {
 
   const whoseAvatar = (listOwnerId: string) => {
     const userOwner = users.find((item: IUser) => item._id === listOwnerId);
-    return userOwner?.avatar
-  }
+    return userOwner?.avatar;
+  };
 
   const animationTimeout: number = 750;
 
@@ -94,20 +98,17 @@ export function MyListItem({ listItem, dateLabelMark }: MyListItemProps) {
         cancelFunc={cancelHandler}
       />
 
-      <div className="flex items-center w-full min-w-[360px] justify-between pb-3">
+      <div className="flex items-center w-full min-w-[360px] justify-between pb-3 pl-1 pr-1">
         {isShared ? (
           !isMyList ? (
-            <div
-            className=" relative left-2"
-            >
+            <div className=" relative left-2">
               <UserAvatar
-              isUserActive={false}
-              userAvatar={whoseAvatar(listItem.userOwner)}
-              width={26}
-              height={26}
-            />
+                isUserActive={false}
+                userAvatar={whoseAvatar(listItem.userOwner)}
+                width={26}
+                height={26}
+              />
             </div>
-            
           ) : (
             <ShareIcon
               color="action"
@@ -127,7 +128,10 @@ export function MyListItem({ listItem, dateLabelMark }: MyListItemProps) {
         )}
 
         {isEditing ? (
-          <ItemEdit title={listItem.title} onEdit={listEditHandle} />
+          <ItemEdit
+            title={listItem.title}
+            onEdit={listEditHandle}
+          />
         ) : (
           <ItemTitle title={listItem.title} onClick={onGoListHandle} />
         )}
