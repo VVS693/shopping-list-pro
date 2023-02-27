@@ -99,6 +99,8 @@ export function AddItemMenu({ placeHolder, onAdd }: AddItemMenuProps) {
           id="edit-input"
           variant="standard"
           multiline
+          autoComplete="off"
+          type={"text"}
           maxRows={10}
           sx={{
             pl: "12px",
@@ -124,6 +126,7 @@ export function AddItemMenu({ placeHolder, onAdd }: AddItemMenuProps) {
               el.code === "Enter" && submitHandler(el);
             }, 0);
           }}
+          
           InputProps={{
             disableUnderline: true,
             style: {
@@ -143,6 +146,7 @@ export function AddItemMenu({ placeHolder, onAdd }: AddItemMenuProps) {
                 </IconButton>
               </InputAdornment>
             ),
+            
           }}
         />
         <IconButton type="submit">

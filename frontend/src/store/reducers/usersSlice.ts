@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IUser, IUsersOnline, IUserTyping } from "../../types";
 import {
   fetchAllUsers,
+  fetchDeleteUserAccount,
   fetchUserLogin,
   fetchUserMe,
   fetchUserNewPassword,
@@ -154,6 +155,18 @@ export const usersSlice = createSlice({
         state.error = "";
       })
       .addCase(fetchUserNewPassword.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message as string;
+      })
+
+      .addCase(fetchDeleteUserAccount.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchDeleteUserAccount.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = "";
+      })
+      .addCase(fetchDeleteUserAccount.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message as string;
       });

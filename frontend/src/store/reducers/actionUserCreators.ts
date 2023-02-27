@@ -135,3 +135,17 @@ export const fetchUserNewPassword = createAsyncThunk(
     }
   }
 );
+
+export const fetchDeleteUserAccount = createAsyncThunk(
+  "fetchDeleteUserAccount",
+  async (userId: string, thunkAPI) => {
+    try {
+      const response = await clientDatabase.delete<string>(
+        `/auth/delete/${userId}`
+      );
+      return response.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue("Error delete user account...");
+    }
+  }
+);

@@ -111,14 +111,15 @@ app.post(
 );
 app.delete("/avatars/:avatar", checkAuth, UserController.delOldAvatarImage);
 
+app.delete("/auth/delete/:id", checkAuth, UserController.deleteUserAccount);
+
+
+
 app.get("/items", checkAuth, ItemController.getAllItems);
 app.post("/items", checkAuth, ItemController.createItem);
 app.delete("/items/:id", checkAuth, ItemController.removeItem);
 app.patch("/items/:id", checkAuth, ItemController.updateItem);
-
 app.get("/items/lists/:id", checkAuth, ItemController.getItemsByListId);
-
-
 
 app.get("/messages/:id", checkAuth, MessageController.getAllMessages);
 

@@ -120,6 +120,8 @@ app.post(
 );
 app.delete("/avatars/:avatar", checkAuth, UserController.delOldAvatarImage);
 
+app.delete("/auth/delete/:id", checkAuth, UserController.deleteUserAccount);
+
 app.get("/items", checkAuth, ItemController.getAllItems);
 app.post("/items", checkAuth, ItemController.createItem);
 app.delete("/items/:id", checkAuth, ItemController.removeItem);

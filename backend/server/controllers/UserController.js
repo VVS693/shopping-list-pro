@@ -4,12 +4,15 @@ import bcrypt from "bcrypt";
 import { unlink } from "node:fs/promises";
 import { __dirname } from "../index.js";
 import UserModel from "../models/User.js";
+import ListModel from "../models/List.js";
+import ItemModel from "../models/Item.js";
+import MessageModel from "../models/Messages.js";
 
 import { secretWord } from "../config/config.js";
 
 export const uploadAvatarImage = async (req, res) => {
   try {
-    console.log("File uploaded successfully");
+    // console.log("File uploaded successfully");
     res.json({
       url: req.file.originalname,
       text: "File uploaded successfully",
@@ -25,7 +28,7 @@ export const uploadAvatarImage = async (req, res) => {
 export const delOldAvatarImage = async (req, res) => {
   try {
     await unlink(`${__dirname}/avatars/${req.params.avatar}`);
-    console.log("successfully deleted");
+    // console.log("successfully deleted");
     res.json({
       success: "successfully deleted",
     });
@@ -259,6 +262,71 @@ export const updatePassword = async (req, res) => {
     console.log(error);
     res.status(500).json({
       message: "Failed to update user or password!",
+    });
+  }
+};
+
+export const deleteUserAccount = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const userDeleted = await UserModel.findOne({ _id: userId });
+    const lists = await ListModel.find({
+      "usersSharing.userId": userId,
+    });
+    lists.forEach(async (el) => {
+      const newUserShared = [...el.usersSharing];
+      const i = el.usersSharing.findIndex((e) => e.userId === userId);
+      newUserShared.splice(i, 1);
+      await ListModel.updateOne(
+        {
+          _id: el._id,
+        },
+        {
+          usersSharing: newUserShared,
+        }
+      );
+    });
+
+    const items = await ItemModel.find({
+      "comments.userId": userId,
+    });
+    items.forEach(async (el) => {
+      const newComments = [...el.comments];
+      const i = el.comments.findIndex((e) => e.userId === userId);
+      newComments.splice(i, 1);
+      await ItemModel.updateOne(
+        {
+          id: el.id,
+        },
+        {
+          comments: newComments,
+        }
+      );
+    });
+
+    await ItemModel.deleteMany({
+      userId: userId,
+    });
+    await MessageModel.deleteMany({
+      userId: userId,
+    });
+    await ListModel.deleteMany({
+      userOwner: userId,
+    });
+    await UserModel.findOneAndDelete({
+      _id: userId,
+    });
+    if (userDeleted.avatar !== " ") {
+      await unlink(`${__dirname}/avatars/${userDeleted.avatar}`);
+    }
+
+    res.json({
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Failed to delete user account...",
     });
   }
 };

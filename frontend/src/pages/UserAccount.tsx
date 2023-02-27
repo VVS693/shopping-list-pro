@@ -8,6 +8,7 @@ import { authReset } from "../store/reducers/usersSlice";
 import { eyeIcon, eyeSlashIcon } from "../components/icons";
 import {
   delOldUserAvatar,
+  fetchDeleteUserAccount,
   fetchUploadUserAvatar,
   fetchUserNewPassword,
   fetchUserUpdateAvatar,
@@ -49,6 +50,8 @@ export function UserAccount() {
   const [isAlertDialogErrorOpen, setAlertDialogErrorOpen] = useState(false);
   const [isAlertDialogSuccessOpen, setAlertDialogSuccessOpen] = useState(false);
   const [isAlertDialogExitOpen, setAlertDialogExitOpen] = useState(false);
+  const [isAlertDialogAccountDeleteOpen, setAlertDialogAccountDeleteOpen] =
+    useState(false);
   const [alertDialogText, setalertDialogText] = useState("");
 
   const navigate = useNavigate();
@@ -129,6 +132,7 @@ export function UserAccount() {
     setAlertDialogErrorOpen(false);
     setAlertDialogSuccessOpen(false);
     setAlertDialogExitOpen(false);
+    setAlertDialogAccountDeleteOpen(false);
     setalertDialogText("");
     reset();
   };
@@ -144,12 +148,36 @@ export function UserAccount() {
     cancelHandler();
     dispatch(authReset());
     dispatch(setInitialLists());
-    navigate("/login")
+    navigate("/login");
   };
 
   const userExitModalOpen = async () => {
     setAlertDialogExitOpen(true);
     setalertDialogText("Are you sure you want to exit?");
+  };
+
+  const accountDeleteModalOpen = async () => {
+    setAlertDialogAccountDeleteOpen(true);
+    setalertDialogText(
+      "Are you sure you want to delete account? All elements will be removed!"
+    );
+  };
+
+  const accountDeleteApprove = async () => {
+    const res = await dispatch(fetchDeleteUserAccount(user._id));
+    if (res.meta.requestStatus === "rejected") {
+      setAlertDialogAccountDeleteOpen(false);
+      if (typeof res.payload === "string") {
+        setalertDialogText(res.payload);
+      }
+      setAlertDialogErrorOpen(true);
+    }
+
+    if (res.meta.requestStatus === "fulfilled") {
+      setAlertDialogAccountDeleteOpen(false);
+      setalertDialogText("The account has been successfully removed!");
+      setAlertDialogSuccessOpen(true);
+    }
   };
 
   return (
@@ -175,6 +203,12 @@ export function UserAccount() {
         isOpen={isAlertDialogSuccessOpen}
         text={alertDialogText}
         okFunc={userApproveModalSuccess}
+      />
+      <AlertDialog
+        isOpen={isAlertDialogAccountDeleteOpen}
+        text={alertDialogText}
+        cancelFunc={cancelHandler}
+        okFunc={accountDeleteApprove}
       />
 
       <div className="text-center">
@@ -239,130 +273,146 @@ export function UserAccount() {
         </>
       )}
       {editAccount && (
-        <form onSubmit={handleSubmit(userApproveModalOpen)}>
-          {!editAvatar && (
-            <>
-              <div>
-                <div className="w-80 pt-3 pb-0">
-                  <Input
-                    label="New username"
-                    type="text"
-                    {...register("newUserName", {
-                      maxLength: {
-                        value: 12,
-                        message: "Maximum username length is twelve characters",
-                      },
-                      pattern: {
-                        value: /^[A-Za-zА-Яа-я0-9]+$/i,
-                        message: "Username is not valid",
-                      },
-                    })}
-                  />
-                  {errors.newUserName ? (
-                    <p className=" pt-1 text-xs text-red-900">
-                      {errors.newUserName.message}
-                    </p>
-                  ) : (
-                    <div className=" block h-5"></div>
-                  )}
+        <>
+          <form onSubmit={handleSubmit(userApproveModalOpen)}>
+            {!editAvatar && (
+              <>
+                <div>
+                  <div className="w-80 pt-3 pb-0">
+                    <Input
+                      label="New username"
+                      type="text"
+                      {...register("newUserName", {
+                        maxLength: {
+                          value: 12,
+                          message:
+                            "Maximum username length is twelve characters",
+                        },
+                        pattern: {
+                          value: /^[A-Za-zА-Яа-я0-9]+$/i,
+                          message: "Username is not valid",
+                        },
+                      })}
+                    />
+                    {errors.newUserName ? (
+                      <p className=" pt-1 text-xs text-red-900">
+                        {errors.newUserName.message}
+                      </p>
+                    ) : (
+                      <div className=" block h-5"></div>
+                    )}
+                  </div>
+
+                  <div className="w-80 pt-3 pb-0">
+                    <Input
+                      label="Current password"
+                      type={showCurrentPassword ? "text" : "password"}
+                      icon={
+                        <div
+                          onClick={() =>
+                            setShowCurrentPassword(!showCurrentPassword)
+                          }
+                        >
+                          {!showCurrentPassword ? eyeIcon : eyeSlashIcon}
+                        </div>
+                      }
+                      {...register("currentPassword", {
+                        required:
+                          dirtyFields.currentPassword || dirtyFields.newPassword
+                            ? "Current password is required"
+                            : false,
+                      })}
+                    />
+                    {!!errors.currentPassword &&
+                    (!!dirtyFields.currentPassword ||
+                      !!dirtyFields.newPassword) ? (
+                      <p className="pt-1 text-xs text-red-900">
+                        {errors.currentPassword.message}
+                      </p>
+                    ) : (
+                      <div className="block h-5"></div>
+                    )}
+                  </div>
+
+                  <div className="w-80 pt-3 pb-0">
+                    <Input
+                      label="New password"
+                      type={showNewPassword ? "text" : "password"}
+                      icon={
+                        <div
+                          onClick={() => setShowNewPassword(!showNewPassword)}
+                        >
+                          {!showNewPassword ? eyeIcon : eyeSlashIcon}
+                        </div>
+                      }
+                      {...register("newPassword", {
+                        required:
+                          dirtyFields.currentPassword || dirtyFields.newPassword
+                            ? "New password is required"
+                            : false,
+                        minLength: {
+                          value: 5,
+                          message: "Password should be at-least 5 characters.",
+                        },
+                      })}
+                    />
+                    {!!errors.newPassword &&
+                    (!!dirtyFields.currentPassword ||
+                      !!dirtyFields.newPassword) ? (
+                      <p className=" pt-1 text-xs text-red-900">
+                        {errors.newPassword.message}
+                      </p>
+                    ) : (
+                      <div className=" block h-5"></div>
+                    )}
+                  </div>
                 </div>
 
-                <div className="w-80 pt-3 pb-0">
-                  <Input
-                    label="Current password"
-                    type={showCurrentPassword ? "text" : "password"}
-                    icon={
-                      <div
-                        onClick={() =>
-                          setShowCurrentPassword(!showCurrentPassword)
-                        }
-                      >
-                        {!showCurrentPassword ? eyeIcon : eyeSlashIcon}
-                      </div>
-                    }
-                    {...register("currentPassword", {
-                      required:
-                        dirtyFields.currentPassword || dirtyFields.newPassword
-                          ? "Current password is required"
-                          : false,
-                    })}
-                  />
-                  {!!errors.currentPassword &&
-                  (!!dirtyFields.currentPassword ||
-                    !!dirtyFields.newPassword) ? (
-                    <p className="pt-1 text-xs text-red-900">
-                      {errors.currentPassword.message}
-                    </p>
-                  ) : (
-                    <div className="block h-5"></div>
-                  )}
-                </div>
-
-                <div className="w-80 pt-3 pb-0">
-                  <Input
-                    label="New password"
-                    type={showNewPassword ? "text" : "password"}
-                    icon={
-                      <div onClick={() => setShowNewPassword(!showNewPassword)}>
-                        {!showNewPassword ? eyeIcon : eyeSlashIcon}
-                      </div>
-                    }
-                    {...register("newPassword", {
-                      required:
-                        dirtyFields.currentPassword || dirtyFields.newPassword
-                          ? "New password is required"
-                          : false,
-                      minLength: {
-                        value: 5,
-                        message: "Password should be at-least 5 characters.",
-                      },
-                    })}
-                  />
-                  {!!errors.newPassword &&
-                  (!!dirtyFields.currentPassword ||
-                    !!dirtyFields.newPassword) ? (
-                    <p className=" pt-1 text-xs text-red-900">
-                      {errors.newPassword.message}
-                    </p>
-                  ) : (
-                    <div className=" block h-5"></div>
-                  )}
-                </div>
-              </div>
-
-              <div
-                className={`flex w-80 pt-3 pb-3 ${
-                  dirtyFields.currentPassword ||
-                  dirtyFields.newPassword ||
-                  dirtyFields.newUserName
-                    ? "justify-between"
-                    : "justify-end"
-                }`}
-              >
-                {(dirtyFields.currentPassword ||
-                  dirtyFields.newPassword ||
-                  dirtyFields.newUserName) && (
-                  <Button
-                    type="submit"
-                    size="sm"
-                    className="w-48 tracking-wider"
-                  >
-                    Save
-                  </Button>
-                )}
-
-                <Button
-                  size="sm"
-                  variant="outlined"
-                  className="w-28 tracking-wider"
-                  onClick={cancelHandler}
+                <div
+                  className={`flex w-80 pt-3 pb-3 ${
+                    dirtyFields.currentPassword ||
+                    dirtyFields.newPassword ||
+                    dirtyFields.newUserName
+                      ? "justify-between"
+                      : "justify-end"
+                  }`}
                 >
-                  Cancel
-                </Button>
-              </div>
-            </>
-          )}
-        </form>
+                  {(dirtyFields.currentPassword ||
+                    dirtyFields.newPassword ||
+                    dirtyFields.newUserName) && (
+                    <Button
+                      type="submit"
+                      size="sm"
+                      className="w-48 tracking-wider"
+                    >
+                      Save
+                    </Button>
+                  )}
+
+                  <Button
+                    size="sm"
+                    variant="outlined"
+                    className="w-28 tracking-wider"
+                    onClick={cancelHandler}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </>
+            )}
+          </form>
+
+          <div className="flex fixed justify-end w-80 bottom-8">
+            <Button
+              size="sm"
+              variant="outlined"
+              className=" tracking-wider"
+              onClick={accountDeleteModalOpen}
+            >
+              Delete account
+            </Button>
+          </div>
+        </>
       )}
     </div>
   );
