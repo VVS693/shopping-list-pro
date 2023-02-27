@@ -181,7 +181,7 @@ export function UserAccount() {
   };
 
   return (
-    <div className="container mx-auto max-w-sm flex flex-wrap justify-center pt-1">
+    <div className="container mx-auto max-w-sm flex flex-wrap justify-center pt-4">
       <AlertDialog
         isOpen={isAlertDialogExitOpen}
         text={alertDialogText}
@@ -260,11 +260,22 @@ export function UserAccount() {
               Cancel
             </Button>
           </div>
-          <div className="flex fixed justify-end w-80 bottom-8">
+
+          <div className="flex fixed justify-between w-80 bottom-8">
+            <Button
+              color="red"
+              size="sm"
+              variant="outlined"
+              className="w-48 tracking-wider"
+              onClick={accountDeleteModalOpen}
+            >
+              Delete account
+            </Button>
+
             <Button
               size="sm"
               variant="outlined"
-              className="w-20 tracking-wider"
+              className="w-28 tracking-wider"
               onClick={userExitModalOpen}
             >
               Exit
@@ -402,7 +413,7 @@ export function UserAccount() {
             )}
           </form>
 
-          <div className="flex fixed justify-end w-80 bottom-8">
+          {/* <div className="flex fixed justify-end w-80 bottom-8">
             <Button
               size="sm"
               variant="outlined"
@@ -411,7 +422,7 @@ export function UserAccount() {
             >
               Delete account
             </Button>
-          </div>
+          </div> */}
         </>
       )}
     </div>
