@@ -11,10 +11,15 @@ import Paper from "@mui/material/Paper";
 
 interface AddItemMenuProps {
   placeHolder?: string;
-  onAdd: (value: string) => void;
+  onAdd?: (value: string) => void;
+  onSearch?: (value: string) => void;
 }
 
-export function AddItemMenu({ placeHolder, onAdd }: AddItemMenuProps) {
+export function AddItemMenu({
+  placeHolder,
+  onAdd,
+  onSearch,
+}: AddItemMenuProps) {
   const [value, setValue] = useState("");
   // const isClearFocus = useRef(false);
   // const isClearClick = useRef(false);
@@ -24,6 +29,7 @@ export function AddItemMenu({ placeHolder, onAdd }: AddItemMenuProps) {
   const dispatch = useAppDispatch();
 
   const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onSearch && onSearch(event.target.value.trim());
     setValue(event.target.value);
   };
 
@@ -55,7 +61,7 @@ export function AddItemMenu({ placeHolder, onAdd }: AddItemMenuProps) {
       dispatch(showAddForm(false));
       return;
     }
-    onAdd(value.trim());
+    onAdd && onAdd(value.trim());
     animateScroll.scrollToBottom({
       duration: 750,
       smooth: "easeInQuad",
@@ -82,6 +88,7 @@ export function AddItemMenu({ placeHolder, onAdd }: AddItemMenuProps) {
     // console.log("click");
     setValue("");
     addInputRef.current.focus();
+    onSearch && onSearch("");
   };
 
   return (
@@ -90,10 +97,12 @@ export function AddItemMenu({ placeHolder, onAdd }: AddItemMenuProps) {
         onSubmit={submitHandler}
         className="flex w-full flex-nowrap px-3 py-[2px] items-center justify-between bg-white"
       >
-        <div
-          className="fixed top-0 right-0 left-0 bottom-0"
-          onClick={submitHandler}
-        />
+        {!onSearch && (
+          <div
+            className="fixed top-0 right-0 left-0 bottom-0"
+            onClick={submitHandler}
+          />
+        )}
 
         <TextField
           id="edit-input"
@@ -122,11 +131,12 @@ export function AddItemMenu({ placeHolder, onAdd }: AddItemMenuProps) {
           // }}
           onKeyDown={(el) => {
             el.code === "Enter" && el.preventDefault();
-            setTimeout(() => {
-              el.code === "Enter" && submitHandler(el);
-            }, 0);
+            if (!onSearch) {
+              setTimeout(() => {
+                el.code === "Enter" && submitHandler(el);
+              }, 0);
+            }
           }}
-          
           InputProps={{
             disableUnderline: true,
             style: {
@@ -146,15 +156,16 @@ export function AddItemMenu({ placeHolder, onAdd }: AddItemMenuProps) {
                 </IconButton>
               </InputAdornment>
             ),
-            
           }}
         />
-        <IconButton type="submit">
-          <SubdirectoryArrowLeftOutlinedIcon
-            sx={{ fontSize: 30 }}
-            color="warning"
-          />
-        </IconButton>
+        {!onSearch && (
+          <IconButton type="submit">
+            <SubdirectoryArrowLeftOutlinedIcon
+              sx={{ fontSize: 30 }}
+              color="warning"
+            />
+          </IconButton>
+        )}
       </form>
     </Paper>
   );

@@ -11,6 +11,7 @@ interface ItemsState {
   error: string;
   isShowComments: boolean;
   isAddFormVisible: boolean;
+  isSearchFormVisible: boolean;
 }
 
 const initialState: ItemsState = {
@@ -19,12 +20,16 @@ const initialState: ItemsState = {
   error: "",
   isShowComments: false,
   isAddFormVisible: false,
+  isSearchFormVisible: false
 };
 
 export const itemsSlice = createSlice({
   name: "items",
   initialState,
   reducers: {
+    showSearchForm(state, action: PayloadAction<boolean>) {
+      state.isSearchFormVisible = action.payload;
+    },
     showAddForm(state, action: PayloadAction<boolean>) {
       state.isAddFormVisible = action.payload;
     },
@@ -101,6 +106,7 @@ export const {
   showAllComments,
   showAddForm,
   setInitialItems,
+  showSearchForm
 } = itemsSlice.actions;
 
 export default itemsSlice.reducer;

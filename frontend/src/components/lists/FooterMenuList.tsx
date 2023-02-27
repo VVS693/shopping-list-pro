@@ -13,24 +13,29 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import { useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { showAddForm } from "../../store/reducers/itemsSlice";
+import { showAddForm, showSearchForm } from "../../store/reducers/itemsSlice";
 import { CSSTransition } from "react-transition-group";
 import "./stylesLists.css";
 import { AddItemMenu } from "../elements/AddItemMenu";
 import Divider from "@mui/material/Divider";
 
 interface FooterMenuListProps {
+  onSearchValue?: (value: string) => void;
   onSortClick: () => void;
   onAddItemClick: (value: string) => void;
 }
 
 export function FooterMenuList({
+  onSearchValue,
   onSortClick,
   onAddItemClick,
 }: FooterMenuListProps) {
   const [sortToggle, setSortToggle] = useState(true);
   const dispatch = useAppDispatch();
-  const { isAddFormVisible } = useAppSelector((state) => state.itemsReducer);
+  const { isAddFormVisible, isSearchFormVisible } = useAppSelector((state) => state.itemsReducer);
+
+
+
 
   return (
     <>
@@ -50,6 +55,21 @@ export function FooterMenuList({
         </div>
       </CSSTransition>
 
+
+      <CSSTransition
+        in={isSearchFormVisible}
+        timeout={500}
+        classNames="footerList"
+        unmountOnExit
+      >
+        <div className="fixed bottom-20 w-full max-w-md min-w-[360px] border-t">
+          <AddItemMenu
+            onSearch={onSearchValue}
+            placeHolder="List search..."
+          />
+        </div>
+      </CSSTransition>
+
       <div className="z-30 fixed w-full max-w-md min-w-[360px] bottom-0  bg-white">
         <Divider />
         <div className="flex justify-between px-4 pb-6 pt-[10px]">
@@ -61,11 +81,11 @@ export function FooterMenuList({
             />
           </IconButton>
 
-          <IconButton onClick={() => {}} disabled>
+          <IconButton onClick={() => dispatch(showSearchForm(!isSearchFormVisible))} >
             <SearchOutlinedIcon
               sx={{ fontSize: 30 }}
-              // color="action"
-              color="disabled"
+              color="action"
+              // color="disabled"
             />
           </IconButton>
 

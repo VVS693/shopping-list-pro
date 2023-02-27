@@ -7,17 +7,23 @@ import { useMemo } from "react";
 
 interface MyListsProps {
   isSortedByTitle?: boolean;
+  searchByValue?: string;
 }
 
-export function MyLists({ isSortedByTitle }: MyListsProps) {
+export function MyLists({ isSortedByTitle, searchByValue }: MyListsProps) {
   const { lists } = useAppSelector((state) => state.listsReducer);
   const { user } = useAppSelector((state) => state.userReducer);
 
   const listUserOwnerData = useMemo(() => {
-    const listsDataMy = lists.filter(
+    
+    let listDataSearch = [...lists];
+    if (searchByValue && searchByValue.trim().length !== 0) {
+      listDataSearch = lists.filter((el) => el.title.toLowerCase().includes(searchByValue.toLowerCase()));
+    }
+    const listsDataMy = listDataSearch.filter(
       (el) => el.userOwner === user._id && el.usersSharing.length === 0
     );
-    const listsDataMyShared = lists.filter(
+    const listsDataMyShared = listDataSearch.filter(
       (el) => el.userOwner === user._id && el.usersSharing.length !== 0
     );
     return isSortedByTitle
@@ -49,10 +55,14 @@ export function MyLists({ isSortedByTitle }: MyListsProps) {
             return 0;
           }),
         ];
-  }, [user._id, lists, isSortedByTitle]);
+  }, [user._id, lists, isSortedByTitle, searchByValue]);
 
   const listUsersSharingData = useMemo(() => {
-    const listsData = lists.filter((el) => el.userOwner !== user._id);
+    let listDataSearch = [...lists];
+    if (searchByValue) {
+      listDataSearch = lists.filter((el) => el.title.toLowerCase().includes(searchByValue.toLowerCase()));
+    }
+    const listsData = listDataSearch.filter((el) => el.userOwner !== user._id);
 
     return isSortedByTitle
       ? listsData.sort((a, b) => {
@@ -63,7 +73,7 @@ export function MyLists({ isSortedByTitle }: MyListsProps) {
           if (a.title < b.title) return -1;
           return 0;
         });
-  }, [user._id, lists, isSortedByTitle]);
+  }, [user._id, lists, isSortedByTitle, searchByValue]);
 
   return (
     <TransitionGroup>

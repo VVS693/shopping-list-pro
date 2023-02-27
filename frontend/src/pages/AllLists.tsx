@@ -1,7 +1,11 @@
 import { ErrorMessage } from "../components/elements/ErrorMessage";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { fetchAllSortedItems } from "../store/reducers/actionsItemsCreators";
-import { showAllComments, sortItemsArray } from "../store/reducers/itemsSlice";
+import {
+  showAllComments,
+  showSearchForm,
+  sortItemsArray,
+} from "../store/reducers/itemsSlice";
 import { Header } from "../components/elements/Header";
 import { animateScroll } from "react-scroll";
 import { FooterMenu } from "../components/elements/FooterMenu";
@@ -36,13 +40,14 @@ export function AllLists() {
   const dispatch = useAppDispatch();
   const { isLoading, error, isShareUsersMenuOpen, currentList, lists } =
     useAppSelector((state) => state.listsReducer);
-  const { user, isAuth } = useAppSelector((state) => state.userReducer);
+  const { user } = useAppSelector((state) => state.userReducer);
+  const { isSearchFormVisible } = useAppSelector((state) => state.itemsReducer);
   const { amountElements, createdAt, updatedAt } = useListData(currentList);
   const [isSortedByTitle, setIsSortedByTitle] = useState(false);
-  const navigate = useNavigate();
+  const [searchValue, setSearchValue] = useState("");
 
   const onSortHandler = () => {
-    dispatch(fetchAllUserLists(user))
+    dispatch(fetchAllUserLists(user));
     animateScroll.scrollToTop({
       duration: 1000,
       smooth: "easeInQuad",
@@ -55,11 +60,10 @@ export function AllLists() {
       _id: v4(),
       title: value,
       userOwner: user._id,
-      usersSharing: []
+      usersSharing: [],
     };
     dispatch(fetchAddList(listData));
-    dispatch(fetchAllUserLists(user))
-    
+    dispatch(fetchAllUserLists(user));
   };
 
   const TitleHeaderPro = () => {
@@ -101,7 +105,14 @@ export function AllLists() {
   useEffect(() => {
     dispatch(fetchAllUsers());
     if (user._id !== "") dispatch(fetchAllUserLists(user));
+    return () => {
+      dispatch(showSearchForm(false));
+    };
   }, [isShareUsersMenuOpen, user._id]);
+
+  useEffect(() => {
+    if (!isSearchFormVisible) setSearchValue("");
+  }, [isSearchFormVisible]);
 
   return (
     <div
@@ -121,7 +132,7 @@ export function AllLists() {
       )}
 
       {!isLoading && lists.length === 0 && <Greeting />}
-      <MyLists isSortedByTitle={isSortedByTitle} />
+      <MyLists isSortedByTitle={isSortedByTitle} searchByValue={searchValue} />
 
       <Slide
         direction="up"
@@ -136,6 +147,7 @@ export function AllLists() {
       </Slide>
 
       <FooterMenuList
+        onSearchValue={(e) => setSearchValue(e)}
         onSortClick={onSortHandler}
         onAddItemClick={onAddListHandler}
       />
