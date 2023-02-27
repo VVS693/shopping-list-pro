@@ -1,17 +1,23 @@
 import { useAppSelector } from "../../hooks/redux";
 import { ShopItem } from "./ShopItem";
-import { TransitionGroup, CSSTransition } from "react-transition-group";
+import { TransitionGroup } from "react-transition-group";
 import Collapse from "@mui/material/Collapse";
-import "./stylesItems.css";
 
-export function ItemsList() {
+interface ItemsListProps {
+  searchByValue?: string;
+}
+
+export function ItemsList({ searchByValue }: ItemsListProps) {
   const { items } = useAppSelector((state) => state.itemsReducer);
-
+  let itemsDataSearch = [...items];
+  if (searchByValue && searchByValue.trim().length !== 0) {
+    itemsDataSearch = items.filter((el) =>
+      el.title.toLowerCase().includes(searchByValue.toLowerCase())
+    );
+  }
   return (
     <TransitionGroup>
-      {items.map((el) => (
-        // <CSSTransition key={el.id} timeout={750} classNames="item">
-
+      {itemsDataSearch.map((el) => (
         <Collapse
           key={el.id}
           timeout={{
@@ -22,8 +28,6 @@ export function ItemsList() {
         >
           <ShopItem item={el} />
         </Collapse>
-
-        // {/* </CSSTransition>  */}
       ))}
     </TransitionGroup>
   );

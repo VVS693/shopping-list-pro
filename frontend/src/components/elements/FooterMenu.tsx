@@ -9,12 +9,13 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { showAddForm } from "../../store/reducers/itemsSlice";
+import { showAddForm, showSearchForm } from "../../store/reducers/itemsSlice";
 import { CSSTransition } from "react-transition-group";
 import Divider from "@mui/material/Divider";
 import "./stylesElements.css";
 
 interface FooterMenuProps {
+  onSearchValue?: (value: string) => void;
   onChatClick: () => void;
   onSortClick: () => void;
   onShowCommentsClick: () => void;
@@ -24,6 +25,7 @@ interface FooterMenuProps {
 }
 
 export function FooterMenu({
+  onSearchValue,
   onChatClick,
   onSortClick,
   onShowCommentsClick,
@@ -33,7 +35,7 @@ export function FooterMenu({
 }: FooterMenuProps) {
   const [isCommentsVisible, setCommentsVisible] = useState(false);
   const dispatch = useAppDispatch();
-  const { isAddFormVisible } = useAppSelector((state) => state.itemsReducer);
+  const { isAddFormVisible, isSearchFormVisible } = useAppSelector((state) => state.itemsReducer);
 
   return (
     <>
@@ -49,6 +51,20 @@ export function FooterMenu({
               onAddItemClick(value);
             }}
             placeHolder="Add item..."
+          />
+        </div>
+      </CSSTransition>
+
+      <CSSTransition
+        in={isSearchFormVisible}
+        timeout={500}
+        classNames="footerList"
+        unmountOnExit
+      >
+        <div className="fixed bottom-20 w-full max-w-md min-w-[360px] border-t">
+          <AddItemMenu
+            onSearch={onSearchValue}
+            placeHolder="List search..."
           />
         </div>
       </CSSTransition>
@@ -83,8 +99,8 @@ export function FooterMenu({
             )}
           </IconButton>
 
-          <IconButton onClick={() => {}} disabled>
-            <SearchOutlinedIcon sx={{ fontSize: 30 }} color="disabled" />
+          <IconButton onClick={() => dispatch(showSearchForm(!isSearchFormVisible))} >
+            <SearchOutlinedIcon sx={{ fontSize: 30 }} color="action" />
           </IconButton>
 
           <IconButton onClick={onSortClick}>

@@ -8,6 +8,7 @@ import {
   addItemArray,
   setInitialItems,
   showAllComments,
+  showSearchForm,
   sortItemsArray,
 } from "../store/reducers/itemsSlice";
 import { Header } from "../components/elements/Header";
@@ -27,7 +28,7 @@ import {
   setInitialLists,
   setIsShareUsersMenuOpen,
 } from "../store/reducers/listsSlice";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AlertDialog } from "../components/elements/AlertDialog";
 import { useDeleteList, useListData } from "../hooks/listHooks";
 import { ShareUsersMenu } from "../components/elements/ShareUsersMenu";
@@ -38,12 +39,15 @@ export function Home() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+  const [searchValue, setSearchValue] = useState("");
+
   const { isLoading, error, items, isShowComments } = useAppSelector(
     (state) => state.itemsReducer
   );
   const { currentList, isShareUsersMenuOpen } = useAppSelector(
     (state) => state.listsReducer
   );
+  const { isSearchFormVisible } = useAppSelector((state) => state.itemsReducer);
   const { user } = useAppSelector((state) => state.userReducer);
   const {
     alertDialogText,
@@ -141,7 +145,15 @@ export function Home() {
   useEffect(() => {
     if (currentList._id !== "")
       dispatch(fetchAllSortedItemsByListId(currentList?._id));
+
+    return () => {
+      dispatch(showSearchForm(false));
+    };
   }, []);
+
+  useEffect(() => {
+    if (!isSearchFormVisible) setSearchValue("");
+  }, [isSearchFormVisible]);
 
   return (
     <div className="container mx-auto max-w-md min-w-[360px] pb-20">
@@ -163,7 +175,7 @@ export function Home() {
           listLabelMark={<ListLabelMarkAll />}
         />
       )}
-      <ItemsList />
+      <ItemsList searchByValue={searchValue} />
 
       <Slide
         direction="up"
@@ -182,6 +194,7 @@ export function Home() {
         isChatButtonActive={currentList.usersSharing.length !== 0}
         onSortClick={onSortHandler}
         onShowCommentsClick={onShowAllCommentsHandle}
+        onSearchValue={(e) => setSearchValue(e)}
         onAddItemClick={onAddItemHandle}
       />
     </div>

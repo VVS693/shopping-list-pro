@@ -35,8 +35,6 @@ export function FooterMenuList({
   const { isAddFormVisible, isSearchFormVisible } = useAppSelector((state) => state.itemsReducer);
 
 
-
-
   return (
     <>
       <CSSTransition
