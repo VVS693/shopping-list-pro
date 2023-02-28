@@ -84,7 +84,7 @@ export function AllLists() {
     return (
       <ListLabelMark
         updated={{
-          updatedAt: updatedAt,
+          updatedAt: updatedAt === "" ? createdAt : updatedAt,
           dateStyle: "short",
         }}
         created={{

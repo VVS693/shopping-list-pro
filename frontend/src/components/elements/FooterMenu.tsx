@@ -64,7 +64,7 @@ export function FooterMenu({
         <div className="fixed bottom-20 w-full max-w-md min-w-[360px] border-t">
           <AddItemMenu
             onSearch={onSearchValue}
-            placeHolder="List search..."
+            placeHolder="Item search..."
           />
         </div>
       </CSSTransition>
