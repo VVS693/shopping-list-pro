@@ -21,19 +21,41 @@
 
 .footerList-enter {
     bottom: 0;
+    opacity: 0;
 }
 
 .footerList-enter-active {
-    bottom: 80px;
-    transition: bottom 500ms;
+    bottom: 28px;
+    opacity: 1;
+    transition: bottom 500ms, opacity 250ms
 }
 
 .footerList-exit {
     opacity: 1;
-    bottom: 80px;
+    bottom: 28px;
 }
 
 .footerList-exit-active {
     bottom: 0;
-    transition:  500ms;
+    opacity: 0;
+    transition:  bottom 500ms, opacity 500ms
 } 
+
+
+.search-enter {
+    bottom: 0;
+}
+
+.search-enter-active {
+    bottom: 80px;
+    transition: bottom 500ms
+}
+
+.search-exit {
+    bottom: 80px;
+}
+
+.search-exit-active {
+    bottom: 0;
+    transition:  bottom 500ms
+}

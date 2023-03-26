@@ -1,17 +1,9 @@
 import IconButton from "@mui/material/IconButton";
-import QuestionAnswerOutlinedIcon from "@mui/icons-material/QuestionAnswerOutlined";
-import IosShareOutlinedIcon from "@mui/icons-material/IosShareOutlined";
-
-import ArchiveOutlinedIcon from "@mui/icons-material/ArchiveOutlined";
-import UnarchiveOutlinedIcon from "@mui/icons-material/UnarchiveOutlined";
-import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
-import FilterListOutlinedIcon from "@mui/icons-material/FilterListOutlined";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
-import CommentsDisabledOutlinedIcon from "@mui/icons-material/CommentsDisabledOutlined";
 import SortOutlinedIcon from "@mui/icons-material/SortOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { showAddForm, showSearchForm } from "../../store/reducers/itemsSlice";
 import { CSSTransition } from "react-transition-group";
@@ -32,8 +24,9 @@ export function FooterMenuList({
 }: FooterMenuListProps) {
   const [sortToggle, setSortToggle] = useState(true);
   const dispatch = useAppDispatch();
-  const { isAddFormVisible, isSearchFormVisible } = useAppSelector((state) => state.itemsReducer);
-
+  const { isAddFormVisible, isSearchFormVisible } = useAppSelector(
+    (state) => state.itemsReducer
+  );
 
   return (
     <>
@@ -43,7 +36,7 @@ export function FooterMenuList({
         classNames="footerList"
         unmountOnExit
       >
-        <div className="fixed bottom-20 w-full max-w-md min-w-[360px] border-t">
+        <div className="z-40 fixed bottom-7 w-full max-w-md min-w-[360px] border-t">
           <AddItemMenu
             onAdd={(value) => {
               onAddItemClick(value);
@@ -53,18 +46,14 @@ export function FooterMenuList({
         </div>
       </CSSTransition>
 
-
       <CSSTransition
         in={isSearchFormVisible}
         timeout={500}
-        classNames="footerList"
+        classNames="search"
         unmountOnExit
       >
         <div className="fixed bottom-20 w-full max-w-md min-w-[360px] border-t">
-          <AddItemMenu
-            onSearch={onSearchValue}
-            placeHolder="List search..."
-          />
+          <AddItemMenu onSearch={onSearchValue} placeHolder="List search..." />
         </div>
       </CSSTransition>
 
@@ -79,11 +68,13 @@ export function FooterMenuList({
             />
           </IconButton>
 
-          <IconButton onClick={() => dispatch(showSearchForm(!isSearchFormVisible))} >
+          <IconButton
+            onClick={() => dispatch(showSearchForm(!isSearchFormVisible))}
+            disabled={isAddFormVisible}
+          >
             <SearchOutlinedIcon
               sx={{ fontSize: 30 }}
-              color="action"
-              // color="disabled"
+              color={isAddFormVisible ? "disabled" : "action"}
             />
           </IconButton>
 
@@ -92,24 +83,30 @@ export function FooterMenuList({
               setSortToggle(!sortToggle);
               onSortClick();
             }}
+            disabled={isAddFormVisible}
           >
             {!sortToggle ? (
-              <SortOutlinedIcon sx={{ fontSize: 30 }} color="action" />
+              <SortOutlinedIcon
+                sx={{ fontSize: 30 }}
+                color={isAddFormVisible ? "disabled" : "action"}
+              />
             ) : (
               <SortOutlinedIcon
                 sx={{ fontSize: 30, transform: "scaleY(-1)" }}
-                color="action"
+                color={isAddFormVisible ? "disabled" : "action"}
               />
             )}
           </IconButton>
 
           <IconButton
             onClick={() => dispatch(showAddForm(true))}
-            disabled={isAddFormVisible}
+            disabled={isAddFormVisible || isSearchFormVisible}
           >
             <AddOutlinedIcon
               sx={{ fontSize: 30 }}
-              color={isAddFormVisible ? "disabled" : "action"}
+              color={
+                isAddFormVisible || isSearchFormVisible ? "disabled" : "action"
+              }
             />
           </IconButton>
         </div>

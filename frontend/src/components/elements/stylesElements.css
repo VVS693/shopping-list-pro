@@ -3,22 +3,44 @@
 
 .footer-enter {
     bottom: 0;
+    opacity: 0;
 }
 
 .footer-enter-active {
-    bottom: 80px;
-    transition: bottom 500ms;
+    bottom: 28px;
+    opacity: 1;
+    transition: bottom 500ms, opacity 250ms
 }
 
 .footer-exit {
     opacity: 1;
-    bottom: 80px;
+    bottom: 28px;
 }
 
 .footer-exit-active {
     bottom: 0;
-    transition:  500ms;
+    opacity: 0;
+    transition:  bottom 500ms, opacity 500ms
 } 
+
+
+.search-enter {
+    bottom: 0;
+}
+
+.search-enter-active {
+    bottom: 80px;
+    transition: bottom 500ms
+}
+
+.search-exit {
+    bottom: 80px;
+}
+
+.search-exit-active {
+    bottom: 0;
+    transition:  bottom 500ms
+}
 
 
 

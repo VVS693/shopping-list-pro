@@ -2,6 +2,7 @@ import { ErrorMessage } from "../components/elements/ErrorMessage";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { fetchAllSortedItems } from "../store/reducers/actionsItemsCreators";
 import {
+  showAddForm,
   showAllComments,
   showSearchForm,
   sortItemsArray,
@@ -33,6 +34,7 @@ import { useListData } from "../hooks/listHooks";
 import Fade from "@mui/material/Fade";
 import { ListLabelMark } from "../components/lists/ListLabelMark";
 import { Greeting } from "../components/lists/Greeting";
+import { AddItemMenu } from "../components/elements/AddItemMenu";
 // import { useAmountDocsOfList } from "../hooks/listHooks";
 
 export function AllLists() {
@@ -131,7 +133,20 @@ export function AllLists() {
         />
       )}
 
-      {!isLoading && lists.length === 0 && <Greeting />}
+      {!isLoading && lists.length === 0 && (
+        <>
+          <Greeting />
+          <div className="z-40 fixed bottom-7 w-full max-w-md min-w-[360px] border-t">
+            <AddItemMenu
+              onAdd={(value) => {
+                onAddListHandler(value);
+              }}
+              placeHolder="Add new list..."
+            />
+          </div>
+        </>
+      )}
+
       <MyLists isSortedByTitle={isSortedByTitle} searchByValue={searchValue} />
 
       <Slide
@@ -146,11 +161,13 @@ export function AllLists() {
         </div>
       </Slide>
 
-      <FooterMenuList
-        onSearchValue={(e) => setSearchValue(e)}
-        onSortClick={onSortHandler}
-        onAddItemClick={onAddListHandler}
-      />
+      {lists.length !== 0 && (
+        <FooterMenuList
+          onSearchValue={(e) => setSearchValue(e)}
+          onSortClick={onSortHandler}
+          onAddItemClick={onAddListHandler}
+        />
+      )}
     </div>
   );
 }

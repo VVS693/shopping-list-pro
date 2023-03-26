@@ -257,7 +257,7 @@ export function UserAccount() {
               className="w-28 tracking-wider"
               onClick={() => navigate(-1)}
             >
-              Cancel
+              Back
             </Button>
           </div>
 
@@ -406,7 +406,7 @@ export function UserAccount() {
                     className="w-28 tracking-wider"
                     onClick={cancelHandler}
                   >
-                    Cancel
+                    Back
                   </Button>
                 </div>
               </>

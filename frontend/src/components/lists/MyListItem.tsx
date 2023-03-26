@@ -69,7 +69,7 @@ export function MyListItem({ listItem, dateLabelMark }: MyListItemProps) {
   // };
 
   const onEditTitleClickHandle = () => {
-      setIsEditing(true);
+    setIsEditing(true);
   };
 
   const onGoListHandle = () => {
@@ -128,10 +128,7 @@ export function MyListItem({ listItem, dateLabelMark }: MyListItemProps) {
         )}
 
         {isEditing ? (
-          <ItemEdit
-            title={listItem.title}
-            onEdit={listEditHandle}
-          />
+          <ItemEdit title={listItem.title} onEdit={listEditHandle} />
         ) : (
           <ItemTitle title={listItem.title} onClick={onGoListHandle} />
         )}

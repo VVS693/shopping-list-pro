@@ -6,8 +6,9 @@ import IconButton from "@mui/material/IconButton";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import SubdirectoryArrowLeftOutlinedIcon from "@mui/icons-material/SubdirectoryArrowLeftOutlined";
 import { useAppDispatch } from "../../hooks/redux";
-import { showAddForm } from "../../store/reducers/itemsSlice";
+import { showAddForm, showSearchForm } from "../../store/reducers/itemsSlice";
 import Paper from "@mui/material/Paper";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 
 interface AddItemMenuProps {
   placeHolder?: string;
@@ -102,6 +103,12 @@ export function AddItemMenu({
             className="fixed top-0 right-0 left-0 bottom-0"
             onClick={submitHandler}
           />
+        )}
+
+        {onSearch && (
+          <IconButton onClick={() => dispatch(showSearchForm(false))}>
+            <ArrowBackIosNewIcon sx={{ fontSize: 26 }} color="action" />
+          </IconButton>
         )}
 
         <TextField

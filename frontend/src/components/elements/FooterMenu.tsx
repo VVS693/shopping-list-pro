@@ -35,7 +35,9 @@ export function FooterMenu({
 }: FooterMenuProps) {
   const [isCommentsVisible, setCommentsVisible] = useState(false);
   const dispatch = useAppDispatch();
-  const { isAddFormVisible, isSearchFormVisible } = useAppSelector((state) => state.itemsReducer);
+  const { isAddFormVisible, isSearchFormVisible } = useAppSelector(
+    (state) => state.itemsReducer
+  );
 
   return (
     <>
@@ -45,7 +47,7 @@ export function FooterMenu({
         classNames="footer"
         unmountOnExit
       >
-        <div className="fixed bottom-20 w-full max-w-md min-w-[360px] ">
+        <div className="z-40 fixed bottom-7 w-full max-w-md min-w-[360px] ">
           <AddItemMenu
             onAdd={(value) => {
               onAddItemClick(value);
@@ -58,14 +60,11 @@ export function FooterMenu({
       <CSSTransition
         in={isSearchFormVisible}
         timeout={500}
-        classNames="footerList"
+        classNames="search"
         unmountOnExit
       >
         <div className="fixed bottom-20 w-full max-w-md min-w-[360px] border-t">
-          <AddItemMenu
-            onSearch={onSearchValue}
-            placeHolder="Item search..."
-          />
+          <AddItemMenu onSearch={onSearchValue} placeHolder="Item search..." />
         </div>
       </CSSTransition>
 
@@ -99,7 +98,9 @@ export function FooterMenu({
             )}
           </IconButton>
 
-          <IconButton onClick={() => dispatch(showSearchForm(!isSearchFormVisible))} >
+          <IconButton
+            onClick={() => dispatch(showSearchForm(!isSearchFormVisible))}
+          >
             <SearchOutlinedIcon sx={{ fontSize: 30 }} color="action" />
           </IconButton>
 
@@ -112,11 +113,13 @@ export function FooterMenu({
 
           <IconButton
             onClick={() => dispatch(showAddForm(true))}
-            disabled={isAddFormVisible}
+            disabled={isAddFormVisible || isSearchFormVisible}
           >
             <AddOutlinedIcon
               sx={{ fontSize: 30 }}
-              color={isAddFormVisible ? "disabled" : "action"}
+              color={
+                isAddFormVisible || isSearchFormVisible ? "disabled" : "action"
+              }
             />
           </IconButton>
         </div>

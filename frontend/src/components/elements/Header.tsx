@@ -34,7 +34,7 @@ export function Header({
   }, [isLoading]);
 
   return (
-    <div className="z-30 sticky max-w-md min-w-[360px] top-0 bg-white">
+    <div className="z-50 sticky max-w-md min-w-[360px] top-0 bg-white">
       <div className="flex  w-full items-center justify-between  py-2 px-4">
         <div className="min-w-[250px]">
           <Fade in={!!title} timeout={animationTimeout}>
@@ -72,7 +72,7 @@ export function Header({
           <Fade
             in={!isLoaderShow}
             timeout={animationTimeout}
-            className=" absolute right-0 cursor-pointer flex"
+            className="absolute right-0 cursor-pointer flex"
             onClick={() => navigate("/useraccount")}
           >
             <div>
