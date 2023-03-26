@@ -47,7 +47,7 @@ export function Home() {
   const { currentList, isShareUsersMenuOpen } = useAppSelector(
     (state) => state.listsReducer
   );
-  const { isSearchFormVisible } = useAppSelector((state) => state.itemsReducer);
+  const { isSearchFormVisible, isAddFormVisible } = useAppSelector((state) => state.itemsReducer);
   const { user } = useAppSelector((state) => state.userReducer);
   const {
     alertDialogText,
@@ -154,6 +154,15 @@ export function Home() {
   useEffect(() => {
     if (!isSearchFormVisible) setSearchValue("");
   }, [isSearchFormVisible]);
+
+  useEffect(() => {
+    if (isAddFormVisible) {
+      animateScroll.scrollToBottom({
+        duration: 500,
+        smooth: "easeInQuad",
+      })
+    };
+  }, [isAddFormVisible]);
 
   return (
     <div className="container mx-auto max-w-md min-w-[360px] pb-20">

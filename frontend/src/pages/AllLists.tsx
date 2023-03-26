@@ -43,7 +43,7 @@ export function AllLists() {
   const { isLoading, error, isShareUsersMenuOpen, currentList, lists } =
     useAppSelector((state) => state.listsReducer);
   const { user } = useAppSelector((state) => state.userReducer);
-  const { isSearchFormVisible } = useAppSelector((state) => state.itemsReducer);
+  const { isSearchFormVisible, isAddFormVisible } = useAppSelector((state) => state.itemsReducer);
   const { amountElements, createdAt, updatedAt } = useListData(currentList);
   const [isSortedByTitle, setIsSortedByTitle] = useState(false);
   const [searchValue, setSearchValue] = useState("");
@@ -115,6 +115,15 @@ export function AllLists() {
   useEffect(() => {
     if (!isSearchFormVisible) setSearchValue("");
   }, [isSearchFormVisible]);
+
+  useEffect(() => {
+    if (isAddFormVisible) {
+      animateScroll.scrollToBottom({
+        duration: 500,
+        smooth: "easeInQuad",
+      })
+    };
+  }, [isAddFormVisible]);
 
   return (
     <div

@@ -68,62 +68,66 @@ export function FooterMenu({
         </div>
       </CSSTransition>
 
-      <div className="z-30 fixed w-full max-w-md min-w-[360px] bottom-0  bg-white">
-        <Divider />
-        <div className="flex justify-between px-4 pb-6 pt-[10px]">
-          <IconButton onClick={onBackClick}>
-            <ArrowBackIosNewIcon sx={{ fontSize: 30 }} color="action" />
-          </IconButton>
+      {/* {!isAddFormVisible && ( */}
+        <div className="z-30 fixed w-full max-w-md min-w-[360px] bottom-0  bg-white">
+          <Divider />
+          <div className="flex justify-between px-4 pb-6 pt-[10px]">
+            <IconButton onClick={onBackClick}>
+              <ArrowBackIosNewIcon sx={{ fontSize: 30 }} color="action" />
+            </IconButton>
 
-          <IconButton disabled={!isChatButtonActive} onClick={onChatClick}>
-            <QuestionAnswerOutlinedIcon
-              sx={{ fontSize: 30 }}
-              color={!isChatButtonActive ? "disabled" : "action"}
-            />
-          </IconButton>
-
-          <IconButton
-            onClick={() => {
-              setCommentsVisible(!isCommentsVisible);
-              onShowCommentsClick();
-            }}
-          >
-            {!isCommentsVisible ? (
-              <CommentOutlinedIcon sx={{ fontSize: 30 }} color="action" />
-            ) : (
-              <CommentsDisabledOutlinedIcon
+            <IconButton disabled={!isChatButtonActive} onClick={onChatClick}>
+              <QuestionAnswerOutlinedIcon
                 sx={{ fontSize: 30 }}
+                color={!isChatButtonActive ? "disabled" : "action"}
+              />
+            </IconButton>
+
+            <IconButton
+              onClick={() => {
+                setCommentsVisible(!isCommentsVisible);
+                onShowCommentsClick();
+              }}
+            >
+              {!isCommentsVisible ? (
+                <CommentOutlinedIcon sx={{ fontSize: 30 }} color="action" />
+              ) : (
+                <CommentsDisabledOutlinedIcon
+                  sx={{ fontSize: 30 }}
+                  color="action"
+                />
+              )}
+            </IconButton>
+
+            <IconButton
+              onClick={() => dispatch(showSearchForm(!isSearchFormVisible))}
+            >
+              <SearchOutlinedIcon sx={{ fontSize: 30 }} color="action" />
+            </IconButton>
+
+            <IconButton onClick={onSortClick}>
+              <SortOutlinedIcon
+                sx={{ fontSize: 30, transform: "scaleY(-1)" }}
                 color="action"
               />
-            )}
-          </IconButton>
+            </IconButton>
 
-          <IconButton
-            onClick={() => dispatch(showSearchForm(!isSearchFormVisible))}
-          >
-            <SearchOutlinedIcon sx={{ fontSize: 30 }} color="action" />
-          </IconButton>
-
-          <IconButton onClick={onSortClick}>
-            <SortOutlinedIcon
-              sx={{ fontSize: 30, transform: "scaleY(-1)" }}
-              color="action"
-            />
-          </IconButton>
-
-          <IconButton
-            onClick={() => dispatch(showAddForm(true))}
-            disabled={isAddFormVisible || isSearchFormVisible}
-          >
-            <AddOutlinedIcon
-              sx={{ fontSize: 30 }}
-              color={
-                isAddFormVisible || isSearchFormVisible ? "disabled" : "action"
-              }
-            />
-          </IconButton>
+            <IconButton
+              onClick={() => dispatch(showAddForm(true))}
+              disabled={isAddFormVisible || isSearchFormVisible}
+            >
+              <AddOutlinedIcon
+                sx={{ fontSize: 30 }}
+                color={
+                  isAddFormVisible || isSearchFormVisible
+                    ? "disabled"
+                    : "action"
+                }
+              />
+            </IconButton>
+          </div>
         </div>
-      </div>
+      {/* )} */}
     </>
   );
 }

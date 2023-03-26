@@ -57,60 +57,64 @@ export function FooterMenuList({
         </div>
       </CSSTransition>
 
-      <div className="z-30 fixed w-full max-w-md min-w-[360px] bottom-0  bg-white">
-        <Divider />
-        <div className="flex justify-between px-4 pb-6 pt-[10px]">
-          <IconButton onClick={() => {}} disabled>
-            <MenuOutlinedIcon
-              sx={{ fontSize: 30 }}
-              // color="action"
-              color="disabled"
-            />
-          </IconButton>
+      {/* {!isAddFormVisible && ( */}
+        <div className="z-30 fixed w-full max-w-md min-w-[360px] bottom-0  bg-white">
+          <Divider />
+          <div className="flex justify-between px-4 pb-6 pt-[10px]">
+            <IconButton onClick={() => {}} disabled>
+              <MenuOutlinedIcon
+                sx={{ fontSize: 30 }}
+                // color="action"
+                color="disabled"
+              />
+            </IconButton>
 
-          <IconButton
-            onClick={() => dispatch(showSearchForm(!isSearchFormVisible))}
-            disabled={isAddFormVisible}
-          >
-            <SearchOutlinedIcon
-              sx={{ fontSize: 30 }}
-              color={isAddFormVisible ? "disabled" : "action"}
-            />
-          </IconButton>
-
-          <IconButton
-            onClick={() => {
-              setSortToggle(!sortToggle);
-              onSortClick();
-            }}
-            disabled={isAddFormVisible}
-          >
-            {!sortToggle ? (
-              <SortOutlinedIcon
+            <IconButton
+              onClick={() => dispatch(showSearchForm(!isSearchFormVisible))}
+              disabled={isAddFormVisible}
+            >
+              <SearchOutlinedIcon
                 sx={{ fontSize: 30 }}
                 color={isAddFormVisible ? "disabled" : "action"}
               />
-            ) : (
-              <SortOutlinedIcon
-                sx={{ fontSize: 30, transform: "scaleY(-1)" }}
-                color={isAddFormVisible ? "disabled" : "action"}
-              />
-            )}
-          </IconButton>
+            </IconButton>
 
-          <IconButton
-            onClick={() => dispatch(showAddForm(true))}
-            disabled={isAddFormVisible || isSearchFormVisible}
-          >
-            <AddOutlinedIcon
-              sx={{ fontSize: 30 }}
-              color={
-                isAddFormVisible || isSearchFormVisible ? "disabled" : "action"
-              }
-            />
-          </IconButton>
+            <IconButton
+              onClick={() => {
+                setSortToggle(!sortToggle);
+                onSortClick();
+              }}
+              disabled={isAddFormVisible}
+            >
+              {!sortToggle ? (
+                <SortOutlinedIcon
+                  sx={{ fontSize: 30 }}
+                  color={isAddFormVisible ? "disabled" : "action"}
+                />
+              ) : (
+                <SortOutlinedIcon
+                  sx={{ fontSize: 30, transform: "scaleY(-1)" }}
+                  color={isAddFormVisible ? "disabled" : "action"}
+                />
+              )}
+            </IconButton>
+
+            <IconButton
+              onClick={() => dispatch(showAddForm(true))}
+              disabled={isAddFormVisible || isSearchFormVisible}
+            >
+              <AddOutlinedIcon
+                sx={{ fontSize: 30 }}
+                color={
+                  isAddFormVisible || isSearchFormVisible
+                    ? "disabled"
+                    : "action"
+                }
+              />
+            </IconButton>
+          </div>
         </div>
-      </div>
+      {/* )} */}
     </>
   );
 }
