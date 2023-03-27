@@ -13,7 +13,7 @@ You can:
 - go to chat to discuss your shopping list
 ## Main stack
 React, Redux, Redux Toolkit, React Router, React Hook Form, React Transition Group, MUI, Tailwind, Socket.IO, Express, Mongoose, JWT, bcrypt, multer
-## Link to site
+## Link
 https://sl.vvs693.ru/
 ## PS
 You can try using the app as is\
