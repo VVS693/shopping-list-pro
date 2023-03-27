@@ -2,7 +2,8 @@
 
 # dependencies
 /node_modules
-/nginx config ok
+/nginx_config_ok
+/server/config
 /.pnp
 .pnp.js
 
