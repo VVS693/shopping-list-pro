@@ -19,7 +19,7 @@ import { Server } from "socket.io";
 
 const PORT = process.env.PORT || 3001;
 export const __dirname = path.resolve();
-console.log(__dirname)
+console.log(__dirname);
 mongoose.set("strictQuery", false);
 mongoose
   .connect(MY_MONGO_DB)
@@ -56,8 +56,8 @@ io.on("connection", (socket) => {
   // console.log(`User connected on socket: ${socket.id}`);
 
   socket.on("joinListChat", (data) => {
-    const { userId, roomId } = data; 
-    socket.join(roomId); 
+    const { userId, roomId } = data;
+    socket.join(roomId);
     // console.log("Join room " + roomId)
   });
 
@@ -113,8 +113,6 @@ app.delete("/avatars/:avatar", checkAuth, UserController.delOldAvatarImage);
 
 app.delete("/auth/delete/:id", checkAuth, UserController.deleteUserAccount);
 
-
-
 app.get("/items", checkAuth, ItemController.getAllItems);
 app.post("/items", checkAuth, ItemController.createItem);
 app.delete("/items/:id", checkAuth, ItemController.removeItem);
@@ -123,14 +121,17 @@ app.get("/items/lists/:id", checkAuth, ItemController.getItemsByListId);
 
 app.get("/messages/:id", checkAuth, MessageController.getAllMessages);
 
-
 app.get("/lists", checkAuth, ListController.getAllLists);
 app.get("/lists/:id", checkAuth, ListController.getAllUsersLists);
 app.post("/lists", checkAuth, ListController.createList);
 app.patch("/lists/:id", checkAuth, ListController.updateList);
 app.delete("/lists/:id", checkAuth, ListController.removeList);
 app.get("/lists/count/:id", checkAuth, ListController.getAmountDocsByListId);
-app.get("/lists/updated/:id", checkAuth, ListController.getNewestDocDateByListId);
+app.get(
+  "/lists/updated/:id",
+  checkAuth,
+  ListController.getNewestDocDateByListId
+);
 app.get("/lists/created/:id", checkAuth, ListController.getCreatedDateByListId);
 
 server.listen(PORT, () => {
